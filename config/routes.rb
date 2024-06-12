@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   # root "form#serv_req"
   get "summary", to: "form#summary"
 
+  get "personal", to: "form#personal"
+
 
   # Defines the root path route ("/")
   # root "posts#index"

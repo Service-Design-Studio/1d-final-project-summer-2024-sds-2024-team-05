@@ -1,0 +1,15 @@
+/* custom.css */
+p, h1, h2, h3, h4, body {
+  margin: 0 !important; /* Ensure all margins are removed */
+  padding: 0 !important; /* Ensure all padding is removed */
+}
+
+/* Custom class to remove padding */
+.no-padding {
+  padding: 0 !important;
+}
+
+/* Custom class to remove margin */
+.no-margin {
+  margin: 0 !important;
+}

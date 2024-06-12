@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ninkatec</title>
+    <style>
+      .form-container {
+        margin-top: 20px; /* Adjust this value for more space */
+      }
+      .form-group {
+        overflow: hidden; 
+      }
+      .form-group label {
+        display: block; /* Ensure the label is a block element */
+        margin-bottom: 5px; /* Add some space below the label */
+        text-align: left;
+      }
+      ul {
+        list-style: none; /* Remove default list styling */
+        padding: 0;
+      }
+      #checkbox {
+        display: flex;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container text-center">
+        <div style = "height: 50px;"></div>
+        <div class="row">
+          <div class = "col-4">
+            <h1> Create Your Account <h1>
+            </div>           
+          </div>
+         </div>
+
+         <div class='row form-container'>
+          <div class='col-4'>
+            <div class="form-group">
+              <label for="first name">First Name</label>
+              <input type="text"
+                class="form-control" id="first name" aria-describedby="helpId" placeholder="">
+            </div>
+          </div>
+          <div class='col-4'>
+            <div class="form-group">
+              <label for="last name">Last Name</label>
+              <input type="text"
+                class="form-control" id="last name" aria-describedby="helpId" placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class='row form-container'>
+          <div class='col-4'>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="text"
+                class="form-control" id="email" aria-describedby="helpId" placeholder="">
+            </div>
+          </div>          
+        </div>
+
+        <div class='row form-container'>
+          <div class='col-4'>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="text"
+                class="form-control" id="password" aria-describedby="helpId" placeholder="">
+            </div>
+          </div>
+          <div class='col-4'>
+            <div class="form-group">
+              <label for="cfm password">Confirm Password</label>
+              <input type="text"
+                class="form-control" id="cfm password" aria-describedby="helpId" placeholder="">
+            </div>
+          </div>
+        </div>
+        <div class='row form-container'>
+          <div class='col-4'>
+            <ul>
+              <li style="overflow: hidden;" id ='checkbox'>
+                <input type="checkbox" name='terms' id="terms" aria-describedby="helpId" placeholder="" style="float: left; margin-right: 10px;">
+                <label for="terms" style="float: left;">Agree to Terms & Conditions</label>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class='row form-container'>
+          <div class='col-4'>
+            <button type="submit" class="btn btn-outline-primary rounded-pill" style='float: left;'>Submit</button>
+          </div>
+        </div>
+      
+
+
+
+    </div> 
+  </body>
+</html>
+    

@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  get 'photos/new'
+  get 'photos/create'
+  get 'videos/new'
+  get 'videos/create'
+  get 'photos/new', to: 'photos#new', as: 'new_photos'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   # Services
   get "services/service"

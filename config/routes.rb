@@ -2,9 +2,9 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get "services/service"
   get "services/welcomenew"=> 'services#newtask'
-  get "services/signup"=> "services#signup"
-  get "services/envpics"=> "services#envpics"
-  get "services/login"=> "services#login"
+  get "services/signup"
+  get "services/envpics"
+  get "services/login"
   get 'photos/new'
   get 'photos/create'
   get 'videos/new'

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ninkatec</title>
+    <style>
+    .form-container {
+        margin-top: 20px; /* Adjust this value for more space */
+    }
+    .form-group {
+        overflow: hidden; 
+    }
+    .form-group label {
+        display: block; /* Ensure the label is a block element */
+        margin-bottom: 5px; /* Add some space below the label */
+        text-align: left;
+    }
+    #left {
+        text-align: left;
+    }
+    ul {
+        list-style-position: inside;
+        }
+
+
+    </style>
+  </head>
+  <body>
+    <div>
+        <div style = "height: 50px;"></div>
+        <div class="row">
+            <div class = "col-4" id='left'>
+                <h1> Welcome Jane Doe, </h1><br>
+                <p>You have yet to complete the following:</p>
+                <ul>
+                    <li>Take pictures for environmental analysis</li>
+                </ul>
+
+            </div>
+        </div>
+        
+
+        <div class='row form-container'>
+          <div class='col-4'>
+            <button type="submit" class="btn btn-outline-primary rounded-pill" style='float: left; margin-right: 20px;'>Continue</button>
+            <button type="submit" class="btn btn-outline-secondary rounded-pill" style='float: left;'>Restart</button>
+          </div>
+        </div>
+    </div>
+
+</body>
+</html>

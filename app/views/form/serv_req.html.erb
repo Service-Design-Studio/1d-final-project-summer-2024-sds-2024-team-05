@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h1>Service Information</h1>     
+  <div class="row">
+    
+    <div class="col-sm-12">
+    <br>
+    <p><u>Services Requested</u></p>
+      <form>
+        <input type="checkbox" id="showering" name="serv_req" value="Showering">
+        <label for="showering">Showering</label>
+        <input type="checkbox" id="toileting" name="serv_req" value="Toileting">
+        <label for="toileting">Toileting</label>
+        <input type="checkbox" id="companionship" name="serv_req" value="Companionship">
+        <label for="companionship">Companionship</label><br>
+        <label for="others">Others:</label>
+        <br>
+        <input type="text" id="others" name="med_cond" placeholder="Please Fill" style="font-style:italic;height:100px;width:500px">
+        
+      </form>
+    </div>
+    
+    <div class="col-sm-6">
+      <br>
+      <p><u>Services Requested Start Date</u></p>
+      <input id="startDate" class="form-control" type="date" style="width: 200px;"/>
+      <br>
+      <p><u>Service Requested End Date</u></p>
+      <input id="endDate" class="form-control" type="date" style="width: 200px;"/>
+      <br>
+      <br>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="row mt-5">
+        <div class="col-xs-12">
+            <div class="text-center">
+                <div>
+                    <button type="button" class="btn btn-secondary mr-2"><a href="med_cond" style="text-decoration:none; color:white;" >Back</button>
+                    <button type="button" class="btn btn-info mr-2">Save</button>
+                    <button type="button" class="btn btn-success"><a href="summary" style="text-decoration:none; color:white;" >Next</a></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+    
+</body>
+</html>

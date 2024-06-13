@@ -13,4 +13,9 @@
  *= require_tree .
  *= require_self
  */
+
+ .bar {
+    display: flex;
+    justify-content: space-between;
+ }
  

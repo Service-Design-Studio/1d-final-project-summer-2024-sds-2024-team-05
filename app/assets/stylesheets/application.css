@@ -6,6 +6,11 @@
  * It is generally better to create a new file per style scope.
  */
 
+ .bar {
+    display: flex;
+    justify-content: space-between;
+ }
+ 
  :root {
     --linear-grad: linear-gradient(to right, #141E30, #243B55);
     --grad-clr1: #141E30;
@@ -100,3 +105,4 @@
     margin: auto;
     margin-top: 1em;
 }
+

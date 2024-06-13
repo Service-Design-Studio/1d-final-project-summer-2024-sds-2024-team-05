@@ -1,9 +1,4 @@
 Rails.application.routes.draw do
-  get 'photos/new'
-  get 'photos/create'
-  get 'videos/new'
-  get 'videos/create'
-  get 'photos/new', to: 'photos#new', as: 'new_photos'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   # Services
   get "services/service"
@@ -11,7 +6,7 @@ Rails.application.routes.draw do
   get "services/signup"
   get "services/envpics"
   get "services/login"
-  
+
   # Photo and Video uploading
   get 'photos/new'
   get 'photos/create'
@@ -24,15 +19,14 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Forms
-  get "form" => "form/index"
-  get "summary", to: "form#summary"
-  get "med_cond", to: "form#med_cond"
-  get "personal", to: "form#personal"
-  get "serv_req", to:"form#serv_req"
+  get "forms" => "forms/index"
+  get "forms/summary", to: "forms#summary"
+  get "forms/med_cond", to: "forms#med_cond"
+  get "forms/personal", to: "forms#personal"
+  get "forms/serv_req", to:"forms#serv_req"
 
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+
   resources :videos, only: [:new, :create]
   resources :photos, only: [:new, :create]
   root 'services#service'

@@ -32,22 +32,23 @@
     <br>
     <p><u>Medical Conditions</u></p>
       <form>
-        <input type="radio" id="dementia" name="med_cond" value="Dementia">
+        <input type="checkbox" id="dementia" name="med_cond" value="Dementia">
         <label for="dementia">Dementia</label>
-        <input type="radio" id="stroke" name="med_cond" value="Stroke">
+        <input type="checkbox" id="stroke" name="med_cond" value="Stroke">
         <label for="stroke">Stroke</label>
-        <input type="radio" id="cancer" name="med_cond" value="Cancer">
+        <input type="checkbox" id="cancer" name="med_cond" value="Cancer">
         <label for="cancer">Cancer</label>
-        <input type="radio" id="fracture" name="med_cond" value="Fracture">
+        <input type="checkbox" id="fracture" name="med_cond" value="Fracture">
         <label for="Fracture">Fracture</label>
-        <input type="radio" id="Parkinsons" name="med_cond" value="Parkinsons">
+        <input type="checkbox" id="Parkinsons" name="med_cond" value="Parkinsons">
         <label for="Parkinsons">Parkinsons</label><br><br>
         <label for="others">Others:</label>
-        <input type="text" id="others" name="med_cond" placeholder="Please Fill" style="font-style:italic">
+        <br>
+        <input type="text" id="others" name="med_cond" placeholder="Please Fill" style="font-style:italic;height:90px;width:500px">
         
       </form>
     </div>
-    <div class="col-sm-12">
+    <div class="col-sm-12"> 
       <br>
       <p><u>Medication</u></p>
       <input type="text" style="width: 500px;height:150px" id="others" name="med_cond" placeholder="Antihistamines/Ibuprofen/Antacids" style="text-align:center">
@@ -58,7 +59,7 @@
       <input type="radio" id="Yes" name="hospital_recent_y" value="Yes">
       <label for="hospital_recent_n">No: </label>
       <input type="radio" id="No" name="hospital_recent_n" value="No">
-      <p><i>If yes, please upload the relevant discharge summar (optional)</i></p>
+      <p><i>If yes, please upload the relevant discharge summary (optional)</i></p>
       <form action="/action_page.php">
         <input type="file" id="myFile" name="filename">
         <br>
@@ -66,19 +67,20 @@
       </form>
       <br>
     </div>
+
     <div class="container">
-      	<div class="row">
-            <div class="col-xs-16">
-                <div  class="text-center">
-                	<div>
-                    <button type="submit" class="btn btn-info">Save</button>
-                    
-                    <button type="submit" class="btn btn-success">Submit</button>
-                    </div>
+    <div class="row mt-5">
+        <div class="col-xs-12">
+            <div class="text-center">
+                <div>
+                    <button type="button" class="btn btn-secondary mr-2"><a href="personal" style="text-decoration:none; color:white;" >Back</button>
+                    <button type="button" class="btn btn-info mr-2">Save</button>
+                    <button type="button" class="btn btn-success"><a href="serv_req" style="text-decoration:none; color:white;" >Next</a></button>
                 </div>
             </div>
         </div>
-  </div>
+    </div>
+
 </div>
     
 </body>

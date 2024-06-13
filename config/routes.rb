@@ -7,12 +7,12 @@ Rails.application.routes.draw do
 
   get "form" => "form/index"
   # root "form#index"
-  root "form#med_cond"
+  # root "form#med_cond"
   # root "form#serv_req"
   get "summary", to: "form#summary"
-
+  get "med_cond", to: "form#med_cond"
   get "personal", to: "form#personal"
-
+  get "serv_req", to:"form#serv_req"
 
   # Defines the root path route ("/")
   # root "posts#index"

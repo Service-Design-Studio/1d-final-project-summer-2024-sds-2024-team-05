@@ -5,5 +5,7 @@ class ServicesController < ApplicationController
     end
     def envpics
     end
-    
+    def login
+    end
+
 end

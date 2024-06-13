@@ -31,7 +31,7 @@
         <div style = "height: 50px;"></div>
         <div class="row">
           <div class = "col-4">
-            <h1> Create Your Account <h1>
+            <h1> Login To Your Account <h1>
             </div>           
           </div>
          </div>
@@ -39,52 +39,28 @@
          <div class='row form-container'>
           <div class='col-4'>
             <div class="form-group">
-              <label for="first name">First Name</label>
-              <input type="text"
-                class="form-control" id="first name" aria-describedby="helpId" placeholder="">
-            </div>
-          </div>
-          <div class='col-4'>
-            <div class="form-group">
-              <label for="last name">Last Name</label>
-              <input type="text"
-                class="form-control" id="last name" aria-describedby="helpId" placeholder="">
-            </div>
-          </div>
-        </div>
-
-        <div class='row form-container'>
-          <div class='col-4'>
-            <div class="form-group">
               <label for="email">Email</label>
               <input type="text"
                 class="form-control" id="email" aria-describedby="helpId" placeholder="">
             </div>
-          </div>          
-        </div>
+          </div>
 
         <div class='row form-container'>
           <div class='col-4'>
             <div class="form-group">
               <label for="password">Password</label>
-              <input type="text"
+              <input type="password"
                 class="form-control" id="password" aria-describedby="helpId" placeholder="">
             </div>
           </div>
-          <div class='col-4'>
-            <div class="form-group">
-              <label for="cfm password">Confirm Password</label>
-              <input type="text"
-                class="form-control" id="cfm password" aria-describedby="helpId" placeholder="">
-            </div>
-          </div>
         </div>
+
         <div class='row form-container'>
           <div class='col-4'>
             <ul>
               <li style="overflow: hidden;" id ='checkbox'>
                 <input type="checkbox" name='terms' id="terms" aria-describedby="helpId" placeholder="" style="float: left; margin-right: 10px;">
-                <label for="terms" style="float: left;">Agree to Terms & Conditions</label>
+                <label for="terms" style="float: left;">Remember me</label>
               </li>
             </ul>
           </div>
@@ -92,8 +68,7 @@
 
         <div class='row form-container'>
           <div class='col-4'>
-            <%= link_to "Submit", "/services/login", class: "btn btn-outline-primary rounded-pill", style: 'float: left;' %>
-
+            <button type="submit" class="btn btn-outline-primary rounded-pill" style='float: left;'>Login</button>
           </div>
         </div>
       

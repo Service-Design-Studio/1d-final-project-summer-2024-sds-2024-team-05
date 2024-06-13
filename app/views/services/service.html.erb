@@ -12,23 +12,16 @@
   </head>
   <body>
     <div class="container text-center py-2">
-      <%# <div class="row justify-content-end">
-        <div class ="col-4">
-          <%= image_tag("ninkatec_logo.png", class: "img-fluid") 
-
-        </div>
-        <div class ="col-4">
-        </div>
-        <div class="col-4 text-end">
-          <h3>Contact</h3>
-          <p class="mb-0"><a class="link-opacity-100" href="#">&#128382; +65 6531298</a></p>
-          <p class="mb-0"><a class="link-opacity-100" href="#">&#128233; you@email.sutd</a></p>
-          <p style ="margin-bottom:0px;">Already have an account?</p>
-          <button type="button" class="btn btn-outline-primary rounded-pill" style="width: 100px">Sign In</button>
-        </div> 
-      </div> %>
-
+        <div class = "col-4 text-start">
         <h2>Our services</h2>
+        </div>
+        <div class="row justify-content-end">
+          <div class="col-4 text-end">
+            <p style ="margin-bottom:0px;">Already have an account?</p>
+            <%= link_to "Sign In", "/services/login", class: "btn btn-outline-primary rounded-pill", style: 'width: 100px;' %>
+          </div>
+        </div>
+        <br>
 
         <div class="row">
           <div class="col">
@@ -43,8 +36,13 @@
         </div>
 
         <div class="text-start mt-5">
-          <p>Interested in Our Care? Sign Up here to</p>
-          <button type="button" class="btn btn-outline-primary rounded-pill">Sign Up</button>
+          <p>Interested in Our Care? Click below to</p>
+          <div class='row form-container'>
+          <div class='col-4'>
+            <%= link_to "Sign Up", "/services/signup", class: "btn btn-outline-primary rounded-pill", style: 'float: left;' %>
+
+          </div>
+        </div>
         </div>
 
     </div>

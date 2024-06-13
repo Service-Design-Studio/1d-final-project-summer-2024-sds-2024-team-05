@@ -19,20 +19,16 @@
       <div class="row justify-content-end">
         <div class ="col-4">
         </div>
-        <div class="col-4 text-end">
-          <p style ="margin-bottom:0px;">Already have an account?</p>
-          <button type="button" class="btn btn-outline-primary rounded-pill" style="width: 100px">Sign In</button>
-        </div>
-        <h2 style ="text-align: left;">Welcome &lt;CLIENT NAME&gt; </h2>
-        <h3 style ="text-align: left;"> Registering for our services: </h3>
-        <p style ="text-align: left;"> -Fill up forms</p>
-        <p style ="text-align: left;"> -Record videos</p>
-        <p style ="text-align: left;"> -Take picture</p>
-        </div>
+       
+        <h2 style ="text-align: left;">Welcome &lt;CLIENT NAME&gt; </h2><br><br>
+        <h3 style ="text-align: left;"> Registering for our services: </h3><br><br>
+        <ul>
+          <li style ="text-align: left;"> Fill up forms</li>
+          <li style ="text-align: left;"> Record videos for patient assessment</li>
+          <li style ="text-align: left;"> Take pictures of home for us to understand the environment</li>
+        </ul>
       </div> 
-    </div>
-    <div class="col-4" style ="align-items: start">
-          <button type="button" class="btn btn-outline-primary rounded-pill" style= "float: left;">Base class</button>
+      <%= link_to "Continue", "/forms/personal", class: "btn btn-outline-primary rounded-pill", style: 'float: left;' %>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   </body>

@@ -12,6 +12,77 @@
     --grad-clr2: #243B55;
 }
 
+h1 {
+    color: #253255;
+    margin-top: 0.5em;
+    padding: 0;
+}
+
+.btn-outline-blue {
+    color: #253255;
+    border: 1px solid #253255;
+    width: 7em;
+    margin-top: 0.5em;
+}
+
+.btn-outline-blue:hover {
+    color: white;
+    border: 1px solid #253255;
+    background-color: #253255;
+}
+
+.btn-outline-save {
+    color: #7c7d7e;
+    border: 1px solid #7c7d7e;
+    width: 7em;
+    margin-top: 0.5em;
+}
+
+.btn-outline-save:hover {
+    color: white;
+    border: 1px solid #7c7d7e;
+    background-color: #7c7d7e;
+}
+
+.btn-outline-black {
+    color: black;
+    border: 1px solid black;
+    width: 7em;
+    margin-top: 0.5em;
+}
+
+.btn-outline-black:hover {
+    color: white;
+    border: 1px solid black;
+    background-color: black;
+}
+
+.btn-outline-red {
+    color: red;
+    border: 1px solid red;
+    width: 7em;
+    margin-top: 0.5em;
+}
+
+.btn-outline-red:hover {
+    color: white;
+    border: 1px solid red;
+    background-color: red;
+}
+
+.boxhome {
+    display: flex;
+    flex-direction: column;
+    height: 30em;
+    width: 25em;
+    border-radius: 5%;
+    justify-content: center;
+    text-align: left;
+    margin: auto;
+    margin-top: 1.5em;
+    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.5);
+    align-items: stretch;
+}
 
 .steps {
     display: flex;
@@ -24,11 +95,9 @@
     display: flex;
     border: none;
     outline: none;
-    gap: 0.25em;
     justify-content: space-between;
-    width: 56%;
+    width: 70vh;
     margin-top: 5%;
-    margin-bottom: 1em;
 }
 
 .numbers-active { 
@@ -54,6 +123,20 @@
     justify-content: center;
     align-items: center;
 }
+
+  .custom-submit-button {
+    border-radius: 5px;
+    border: 2px solid #253255; /* Custom border color */
+    padding: 10px;
+    background-color: #253255; /* Custom background color */
+    color: white; /* Custom text color */
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .custom-submit-button:hover {
+    background-color: #253255; /* Custom background color on hover */
+  }
 
 /* Videos */
 .box {

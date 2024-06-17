@@ -5,81 +5,97 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .input-group-text {
+      border-left: none;
+    }
+    .form-control {
+      border-right: none;
+    }
+    .form-control:focus {
+      box-shadow: none;
+    }
+  </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>Medical Information</h1>   <br>  
-  <div class="row">
-    <div class="col-sm-2">
-      <form>
-      	<label for="height">Height:</label><br>
-      	<input type="text" id="height" name="height" placeholder="/cm" style="text-align: right" class='form-control'><br>
-      </form>
-    </div>
-    <div class="col-sm-2">
-      <form>
+  <h1>Medical Information</h1><br>  
+  <form action="/action_page.php" method="post" enctype="multipart/form-data">
+    <div class="row">
+      <div class="col-sm-2">
+        <label for="height">Height:</label><br>
+        <div class="input-group">
+          <input type="text" id="height" name="height" class="form-control">
+          <span class="input-group-text">cm</span>
+        </div>
+      </div>
+      <div class="col-sm-2">
         <label for="weight">Weight:</label><br>
-        <input type="text" id="weight" name="weight" placeholder="/Kg" style="text-align: right" class='form-control'>
-      </form>
- 	</div>
-    
-
+        <div class="input-group">
+          <input type="text" id="weight" name="weight" class="form-control">
+          <span class="input-group-text">kg</span>
+        </div>
+      </div>
+    </div>
 
     <div class="col-sm-12">
-    <br>
-    <p>Medical Conditions</p>
-      <form>
-        <input type="checkbox" id="dementia" name="med_cond" value="Dementia">
-        <label for="dementia">Dementia</label>
-        <input type="checkbox" id="stroke" name="med_cond" value="Stroke">
-        <label for="stroke">Stroke</label>
-        <input type="checkbox" id="cancer" name="med_cond" value="Cancer">
-        <label for="cancer">Cancer</label>
-        <input type="checkbox" id="fracture" name="med_cond" value="Fracture">
-        <label for="Fracture">Fracture</label>
-        <input type="checkbox" id="Parkinsons" name="med_cond" value="Parkinsons">
-        <label for="Parkinsons">Parkinsons</label><br><br>
-        <label for="others">Others:</label>
-        <br>
-        <input type="text" id="others" name="med_cond" placeholder="Please Fill" style="font-style:italic;height:90px;width:500px" class='form-control'>
-        
-      </form>
+      <br>
+      <p>Medical Conditions</p>
+      <input type="checkbox" id="dementia" name="med_cond" value="Dementia">
+      <label for="dementia">Dementia</label>
+      <input type="checkbox" id="stroke" name="med_cond" value="Stroke">
+      <label for="stroke">Stroke</label>
+      <input type="checkbox" id="cancer" name="med_cond" value="Cancer">
+      <label for="cancer">Cancer</label>
+      <input type="checkbox" id="fracture" name="med_cond" value="Fracture">
+      <label for="fracture">Fracture</label>
+      <input type="checkbox" id="parkinsons" name="med_cond" value="Parkinsons">
+      <label for="parkinsons">Parkinsons</label>
+      <input type="checkbox" id="othersCheckbox" name="med_cond" value="Others" onclick="toggleOthersInput()">
+      <label for="othersCheckbox">Others</label><br><br>
+      <label for="others">Others:</label>
+      <br>
+      <input type="text" id="others" name="med_cond" placeholder="Please Fill" style="font-style:italic;height:90px;width:500px" class='form-control' disabled>
     </div>
+
+    <script>
+      function toggleOthersInput() {
+        var othersCheckbox = document.getElementById("othersCheckbox");
+        var othersInput = document.getElementById("others");
+        othersInput.disabled = !othersCheckbox.checked;
+      }
+    </script>
     <div class="col-sm-12"> 
       <br>
       <p>Medication</p>
-      <input type="text" style="width: 500px;height:150px" id="others" name="med_cond" placeholder="Antihistamines/Ibuprofen/Antacids" style="text-align:center" class='form-control'>
+      <input type="text" style="width: 500px;height:150px" id="medication" name="medication" placeholder="Antihistamines/Ibuprofen/Antacids" style="text-align:center" class='form-control'>
       <br>
       <br>
       <p>Has the patient recently been admitted into Hospital?</p>
       <label for="hospital_recent_y">Yes: </label>
-      <input type="radio" id="Yes" name="hospital_recent_y" value="Yes">
+      <input type="radio" id="hospital_recent_y" name="hospital_recent" value="Yes">
       <label for="hospital_recent_n">No: </label>
-      <input type="radio" id="No" name="hospital_recent_n" value="No">
+      <input type="radio" id="hospital_recent_n" name="hospital_recent" value="No">
       <p><i>If yes, please upload the relevant discharge summary (optional)</i></p>
-      <form action="/action_page.php">
-        <input type="file" id="myFile" name="filename">
-        <br>
-        <input type="submit">
-      </form>
+      <input type="file" id="myFile" name="filename">
       <br>
     </div>
 
     <div class="container">
-    <div class="row mt-5">
+      <div class="row mt-5">
         <div class="col-xs-12">
-            <div class="text-center">
-                <div>
-                  <%= link_to "Back", "/forms/personal", class: "btn btn-outline-secondary rounded-pill", style: 'float: left; margin-right: 5px;'%>
-                  <%= link_to "Save", "#", class: "btn btn-outline-success rounded-pill", style: 'float: left; margin-right: 5px;'%>
-                  <%= link_to "Continue", "/forms/serv_req", class: "btn btn-outline-primary rounded-pill", style: 'float: left;' %>
-                </div>
+          <div class="text-center">
+            <div>
+              <a href="/forms/personal" class="btn btn-outline-secondary rounded-pill" style='float: left; margin-right: 5px;'>Back</a>
+              <button type="submit" class="btn btn-outline-success rounded-pill" style='float: left; margin-right: 5px;'>Save</button>
+              <a href="/forms/serv_req" class="btn btn-outline-primary rounded-pill" style='float: left;'>Continue</a>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-
+  </form>
 </div>
-    
 </body>
 </html>

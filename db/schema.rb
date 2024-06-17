@@ -10,7 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_13_030520) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_17_132717) do
+  create_table "forms", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "gender"
+    t.date "date_of_birth"
+    t.string "address"
+    t.string "relationship"
+    t.string "hobbies"
+    t.integer "height"
+    t.integer "weight"
+    t.string "conditions"
+    t.string "medication"
+    t.string "services"
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "photos", force: :cascade do |t|
     t.string "tag"
     t.datetime "created_at", null: false

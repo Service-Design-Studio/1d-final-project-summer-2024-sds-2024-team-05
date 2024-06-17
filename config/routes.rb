@@ -35,9 +35,16 @@ Rails.application.routes.draw do
   # resources :photos, only: [:new, :create]
   # root 'services#service'
 
-    resources :forms, controller: 'patients' do 
-      delete 'delete', on: :member
+  resources :forms, controller: 'patients' do
+    member do
+      get 'edit_1', to: 'patients#edit_1'
+      patch 'edit_1', to: 'patients#update_1'
+      get 'edit_2', to: 'patients#edit_2'
+      patch 'edit_2', to: 'patients#update_2'
+      get 'edit_3', to: 'patients#edit_3'
+      patch 'edit_3', to: 'patients#update_3'
+      delete 'delete'
     end
-    root 'patients#index'
-
+  end
+  root 'patients#index'
 end

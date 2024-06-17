@@ -161,6 +161,18 @@ h1 {
     box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.5);
 }
 
+.box-video {
+    display: flex;
+    flex-direction: column;
+    height: 70vh;
+    width:100vh;
+    border-radius: 5%;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+    margin-top: 1em;
+    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.5);
+}
 .video-form {
     display: flex;
     flex-direction: column;

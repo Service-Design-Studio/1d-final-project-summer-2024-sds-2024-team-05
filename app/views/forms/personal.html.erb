@@ -11,17 +11,17 @@
         <div class = "container">
             <div class="steps">
                 <div class="page">
-                    <p class="numbers-active">1</p>
-                    <p class="dash">---</p>
-                    <p class="numbers-not-active">2</p>
-                    <p class="dash">---</p>
-                    <p class="numbers-not-active">3</p>
-                    <p class="dash">---</p>
-                    <p class="numbers-not-active">4</p>
-                    <p class="dash">---</p>
-                    <p class="numbers-not-active">5</p>
-                    <p class="dash">---</p>
-                    <p class="numbers-not-active">6</p>
+          <button type="button" class="btn btn-primary circular-button btn-blue">1</button>
+
+          <%= button_to '2', "/forms/med_cond", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+
+          <%= button_to '3', "/forms/serv_req", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+         
+          <%= button_to '4', "/videos/new", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          
+          <%= button_to '5', "/photos/new", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          
+          <%= button_to '6', "/forms/summary", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
                 </div>
             </div>
 
@@ -106,8 +106,10 @@
                     <input type="text" id="hobbies" name="hobbies" class='form-control' style="width: 50%; height: 100px; text-align: left;">
                 </form>
             </div>
+            <div class="col d-flex justify-content-center my-5">
             <%= link_to "Save", "#", class: "btn btn-outline-save rounded-pill my-4", style: 'float: left; margin-right: 5px;'%>
             <%= link_to "Continue", "/forms/med_cond", class: "btn btn-outline-blue rounded-pill my-4", style: 'float: left;' %>
+            </div>
         </div>
     </body>
 </html>

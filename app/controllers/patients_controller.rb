@@ -65,11 +65,58 @@ class PatientsController < ApplicationController
   def update_3
     @form = Form.find(params[:id])
     if @form.update(form_params_step3)
-      redirect_to @form, notice: 'Form 3 was successfully updated.'
+      redirect_to edit_4_form_path(@form), notice: 'Form 3 was successfully updated.'
     else
       render :edit_3
     end
   end
+
+    # GET /forms/1/edit_4
+    def edit_4
+      @form = Form.find(params[:id])
+      @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
+    end
+  
+    # PATCH /forms/1/update_4
+    def update_4
+      @form = Form.find(params[:id])
+      
+      # Check if any parameters are present in the form submission
+      if form_params_step4.empty?
+        puts "TESTING"
+        redirect_to @form, notice: 'No changes were made.'
+      else
+        if @form.update(form_params_step4)
+          redirect_to @form, notice: 'Form 4 was successfully updated.'
+        else
+          render :edit_4
+        end
+      end
+    end
+
+    # GET /forms/1/edit_5
+    def edit_5
+      @form = Form.find(params[:id])
+      @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
+    end
+  
+    # PATCH /forms/1/update_5
+    def update_5
+      @form = Form.find(params[:id])
+      
+      # Check if any parameters are present in the form submission
+      if form_params_step4.empty?
+        puts "TESTING"
+        redirect_to @form, notice: 'No changes were made.'
+      else
+        if @form.update(form_params_step4)
+          redirect_to @form, notice: 'Form 4 was successfully updated.'
+        else
+          render :edit_5
+        end
+      end
+    end
+
 
   def determine_form_origin_text
     if session[:form_origin] == 'new'
@@ -109,10 +156,22 @@ class PatientsController < ApplicationController
   end
 
   def form_params_step2
-    params.require(:form).permit(:height, :weight, :conditions, :medication, :hospital, :discharge_summ)
+    params.require(:form).permit(:height, :weight, :conditions, :medication, :hospital, :discharge_summary)
   end
 
   def form_params_step3
     params.require(:form).permit(:services, :start_date, :end_date)
+  end
+
+  def form_params_step4
+    params.require(:form).permit(:physical_video, :mental_video)
+  end
+
+  def form_params_physical_video
+    params.require(:form).permit(:physical_video)
+  end
+
+  def form_params_mental_video
+    params.require(:form).permit(:mental_video)
   end
 end

@@ -26,7 +26,7 @@
     </div>
     <h1><%= @form_origin_text %> - Step 2</h1>
     
-    <%= form_with(model: @form, url: edit_2_form_path(@form), method: :patch, local: true) do |form| %>
+    <%= form_with(model: @form, url: edit_2_form_path(@form), method: :patch, local: true, multipart: true) do |form| %>
       <div class="form-group">
         <%= form.label :height %>
         <%= form.number_field :height, class: "form-control" %>
@@ -62,6 +62,17 @@
           </fieldset>
           <p><i>If yes, please upload the relevant discharge summary (optional)</i></p>
         </div>
+          <div class="form-group">
+            <%= form.label :discharge_summary, "Upload Discharge Summary (JPG or PNG)" %>
+            <%= form.file_field :discharge_summary, class: "form-control" %>
+          </div>
+        <% if @form.discharge_summary.attached? %>
+          <div class="mt-1 mb-4"> <!-- Add margin-top for spacing -->
+            <p>Discharge Summary Preview:</p>
+            <%= image_tag @form.discharge_summary, class: "img-thumbnail", style: "max-width: 300px;" %>
+            <!--<%= link_to "Download Discharge Summary", rails_blob_path(@form.discharge_summary, disposition: "attachment") %>--> 
+          </div>
+        <% end %>
       </div>
 
       <%= link_to "Back", edit_1_form_path(@form), class: "btn btn-secondary" %>

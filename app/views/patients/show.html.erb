@@ -6,6 +6,18 @@
   <title>Form Details</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <style>
+    .video-container {
+      max-width: 300px; /* Maximum width for the container */
+      margin-bottom: 10px; /* Space between videos */
+    }
+    .video-container video {
+      max-width: 300px;
+      max-height: 180px;
+      width: 100%;
+      height: auto;
+    }
+  </style>
 </head>
 <body>
   <div class="container mt-5">
@@ -27,13 +39,42 @@
         <p class="card-text"><strong>Conditions:</strong> <%= @form.conditions %></p>
         <p class="card-text"><strong>Medication:</strong> <%= @form.medication %></p>
         <p class="card-text"><strong>Hospitalised recently:</strong> <%= @form.hospital.nil? ? "" : (@form.hospital ? "Yes" : "No") %></p>
+
+        <% if @form.discharge_summary.attached? %>
+          <div class="mt-3">
+            <p class="card-text"><strong>Discharge Summary Preview:</strong></p>
+            <%= image_tag @form.discharge_summary, class: "img-thumbnail", style: "max-width: 300px;" %>
+            <!--<%= link_to "Download Discharge Summary", rails_blob_path(@form.discharge_summary, disposition: "attachment") %>-->
+          </div>
+        <% end %>
         
         <h5 class="card-title">Service Information</h5>
         <p class="card-text"><strong>Services:</strong> <%= @form.services %></p>
         <p class="card-text"><strong>Start Date:</strong> <%= @form.start_date %></p>
         <p class="card-text"><strong>End Date:</strong> <%= @form.end_date %></p>
       </div>
+      <!-- Row for Videos -->
+      <div class="row mt-3">
+        <div class="col-md-6">
+          <% if @form.physical_video.attached? %>
+            <div class="video-container text-center">
+              <p>Physical Video:</p>
+              <%= video_tag url_for(@form.physical_video), controls: true, class: "img-thumbnail" %>
+            </div>
+          <% end %>
+        </div>
+        <div class="col-md-6">
+          <% if @form.mental_video.attached? %>
+            <div class="video-container text-center">
+              <p>Mental Video:</p>
+              <%= video_tag url_for(@form.mental_video), controls: true, class: "img-thumbnail" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
+
+    
     <div class="mt-3">
       <%= link_to 'Edit', edit_1_form_path(@form), class: 'btn btn-primary' %>
       <%= link_to 'Back to List', forms_path, class: 'btn btn-secondary' %>

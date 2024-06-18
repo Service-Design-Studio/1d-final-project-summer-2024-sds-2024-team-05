@@ -84,7 +84,14 @@ class PatientsController < ApplicationController
 
   end
   def form_params_step1
-    params.require(:form).permit(:first_name, :last_name, :gender, :date_of_birth, :address, :relationship, :hobbies)
+    permitted_params = params.require(:form).permit(:first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text)
+  
+    # Check if 'Others' is selected for relationship
+    if params[:form][:relationship] == "Others"
+      permitted_params[:relationship] = params[:form][:others_text]
+    end
+  
+    permitted_params
   end
 
   def form_params_step2

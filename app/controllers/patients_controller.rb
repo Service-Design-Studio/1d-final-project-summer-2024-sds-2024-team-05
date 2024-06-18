@@ -84,10 +84,10 @@ class PatientsController < ApplicationController
       # Check if any parameters are present in the form submission
       if form_params_step4.empty?
         puts "TESTING"
-        redirect_to @form, notice: 'No changes were made.'
+        redirect_to edit_5_form_path(@form), notice: 'No changes were made.'
       else
         if @form.update(form_params_step4)
-          redirect_to @form, notice: 'Form 4 was successfully updated.'
+          redirect_to edit_5_form_path(@form), notice: 'Form 4 was successfully updated.'
         else
           render :edit_4
         end
@@ -97,20 +97,19 @@ class PatientsController < ApplicationController
     # GET /forms/1/edit_5
     def edit_5
       @form = Form.find(params[:id])
-      @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
+      @form_origin_text = determine_form_origin_text # Changes my header based on my origin new or edit
     end
-  
+
     # PATCH /forms/1/update_5
     def update_5
       @form = Form.find(params[:id])
-      
-      # Check if any parameters are present in the form submission
-      if form_params_step4.empty?
-        puts "TESTING"
+
+      # Check if any environment_video parameters are present in the form submission
+      if form_params_step5.blank? && @form.environment_video.attached?
         redirect_to @form, notice: 'No changes were made.'
       else
-        if @form.update(form_params_step4)
-          redirect_to @form, notice: 'Form 4 was successfully updated.'
+        if @form.update(form_params_step5)
+          redirect_to @form, notice: 'Form 5 was successfully updated.'
         else
           render :edit_5
         end
@@ -167,11 +166,7 @@ class PatientsController < ApplicationController
     params.require(:form).permit(:physical_video, :mental_video)
   end
 
-  def form_params_physical_video
-    params.require(:form).permit(:physical_video)
-  end
-
-  def form_params_mental_video
-    params.require(:form).permit(:mental_video)
+  def form_params_step5
+    params.require(:form).permit(:environment_video)
   end
 end

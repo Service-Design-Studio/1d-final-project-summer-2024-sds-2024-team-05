@@ -47,4 +47,5 @@ Rails.application.routes.draw do
     end
   end
   root 'patients#index'
+  get 'back_to_previous', to: 'patients#back_to_previous', as: 'back_to_previous'
 end

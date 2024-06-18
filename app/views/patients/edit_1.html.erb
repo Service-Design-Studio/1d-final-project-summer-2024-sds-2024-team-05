@@ -24,7 +24,7 @@
         <p class="numbers-not-active">6</p>
       </div>
     </div>
-    <h1>Edit Form - Step 1</h1>
+    <h1><%= @form_origin_text %> - Step 1</h1>
     
     <%= form_with(model: @form, url: edit_1_form_path(@form), method: :patch, local: true, class: "mb-4") do |form| %>
       <div class="row mb-3">
@@ -118,6 +118,7 @@
         </div>
       </div>
 
+    <%= link_to "Back", forms_path, class: "btn btn-secondary" %>
       <%= form.submit "Next", class: "btn btn-primary" %>
     <% end %>
   </div>

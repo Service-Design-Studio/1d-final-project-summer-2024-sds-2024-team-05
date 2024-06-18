@@ -4,16 +4,20 @@ class PatientsController < ApplicationController
   def index
     @forms = Form.select(:id, :first_name, :last_name, :start_date)
     @form = Form.new
+    session[:form_origin] = 'index'
   end
 
+  # Step 1 of form creation
   def new
     @form = Form.new
+    session[:form_origin] = 'new'
   end
 
+  # Save step 1 form data and move to step 2
   def create
-    @form = Form.new(form_params)
+    @form = Form.new(form_params_step1)
     if @form.save
-      redirect_to forms_path, notice: 'Form was successfully created.'
+      redirect_to edit_2_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
     else
       render :new
     end
@@ -22,6 +26,7 @@ class PatientsController < ApplicationController
   # GET /forms/1/edit_1
   def edit_1
     @form = Form.find(params[:id])
+    @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
   end
 
   # PATCH /forms/1/update_1
@@ -37,15 +42,13 @@ class PatientsController < ApplicationController
   # GET /forms/1/edit_2
   def edit_2
     @form = Form.find(params[:id])
+    @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
   end
 
   # PATCH /forms/1/update_2
   def update_2
     @form = Form.find(params[:id])
     if @form.update(form_params_step2)
-      puts "TRUE TRUE TRUE"
-      puts "TRUE TRUE TRUE"
-      puts "TRUE TRUE TRUE"
       redirect_to edit_3_form_path(@form), notice: 'Form 2 was successfully updated.'
     else
       render :edit_2
@@ -55,6 +58,7 @@ class PatientsController < ApplicationController
   # GET /forms/1/edit_3
   def edit_3
     @form = Form.find(params[:id])
+    @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
   end
 
   # PATCH /forms/1/update_3
@@ -66,6 +70,15 @@ class PatientsController < ApplicationController
       render :edit_3
     end
   end
+
+  def determine_form_origin_text
+    if session[:form_origin] == 'new'
+      'New Form'
+    elsif session[:form_origin] == 'index'
+      'Edit Form'
+    end
+  end
+
 
   def destroy
     @form = Form.find(params[:id])

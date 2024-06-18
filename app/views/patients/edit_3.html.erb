@@ -9,7 +9,22 @@
 </head>
 <body>
   <div class="container">
-    <h1>Edit Form - Step 3</h1>
+    <div class="steps">
+      <div class="page">
+        <p class="numbers-not-active">1</p>
+        <p class="dash">---</p>
+        <p class="numbers-not-active">2</p>
+        <p class="dash">---</p>
+        <p class="numbers-active">3</p>
+        <p class="dash">---</p>
+        <p class="numbers-not-active">4</p>
+        <p class="dash">---</p>
+        <p class="numbers-not-active">5</p>
+        <p class="dash">---</p>
+        <p class="numbers-not-active">6</p>
+      </div>
+    </div>
+    <h1><%= @form_origin_text %> - Step 3</h1>
     
     <%= form_with(model: @form, url: edit_3_form_path(@form), method: :patch, local: true) do |form| %>
       <div class="form-group">
@@ -27,6 +42,7 @@
         <%= form.date_field :end_date, class: "form-control" %>
       </div>
 
+      <%= link_to "Back", edit_2_form_path(@form), class: "btn btn-secondary" %>
       <%= form.submit "Next", class: "btn btn-primary" %>
     <% end %>
   </div>

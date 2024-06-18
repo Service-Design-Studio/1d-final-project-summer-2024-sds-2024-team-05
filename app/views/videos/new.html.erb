@@ -44,11 +44,12 @@
           <%= form.file_field :file, accept: 'video/*', class: 'form-control mb-3', id: 'videoInput1' %>
         <% end %>
         <h5 style="margin-top: 1em;">Video should contain patient moving around the house just like how he/she would on a daily basis</h5>
-
+               <br>
+               <p>Example video:</p>
         <!-- Embedded Video Player -->
         <div class="video-preview" style="margin-top: 20px;">
           <video width="300" height="200" controls>
-            <source src="/videos/gait.mp4" type="video/mp4">
+            <source src="/videos/videoUploadForm1.mp4" type="video/mp4">
             Your browser does not support the video tag.
           </video>
         </div>
@@ -63,11 +64,12 @@
           <%= form.file_field :file, accept: 'video/*', class: 'form-control mb-3', id: 'videoInput2' %>
         <% end %>
         <h5 style="margin-top: 1em;">Possible Questions: “How are you today?”, “What is your name?”, “What day is it today?”, “Who is this person?”</h5>
-
+        <br>
+        <p>Example video:</p>
         <!-- Embedded Video Player for Cognitive Video -->
         <div class="video-preview" style="margin-top: 20px;">
-          <video width="600" height="200" controls>
-            <source src="/videos/cognitive.mp4" type="video/mp4">
+          <video width="300" height="200" controls>
+            <source src="/videos/videoUploadForm2.mp4" type="video/mp4">
             Your browser does not support the video tag.
           </video>
         </div>

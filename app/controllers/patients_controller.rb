@@ -83,7 +83,8 @@ class PatientsController < ApplicationController
   def destroy
     @form = Form.find(params[:id])
     @form.destroy
-    redirect_to forms_url, notice: 'Form was successfully deleted.'
+    flash[:notice] = "Movie '#{@movie.title}' deleted."
+    redirect_to forms_path
   end
 
   private
@@ -108,7 +109,7 @@ class PatientsController < ApplicationController
   end
 
   def form_params_step2
-    params.require(:form).permit(:height, :weight, :conditions, :medication)
+    params.require(:form).permit(:height, :weight, :conditions, :medication, :hospital, :discharge_summ)
   end
 
   def form_params_step3

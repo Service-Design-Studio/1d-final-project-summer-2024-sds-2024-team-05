@@ -19,7 +19,8 @@
           <th>First Name</th>
           <th>Last Name</th>
           <th>Start Date</th>
-          <th>Actions</th>
+          <th class="text-center">Summary</th>
+          <th class="text-center">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -28,11 +29,12 @@
             <td><%= form.first_name %></td>
             <td><%= form.last_name %></td>
             <td><%= form.start_date %></td>
-            <td>
+            <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info' %></td>
+            <td class="text-center">
               <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary' %>
               <%= link_to 'Delete', form_path(form), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
-
             </td>
+
           </tr>
         <% end %>
       </tbody>

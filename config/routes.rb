@@ -43,7 +43,6 @@ Rails.application.routes.draw do
       patch 'edit_2', to: 'patients#update_2'
       get 'edit_3', to: 'patients#edit_3'
       patch 'edit_3', to: 'patients#update_3'
-      delete 'delete'
     end
   end
   root 'patients#index'

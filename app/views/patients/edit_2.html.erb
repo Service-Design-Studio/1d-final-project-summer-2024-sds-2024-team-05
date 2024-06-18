@@ -46,6 +46,24 @@
         <%= form.label :medication %>
         <%= form.text_field :medication, class: "form-control" %>
       </div>
+
+      <div class="row d-flex justify-content-left mt-4">
+        <div class="col-sm-12">
+          <fieldset>
+            <p>Has the Patient been Hospitalised Recently?</p>
+            <div class="form-check form-check-inline">
+              <%= form.radio_button :hospital, '1', class: 'form-check-input', checked: @form.hospital == true %>
+              <%= form.label :hospital_yes, "Yes", class: 'form-check-label' %>
+            </div>
+            <div class="form-check form-check-inline">
+              <%= form.radio_button :hospital, '0', class: 'form-check-input', checked: @form.hospital == false %>
+              <%= form.label :hospital_no, "No", class: 'form-check-label' %>
+            </div>
+          </fieldset>
+          <p><i>If yes, please upload the relevant discharge summary (optional)</i></p>
+        </div>
+      </div>
+
       <%= link_to "Back", edit_1_form_path(@form), class: "btn btn-secondary" %>
       <%= form.submit "Next", class: "btn btn-primary" %>
     <% end %>

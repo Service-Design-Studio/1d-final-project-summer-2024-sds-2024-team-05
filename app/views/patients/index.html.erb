@@ -31,8 +31,12 @@
             <td><%= form.start_date %></td>
             <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info' %></td>
             <td class="text-center">
-              <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary' %>
-              <%= link_to 'Delete', form_path(form), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+          <div class="d-flex justify-content-center align-items-center">
+            <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2' %>
+            <%= form_with(model: form, method: :delete, url: form_path(form), data: { confirm: 'Are you sure?' }) do |f| %>
+              <%= f.submit 'Delete', class: 'btn btn-danger' %>
+            <% end %>
+          </div>
             </td>
 
           </tr>

@@ -83,7 +83,7 @@ class PatientsController < ApplicationController
   def destroy
     @form = Form.find(params[:id])
     @form.destroy
-    flash[:notice] = "Movie '#{@movie.title}' deleted."
+    flash[:notice] = "Form for '#{@form.first_name}' deleted."
     redirect_to forms_path
   end
 

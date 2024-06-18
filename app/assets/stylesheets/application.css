@@ -18,9 +18,21 @@ h1 {
     padding: 0;
 }
 
+
+
+.btn-blue {
+    color: white;
+    border: 1px solid #253255;
+    background-color: #253255;
+    width: 7em;
+    margin-top: 0.5em;
+}
+
 .btn-outline-blue {
     color: #253255;
     border: 1px solid #253255;
+    background-color: white;
+
     width: 7em;
     margin-top: 0.5em;
 }
@@ -152,6 +164,20 @@ h1 {
     box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.5);
 }
 
+
+.box-video {
+    display: flex;
+    flex-direction: column;
+    height: 70vh;
+    width:100vh;
+    border-radius: 5%;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+    margin-top: 1em;
+    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.5);
+}
+
 .video-form {
     display: flex;
     flex-direction: column;
@@ -182,5 +208,42 @@ h1 {
     text-align: center;
     margin: auto;
     margin-top: 1em;
+}
+
+.circular-button {
+    border-radius: 50%;  /* Makes the button round */
+    width: 40px;         /* Width of the button */
+    height: 40px;        /* Height of the button, equal to the width to make it a perfect circle */
+    padding: 0;          /* Removes padding to avoid content overflow */
+    display: flex;       /* Ensures the content is centered */
+    align-items: center; /* Centers content vertically */
+    justify-content: center; /* Centers content horizontally */
+
+}
+
+.btn-selected {
+    color: white;
+    background-color: #253255;
+
+    border-radius: 50%;  /* Makes the button round */
+    width: 40px;         /* Width of the button */
+    height: 40px;        /* Height of the button, equal to the width to make it a perfect circle */
+    padding: 0;          /* Removes padding to avoid content overflow */
+    display: flex;       /* Ensures the content is centered */
+    align-items: center; /* Centers content vertically */
+    justify-content: center; /* Centers content horizontally */
+}
+.btn-outline-save {
+    color: white;
+    border: 1px solid #04AA6D;
+    background-color: #04AA6D;
+    width: 7em;
+    margin-top: 0.5em;
+}
+
+.btn-outline-save:hover {
+    color: #04AA6D;
+    background-color: white;
+    border: 1px solid #04AA6D;
 }
 

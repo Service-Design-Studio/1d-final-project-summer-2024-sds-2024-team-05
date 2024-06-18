@@ -12,17 +12,19 @@
     <div class="container">
         <div class="steps">
         <div class="page">
-            <p class="numbers-not-active">1</p>
-            <p class="dash">---</p>
-            <p class="numbers-not-active">2</p>
-            <p class="dash">---</p>
-            <p class="numbers-not-active">3</p>
-            <p class="dash">---</p>
-            <p class="numbers-not-active">4</p>
-            <p class="dash">---</p>
-            <p class="numbers-not-active">5</p>
-            <p class="dash">---</p>
-            <p class="numbers-active">6</p>
+
+          <%= button_to '1', "/forms/personal", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+
+          <%= button_to '2', "/forms/med_cond", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+
+          <%= button_to '3', "/forms/serv_req", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+         
+          <%= button_to '4', "/videos/new", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          
+          <%= button_to '5', "/photos/new", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          
+          <button type="button" class="btn btn-primary circular-button btn-blue">5</button>
+
         </div>
         </div>
 
@@ -233,6 +235,7 @@
     <div class="col my-5 text-center">
             <%= link_to "Back", "/photos/new", class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: center; margin-right: 5px;'%>
             <%= link_to "Save", "#", class: "btn btn-lg btn-outline-save rounded-pill", style: 'float: center; margin-right: 5px;'%>
-            <%= link_to "Submit", "#", class: "btn btn-lg btn-outline-red rounded-pill", style: 'float: center;' %>
+
+            <%= link_to "Submit", "#", class: "btn btn-lg btn-blue rounded-pill", style: 'float: center;' %>
     </div>
 </body>

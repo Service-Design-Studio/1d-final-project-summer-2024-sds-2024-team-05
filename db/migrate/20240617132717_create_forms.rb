@@ -12,7 +12,7 @@ class CreateForms < ActiveRecord::Migration[7.1]
       t.integer :weight
       t.string :conditions
       t.string :medication
-      t.string :service
+      t.string :services
       t.date :start_date
       t.date :end_date
 

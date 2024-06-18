@@ -12,6 +12,7 @@
   <div class="container">
     <div class="steps">
       <div class="page">
+
           <%= button_to '1', "/forms/personal", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
 
           <%= button_to '2', "/forms/med_cond", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
@@ -23,6 +24,7 @@
           <%= button_to '5', "/photos/new", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
           
           <%= button_to '6', "/forms/summary", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+
       </div>
     </div>
     
@@ -53,10 +55,12 @@
           </form>
         </div>
         
+
       <div class="col d-flex justify-content-center my-5">
           <%= link_to "Back", "/forms/med_cond", class: "btn btn-lg btn-outline-blue rounded-pill", style: 'float: left; margin-right: 5px;'%>
           <%= link_to "Save", "#", class: "btn btn-outline-save btn-lg rounded-pill", style: 'float: left; margin-right: 5px;'%>
           <%= link_to "Continue", "/videos/new", class: "btn btn-lg btn-outline-blue rounded-pill", style: 'float: left;' %>
+
         </div>
     </div>   
 </body>

@@ -15,9 +15,18 @@ class PatientsController < ApplicationController
 
   # Save step 1 form data and move to step 2
   def create
-    @form = Form.new(form_params_step1)
-    if @form.save
-      redirect_to edit_2_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
+    case params[:commit]
+    when 'Save'
+      @form = Form.new(form_params_step1)
+      if @form.save
+        session[:form_origin] = 'new'
+        redirect_to edit_1_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
+      end
+    when 'Next'
+      @form = Form.new(form_params_step1)
+      if @form.save
+        redirect_to edit_2_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
+      end
     else
       render :new
     end

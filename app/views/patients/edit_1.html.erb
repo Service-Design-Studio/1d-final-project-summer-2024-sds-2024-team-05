@@ -99,7 +99,7 @@
             </div>
 
             <div class="form-check form-check-inline">
-              <%= form.radio_button :relationship, nil, class: "form-check-input", id: "others", checked: @form.relationship == "Others" %>
+              <%= form.radio_button :relationship, "Others", class: "form-check-input", id: "others", checked: @form.relationship == "Others" %>
               <%= form.label "others", class: "form-check-label", for: "others" do %>
                 Others:
               <% end %>

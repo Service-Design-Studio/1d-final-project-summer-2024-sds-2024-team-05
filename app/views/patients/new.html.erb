@@ -24,7 +24,7 @@
         <p class="numbers-not-active">6</p>
       </div>
     </div>
-    <h1>New Form</h1>
+    <h1>New Form - Step 1</h1>
     
     <%= form_with(model: @form, local: true) do |form| %>
       <div class="row mb-3">
@@ -118,7 +118,8 @@
         </div>
       </div>
       <%= link_to "Back", forms_path, class: "btn btn-secondary" %>
-      <%= form.submit "Next", class: "btn btn-primary" %>
+      <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-primary" %>
+      <%= form.submit "Next",  name: "commit", value: "Next", class: "btn btn-primary" %>
     <% end %>
   </div>
 

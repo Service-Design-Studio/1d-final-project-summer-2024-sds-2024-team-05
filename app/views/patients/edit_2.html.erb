@@ -76,7 +76,8 @@
       </div>
 
       <%= link_to "Back", edit_1_form_path(@form), class: "btn btn-secondary" %>
-      <%= form.submit "Next", class: "btn btn-primary" %>
+      <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-success" %>
+      <%= form.submit "Next",  name: "commit", value: "Next", class: "btn btn-primary" %>
     <% end %>
   </div>
 

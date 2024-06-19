@@ -56,7 +56,8 @@
       <!-- Navigation Buttons -->
       <div class="d-flex justify-content-center mt-5">
         <%= link_to "Back", edit_4_form_path(@form), class: "btn btn-secondary me-2" %>
-        <%= form.submit "Next", name: 'commit', value: 'Submit', class: "btn btn-primary" %>
+        <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-success me-2" %>
+        <%= form.submit "Next",  name: "commit", value: "Submit", class: "btn btn-primary" %>
       </div>
     <% end %>
   </div>

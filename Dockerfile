@@ -11,7 +11,8 @@ WORKDIR /rails
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+    BUNDLE_WITHOUT="development" \
+    SECRET_KEY_BASE="7af3db59fdf73046acc2d172674f1da8d671cedfc008b80281a40daaa0b00abab2289811b25966c67e6d4a13d5c69b757d865a00eacf82de4fc99758547dd2a2"
 
 
 # Throw-away build stage to reduce size of final image
@@ -20,6 +21,13 @@ FROM base as build
 # Install packages needed to build gems
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential git libvips pkg-config
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    postgresql-client \
+    # Other dependencies if needed
+    && rm -rf /var/lib/apt/lists/*
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
@@ -47,8 +55,13 @@ FROM base
 
 # Install packages needed for deployment
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libsqlite3-0 libvips && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+    apt-get install --no-install-recommends -y \
+        curl \
+        libsqlite3-0 \
+        libvips \
+        libpq5 \
+        postgresql-client \
+    && rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Copy built artifacts: gems, application
 COPY --from=build /usr/local/bundle /usr/local/bundle
@@ -63,5 +76,5 @@ USER rails:rails
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start the server by default, this can be overwritten at runtime
-EXPOSE 3000
-CMD ["./bin/rails", "server"]
+EXPOSE 8080
+CMD ["bin/rails", "server", "-b", "0.0.0.0", "-p", "8080"]

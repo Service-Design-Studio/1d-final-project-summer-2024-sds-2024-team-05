@@ -55,7 +55,7 @@
             <hr/>
             <h4>Upload Physical Video</h4>
             <%= form.file_field :physical_video, accept: 'video/*', class: 'form-control mb-3' %>
-            <%= form.submit 'Upload Physical Video', name: 'commit', value: 'upload_physical', class: 'btn btn-primary me-2' %>
+            <%= form.submit 'Upload Physical Video', name: 'commit', value: 'Upload Physical Video', class: 'btn btn-primary me-2' %>
             <% if @form.physical_video.attached? %>
               <div class="video-container text-center mt-3">
                 <p>Physical Video Uploaded:</p>
@@ -72,7 +72,7 @@
             <hr/>
             <h4>Upload Mental Video</h4>
             <%= form.file_field :mental_video, accept: 'video/*', class: 'form-control mb-3' %>
-            <%= form.submit 'Upload Mental Video', name: 'commit', value: 'upload_mental', class: 'btn btn-primary me-2' %>
+            <%= form.submit 'Upload Mental Video', name: 'commit', value: 'Upload Mental Video', class: 'btn btn-primary me-2' %>
             <% if @form.mental_video.attached? %>
               <div class="video-container text-center mt-3">
                 <p>Mental Video Uploaded:</p>
@@ -86,7 +86,7 @@
       <!-- Navigation Buttons -->
       <div class="d-flex justify-content-center mt-5">
         <%= link_to "Back", edit_3_form_path(@form), class: "btn btn-secondary me-2" %>
-        <%= form.submit "Next", class: "btn btn-primary", name: 'commit', value: 'next_step' %>
+        <%= form.submit "Next", class: "btn btn-primary", name: 'commit', value: 'Next' %>
       </div>
     <% end %>
   </div>

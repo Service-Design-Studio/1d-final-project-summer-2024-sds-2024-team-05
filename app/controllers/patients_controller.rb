@@ -84,19 +84,19 @@ class PatientsController < ApplicationController
     Rails.logger.debug "params[:form]: #{params[:form]}"
 
     case params[:commit]
-    when 'upload_physical'
+    when 'Upload Physical Video'
       if params[:form].present? && params[:form][:physical_video].present?
         @form.physical_video.attach(params[:form][:physical_video])
       end
       # Redirect or render to update view to show the uploaded file
       redirect_to edit_4_form_path(@form), notice: 'Physical video uploaded successfully.'
-    when 'upload_mental'
+    when 'Upload Mental Video'
       if params[:form].present? && params[:form][:mental_video].present?
         @form.mental_video.attach(params[:form][:mental_video])
       end
       # Redirect or render to update view to show the uploaded file
       redirect_to edit_4_form_path(@form), notice: 'Mental video uploaded successfully.'
-    when 'next_step'
+    when 'Next'
       if params[:form].present?
         @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
         @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
@@ -122,13 +122,12 @@ class PatientsController < ApplicationController
     Rails.logger.debug "params[:form]: #{params[:form]}"
 
     case params[:commit]
-    when 'upload_enviroment'
-      if params[:form].present? && params[:form][:environment_video].present?
-        @form.environment_video.attach(params[:form][:environment_video])
-      end
-      # Redirect or render to update view to show the uploaded file
+  when 'Upload Environment Video'
+    if params[:form].present? && params[:form][:environment_video].present?
+      @form.environment_video.attach(params[:form][:environment_video])
       redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
-    when 'next_step'
+    end
+    when 'Submit'
       if params[:form].present?
         @form.environment_video.attach(params[:form][:environment_video]) if params[:form][:environment_video].present?
       end

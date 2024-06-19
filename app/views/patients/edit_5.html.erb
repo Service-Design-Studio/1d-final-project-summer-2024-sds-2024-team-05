@@ -12,9 +12,9 @@
       margin-bottom: 10px;
     }
     .video-container video {
-      max-width: 100%;
+      max-width: 300px;
       max-height: 180px;
-      width: auto;
+      width: 100%;
       height: auto;
     }
   </style>
@@ -43,7 +43,7 @@
             Take a video from your house doorstep including the Living Room, Bedroom, and Toilet. The video should show the patient moving around the house as they would daily.
           </p>
           <%= form.file_field :environment_video, accept: 'video/*', class: 'form-control mb-3'%>
-          <%= form.submit 'Upload', name: 'commit', value: 'upload_environment', class: 'btn btn-primary' %>
+          <%= form.submit 'Upload', name: 'commit', value: 'Upload Environment Video', class: 'btn btn-primary' %>
           <div class="video-container text-center">
             <% if @form.environment_video.attached? %>
               <p>Current Environment Video:</p>
@@ -56,7 +56,7 @@
       <!-- Navigation Buttons -->
       <div class="d-flex justify-content-center mt-5">
         <%= link_to "Back", edit_4_form_path(@form), class: "btn btn-secondary me-2" %>
-        <%= form.submit "Next", name: 'commit', value: 'next_step', class: "btn btn-primary" %>
+        <%= form.submit "Next", name: 'commit', value: 'Submit', class: "btn btn-primary" %>
       </div>
     <% end %>
   </div>

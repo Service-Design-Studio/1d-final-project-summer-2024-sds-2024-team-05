@@ -71,50 +71,73 @@ class PatientsController < ApplicationController
     end
   end
 
-    # GET /forms/1/edit_4
-    def edit_4
-      @form = Form.find(params[:id])
-      @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
-    end
-  
-    # PATCH /forms/1/update_4
-    def update_4
-      @form = Form.find(params[:id])
-      
-      # Check if any parameters are present in the form submission
-      if form_params_step4.empty?
-        puts "TESTING"
-        redirect_to edit_5_form_path(@form), notice: 'No changes were made.'
-      else
-        if @form.update(form_params_step4)
-          redirect_to edit_5_form_path(@form), notice: 'Form 4 was successfully updated.'
-        else
-          render :edit_4
-        end
+  # GET /forms/1/edit_4
+  def edit_4
+    @form = Form.find(params[:id])
+    @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
+  end
+
+# PATCH /forms/1/update_4
+  def update_4
+    @form = Form.find(params[:id])
+    Rails.logger.debug "params[:commit]: #{params[:commit]}"
+    Rails.logger.debug "params[:form]: #{params[:form]}"
+
+    case params[:commit]
+    when 'upload_physical'
+      if params[:form].present? && params[:form][:physical_video].present?
+        @form.physical_video.attach(params[:form][:physical_video])
       end
-    end
-
-    # GET /forms/1/edit_5
-    def edit_5
-      @form = Form.find(params[:id])
-      @form_origin_text = determine_form_origin_text # Changes my header based on my origin new or edit
-    end
-
-    # PATCH /forms/1/update_5
-    def update_5
-      @form = Form.find(params[:id])
-
-      # Check if any environment_video parameters are present in the form submission
-      if form_params_step5.blank? && @form.environment_video.attached?
-        redirect_to @form, notice: 'No changes were made.'
-      else
-        if @form.update(form_params_step5)
-          redirect_to @form, notice: 'Form 5 was successfully updated.'
-        else
-          render :edit_5
-        end
+      # Redirect or render to update view to show the uploaded file
+      redirect_to edit_4_form_path(@form), notice: 'Physical video uploaded successfully.'
+    when 'upload_mental'
+      if params[:form].present? && params[:form][:mental_video].present?
+        @form.mental_video.attach(params[:form][:mental_video])
       end
+      # Redirect or render to update view to show the uploaded file
+      redirect_to edit_4_form_path(@form), notice: 'Mental video uploaded successfully.'
+    when 'next_step'
+      if params[:form].present?
+        @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
+        @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+      end
+      redirect_to edit_5_form_path(@form)
+    else
+      # Handle unexpected values for params[:commit]
+      redirect_to edit_4_form_path(@form), alert: 'Invalid action.'
     end
+  end
+
+
+  # GET /forms/1/edit_5
+  def edit_5
+    @form = Form.find(params[:id])
+    @form_origin_text = determine_form_origin_text # Changes my header based on my origin new or edit
+  end
+
+  # PATCH /forms/1/update_5
+  def update_5
+    @form = Form.find(params[:id])
+    Rails.logger.debug "params[:commit]: #{params[:commit]}"
+    Rails.logger.debug "params[:form]: #{params[:form]}"
+
+    case params[:commit]
+    when 'upload_enviroment'
+      if params[:form].present? && params[:form][:environment_video].present?
+        @form.environment_video.attach(params[:form][:environment_video])
+      end
+      # Redirect or render to update view to show the uploaded file
+      redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
+    when 'next_step'
+      if params[:form].present?
+        @form.environment_video.attach(params[:form][:environment_video]) if params[:form][:environment_video].present?
+      end
+      redirect_to @form
+    else
+      # Handle unexpected values for params[:commit]
+      redirect_to edit_5_form_path(@form), alert: 'Invalid action.'
+    end
+  end
 
 
   def determine_form_origin_text
@@ -169,4 +192,5 @@ class PatientsController < ApplicationController
   def form_params_step5
     params.require(:form).permit(:environment_video)
   end
+
 end

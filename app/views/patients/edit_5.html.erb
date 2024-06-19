@@ -33,34 +33,32 @@
     <h1>Environmental Analysis</h1>
         
     <!-- Video Upload Section -->
-    <div class="row">
-      <!-- Step 1 -->
-      <div class="box-video g-5">
-        <h2 style="text-align: center">Environmental Video</h2>
-        <hr/>
-        <p style="text-align: center">
-          Take a video from your house doorstep including the Living Room, Bedroom, and Toilet. The video should show the patient moving around the house as they would daily.
-        </p>
-        <div class="video-container text-center">
-          <% if @form.environment_video.attached? %>
-            <p>Current Environment Video:</p>
-            <%= video_tag url_for(@form.environment_video), controls: true, class: "img-thumbnail" %>
-          <% end %>
+    <%= form_with(model: @form, url: edit_5_form_path(@form), method: :patch, local: true, html: { multipart: true }) do |form| %>
+      <div class="row">
+        <!-- Step 1: Environment Video -->
+        <div class="box-video g-5">
+          <h2 style="text-align: center">Environmental Video</h2>
+          <hr/>
+          <p style="text-align: center">
+            Take a video from your house doorstep including the Living Room, Bedroom, and Toilet. The video should show the patient moving around the house as they would daily.
+          </p>
+          <%= form.file_field :environment_video, accept: 'video/*', class: 'form-control mb-3'%>
+          <%= form.submit 'Upload', name: 'commit', value: 'upload_environment', class: 'btn btn-primary' %>
+          <div class="video-container text-center">
+            <% if @form.environment_video.attached? %>
+              <p>Current Environment Video:</p>
+              <%= video_tag url_for(@form.environment_video), controls: true, class: "img-thumbnail" %>
+            <% end %>
+          </div>
         </div>
-        <%= form_with model: @form, url: edit_5_form_path(@form), method: :patch, local: true, html: { multipart: true, id: 'environmentVideoUploadForm' } do |form| %>
-          <%= form.file_field :environment_video, accept: 'video/*', class: 'form-control mb-3', id: 'environmentVideoInput' %>
-          <%= form.submit 'Upload', class: 'btn btn-primary' %>
-        <% end %>
       </div>
-    </div>
 
-    <!-- Navigation Buttons -->
-    <div class="d-flex justify-content-center mt-5">
-      <%= link_to "Back", edit_4_form_path(@form), class: "btn btn-secondary me-2" %>
-      <%= form_with(model: @form, url: edit_5_form_path(@form), method: :patch, local: true) do |form| %>
-        <%= form.submit "Next", class: "btn btn-primary" %>
-      <% end %>
-    </div>
+      <!-- Navigation Buttons -->
+      <div class="d-flex justify-content-center mt-5">
+        <%= link_to "Back", edit_4_form_path(@form), class: "btn btn-secondary me-2" %>
+        <%= form.submit "Next", name: 'commit', value: 'next_step', class: "btn btn-primary" %>
+      </div>
+    <% end %>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

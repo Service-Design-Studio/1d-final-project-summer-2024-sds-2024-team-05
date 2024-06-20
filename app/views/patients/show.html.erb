@@ -71,35 +71,34 @@
       <!-- Row for Videos -->
       <div class="row mt-3">
         <div class="col-md-6">
-          <% if @form.physical_video.attached? %>
-            <div class="video-container text-center">
-              <p>Physical Video:</p>
+          <div class="video-container text-center">
+            <p>Physical Video:</p>
+            <% if @form.physical_video.attached? %>
               <%= video_tag url_for(@form.physical_video), controls: true, class: "img-thumbnail" %>
-            </div>
-          <% end %>
+            <% end %>
+          </div>
         </div>
         <div class="col-md-6">
-          <% if @form.mental_video.attached? %>
-            <div class="video-container text-center">
-              <p>Mental Video:</p>
+          <div class="video-container text-center">
+            <p>Mental Video:</p>
+            <% if @form.mental_video.attached? %>
               <%= video_tag url_for(@form.mental_video), controls: true, class: "img-thumbnail" %>
-            </div>
-          <% end %>
+            <% end %>
+          </div>
         </div>
       </div>
 
-          <!-- Environment Video Section -->
+      <!-- Environment Video Section -->
       <div class="row mt-3">
         <div class="col-md-6">
-          <% if @form.environment_video.attached? %>
-            <div class="video-container text-center">
-              <p>Environment Video:</p>
+          <div class="video-container text-center">
+            <p>Environment Video:</p>
+            <% if @form.environment_video.attached? %>
               <%= video_tag url_for(@form.environment_video), controls: true, class: "img-thumbnail" %>
-            </div>
-          <% end %>
+            <% end %>
+          </div>
         </div>
       </div>
-    </div>
 
     
     <div class="d-flex justify-content-center mt-5 mb-5">

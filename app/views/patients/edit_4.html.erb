@@ -99,9 +99,12 @@
       </div>
 
       <!-- Navigation Buttons -->
+
       <div class="d-flex justify-content-center mt-5 mb-5">
         <%= link_to "Back", edit_3_form_path(@form), class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
+        <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-success me-2" %>
         <%= form.submit "Next", name: 'commit', value: 'Next',  class: "btn btn-lg btn-blue rounded-pill", style: 'float: left; margin-right: 5px;'%>
+
       </div>
     <% end %>
   </div>

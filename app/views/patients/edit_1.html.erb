@@ -118,9 +118,11 @@
           <%= form.text_area :hobbies, class: "form-control", id: "hobbies", style: "width: 50%; height: 100px; text-align: left;" %>
         </div>
       </div>
+
   <div class="row mb-5">
     <%= link_to "Back", forms_path, class:"btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
-      <%= form.submit "Next", class: "btn btn-lg btn-blue rounded-pill", style: 'float: left; margin-right: 5px;' %>
+    <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-success" %>
+    <%= form.submit "Next", class: "btn btn-lg btn-blue rounded-pill", style: 'float: left; margin-right: 5px;' %>
     <% end %>
     </div>
   </div>

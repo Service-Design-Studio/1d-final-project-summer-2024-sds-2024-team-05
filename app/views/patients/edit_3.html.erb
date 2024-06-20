@@ -43,7 +43,9 @@
       </div>
       <br>
       <%= link_to "Back", edit_2_form_path(@form), class:"btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;'%>
+      <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-success" %>
       <%= form.submit "Next", class: "btn btn-lg btn-blue rounded-pill", style: 'float: left; margin-right: 5px;' %>
+
     <% end %>
   </div>
 

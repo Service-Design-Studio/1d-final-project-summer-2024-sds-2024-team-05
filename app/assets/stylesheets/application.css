@@ -1,0 +1,249 @@
+/* This is a manifest file that'll be compiled into application.css, which will include all the files listed below.
+ *
+ * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the compiled file so the styles you add here take precedence over styles defined in any other CSS files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ */
+
+ :root {
+    --linear-grad: linear-gradient(to right, #141E30, #243B55);
+    --grad-clr1: #141E30;
+    --grad-clr2: #243B55;
+}
+
+h1 {
+    color: #253255;
+    margin-top: 0.5em;
+    padding: 0;
+}
+
+
+
+.btn-blue {
+    color: white;
+    border: 1px solid #253255;
+    background-color: #253255;
+    width: 7em;
+    margin-top: 0.5em;
+}
+
+.btn-outline-blue {
+    color: #253255;
+    border: 1px solid #253255;
+    background-color: white;
+
+    width: 7em;
+    margin-top: 0.5em;
+}
+
+.btn-outline-blue:hover {
+    color: white;
+    border: 1px solid #253255;
+    background-color: #253255;
+}
+
+.btn-outline-save {
+    color: #7c7d7e;
+    border: 1px solid #7c7d7e;
+    width: 7em;
+    margin-top: 0.5em;
+}
+
+.btn-outline-save:hover {
+    color: white;
+    border: 1px solid #7c7d7e;
+    background-color: #7c7d7e;
+}
+
+.btn-outline-black {
+    color: black;
+    border: 1px solid black;
+    width: 7em;
+    margin-top: 0.5em;
+}
+
+.btn-outline-black:hover {
+    color: white;
+    border: 1px solid black;
+    background-color: black;
+}
+
+.btn-outline-red {
+    color: red;
+    border: 1px solid red;
+    width: 7em;
+    margin-top: 0.5em;
+}
+
+.btn-outline-red:hover {
+    color: white;
+    border: 1px solid red;
+    background-color: red;
+}
+
+.boxhome {
+    display: flex;
+    flex-direction: column;
+    height: 30em;
+    width: 25em;
+    border-radius: 5%;
+    justify-content: center;
+    text-align: left;
+    margin: auto;
+    margin-top: 1.5em;
+    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.5);
+    align-items: stretch;
+}
+
+.steps {
+    display: flex;
+    justify-content: center;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+.page {
+    display: flex;
+    border: none;
+    outline: none;
+    justify-content: space-between;
+    width: 70vh;
+    margin-top: 5%;
+}
+
+.numbers-active { 
+    width: 50px; 
+    line-height: 50px; 
+    border-radius: 50%; 
+    text-align: center; 
+    background-color: var(--grad-clr2); 
+    color: white; 
+}
+
+.numbers-not-active { 
+    width: 50px; 
+    line-height: 50px; 
+    border-radius: 50%; 
+    text-align: center; 
+    border: 1px solid var(--grad-clr1);
+    color: black; 
+}
+
+.dash {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+  .custom-submit-button {
+    border-radius: 5px;
+    border: 2px solid #253255; /* Custom border color */
+    padding: 10px;
+    background-color: #253255; /* Custom background color */
+    color: white; /* Custom text color */
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .custom-submit-button:hover {
+    background-color: #253255; /* Custom background color on hover */
+  }
+
+/* Videos */
+.box {
+    display: inline-flex;
+    flex-direction: column;
+    height: 80vh;
+    width: 70vh;
+    border-radius: 5%;
+    justify-content: center;
+    text-align: center; 
+    margin: auto;
+    margin-top: 1em;
+    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.5);
+}
+
+
+.box-video {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width:100vh;
+    border-radius: 5%;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+    margin-top: 1em;
+    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.5);
+}
+
+.video-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.box button {
+    display: flex;
+    justify-content: center;
+    width: 25vh;
+    margin: auto;
+}
+
+.video-preview {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Photos */
+.box1 {
+    display: flex;
+    flex-direction: column;
+    /* height: 66vh;
+    width: 80vh; */
+    /* border: black solid 0.25em;
+    border-radius:3.5em; */
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+    margin-top: 1em;
+}
+
+.circular-button {
+    border-radius: 50%;  /* Makes the button round */
+    width: 40px;         /* Width of the button */
+    height: 40px;        /* Height of the button, equal to the width to make it a perfect circle */
+    padding: 0;          /* Removes padding to avoid content overflow */
+    display: flex;       /* Ensures the content is centered */
+    align-items: center; /* Centers content vertically */
+    justify-content: center; /* Centers content horizontally */
+
+}
+
+.btn-selected {
+    color: white;
+    background-color: #253255;
+
+    border-radius: 50%;  /* Makes the button round */
+    width: 40px;         /* Width of the button */
+    height: 40px;        /* Height of the button, equal to the width to make it a perfect circle */
+    padding: 0;          /* Removes padding to avoid content overflow */
+    display: flex;       /* Ensures the content is centered */
+    align-items: center; /* Centers content vertically */
+    justify-content: center; /* Centers content horizontally */
+}
+.btn-outline-save {
+    color: white;
+    border: 1px solid #04AA6D;
+    background-color: #04AA6D;
+    width: 7em;
+    margin-top: 0.5em;
+}
+
+.btn-outline-save:hover {
+    color: #04AA6D;
+    background-color: white;
+    border: 1px solid #04AA6D;
+}
+

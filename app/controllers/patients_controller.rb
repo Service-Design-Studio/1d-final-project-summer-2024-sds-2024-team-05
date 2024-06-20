@@ -88,6 +88,7 @@ class PatientsController < ApplicationController
 
 # PATCH /forms/1/update_4
   def update_4
+    puts 'test'
     @form = Form.find(params[:id])
     Rails.logger.debug "params[:commit]: #{params[:commit]}"
     Rails.logger.debug "params[:form]: #{params[:form]}"
@@ -112,6 +113,7 @@ class PatientsController < ApplicationController
       end
       redirect_to edit_5_form_path(@form)
     else
+      puts 'hello'
       # Handle unexpected values for params[:commit]
       redirect_to edit_4_form_path(@form), alert: 'Invalid action.'
     end
@@ -176,12 +178,12 @@ class PatientsController < ApplicationController
   end
   def form_params_step1
     permitted_params = params.require(:form).permit(:first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text)
-  
+
     # Check if 'Others' is selected for relationship
     if params[:form][:relationship] == "Others"
       permitted_params[:relationship] = params[:form][:others_text]
     end
-  
+
     permitted_params
   end
 

@@ -57,6 +57,7 @@
             <div class="video-preview" style="margin-top: 20px;">
             <video class = "rounded-video" width="100%" height="300" controls>
                 <source src="/videos/videoUploadForm1.mp4" type="video/mp4">
+            </video>
             </div>
             <br>
             Video should contain patient moving around the house just like how he/she would on a daily basis
@@ -67,8 +68,8 @@
             <div class="video-container text-center mt-3">
                   <p>Physical Video Uploaded:</p>
                   <%= video_tag url_for(@form.physical_video), controls: true, class: "img-thumbnail video-preview rounded-video" %>
-                </div>
-              <% end %>
+            </div>
+            <% end %>
           </div>
 
         <!-- Step 2: Mental Video -->
@@ -81,6 +82,7 @@
             <div class="video-preview" style="margin-top: 20px;">
             <video class = "rounded-video" width="100%" height="300" controls>
                 <source src="/videos/videoUploadForm2.mp4" type="video/mp4">
+            </video>
             </div>
             <br>
             Possible Questions: “How are you today?”, “What is your name?”, “What day is it today?”, “Who is this person?”
@@ -91,20 +93,20 @@
               <div class="video-container text-center mt-3">
                 <p>Video Uploaded:</p>
                   <%= video_tag url_for(@form.mental_video), controls: true, class: "img-thumbnail video-preview rounded-video",width:" 100%", height:"10" %>
-
+              </div>
             <% end %>
-          </div>
         </div>
       </div>
 
       <!-- Navigation Buttons -->
       <div class="d-flex justify-content-center mt-5 mb-5">
         <%= link_to "Back", edit_3_form_path(@form), class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
-        <%= form.submit "Next", class: "btn btn-lg btn-blue rounded-pill", style: 'float: left; margin-right: 5px;', name: 'commit', value: 'Next' %>
+        <%= form.submit "Next", name: 'commit', value: 'Next',  class: "btn btn-lg btn-blue rounded-pill", style: 'float: left; margin-right: 5px;'%>
+      </div>
     <% end %>
   </div>
 
   <!-- Bootstrap Bundle JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.netnpm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

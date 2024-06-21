@@ -41,8 +41,15 @@ class PatientsController < ApplicationController
   # PATCH /forms/1/update_1
   def update_1
     @form = Form.find(params[:id])
-    if @form.update(form_params_step1)
-      redirect_to edit_2_form_path(@form), notice: 'Form 1 was successfully updated.'
+    case params[:commit]
+    when 'Save'
+      if @form.update(form_params_step1)
+        redirect_to edit_1_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
+      end
+    when 'Next'
+      if @form.update(form_params_step1)
+        redirect_to edit_2_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
+      end
     else
       render :edit_1
     end
@@ -57,8 +64,15 @@ class PatientsController < ApplicationController
   # PATCH /forms/1/update_2
   def update_2
     @form = Form.find(params[:id])
-    if @form.update(form_params_step2)
-      redirect_to edit_3_form_path(@form), notice: 'Form 2 was successfully updated.'
+    case params[:commit]
+    when 'Save'
+      if @form.update(form_params_step2)
+        redirect_to edit_2_form_path(@form), notice: 'Form 2 was successfully updated.'
+      end
+    when 'Next'
+      if @form.update(form_params_step2)
+        redirect_to edit_3_form_path(@form), notice: 'Form 2 was successfully updated.'
+      end
     else
       render :edit_2
     end
@@ -73,8 +87,15 @@ class PatientsController < ApplicationController
   # PATCH /forms/1/update_3
   def update_3
     @form = Form.find(params[:id])
-    if @form.update(form_params_step3)
-      redirect_to edit_4_form_path(@form), notice: 'Form 3 was successfully updated.'
+    case params[:commit]
+    when 'Save'
+      if @form.update(form_params_step3)
+        redirect_to edit_3_form_path(@form), notice: 'Form 3 was successfully updated.'
+      end
+    when 'Next'
+      if @form.update(form_params_step3)
+        redirect_to edit_4_form_path(@form), notice: 'Form 3 was successfully updated.'
+      end
     else
       render :edit_3
     end
@@ -88,6 +109,7 @@ class PatientsController < ApplicationController
 
 # PATCH /forms/1/update_4
   def update_4
+    puts 'test'
     @form = Form.find(params[:id])
     Rails.logger.debug "params[:commit]: #{params[:commit]}"
     Rails.logger.debug "params[:form]: #{params[:form]}"
@@ -105,6 +127,12 @@ class PatientsController < ApplicationController
       end
       # Redirect or render to update view to show the uploaded file
       redirect_to edit_4_form_path(@form), notice: 'Mental video uploaded successfully.'
+    when 'Save'
+      if params[:form].present?
+        @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
+        @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+      end
+      redirect_to edit_4_form_path(@form)
     when 'Next'
       if params[:form].present?
         @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
@@ -112,6 +140,7 @@ class PatientsController < ApplicationController
       end
       redirect_to edit_5_form_path(@form)
     else
+      puts 'hello'
       # Handle unexpected values for params[:commit]
       redirect_to edit_4_form_path(@form), alert: 'Invalid action.'
     end
@@ -131,11 +160,16 @@ class PatientsController < ApplicationController
     Rails.logger.debug "params[:form]: #{params[:form]}"
 
     case params[:commit]
-  when 'Upload Environment Video'
-    if params[:form].present? && params[:form][:environment_video].present?
-      @form.environment_video.attach(params[:form][:environment_video])
-      redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
-    end
+    when 'Upload Environment Video'
+      if params[:form].present? && params[:form][:environment_video].present?
+        @form.environment_video.attach(params[:form][:environment_video])
+        redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
+      end
+    when 'Save'
+      if params[:form].present? && params[:form][:environment_video].present?
+        @form.environment_video.attach(params[:form][:environment_video])
+        redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
+      end
     when 'Submit'
       if params[:form].present?
         @form.environment_video.attach(params[:form][:environment_video]) if params[:form][:environment_video].present?
@@ -176,12 +210,12 @@ class PatientsController < ApplicationController
   end
   def form_params_step1
     permitted_params = params.require(:form).permit(:first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text)
-  
+
     # Check if 'Others' is selected for relationship
     if params[:form][:relationship] == "Others"
       permitted_params[:relationship] = params[:form][:others_text]
     end
-  
+
     permitted_params
   end
 

@@ -9,7 +9,7 @@
   <!-- Application CSS -->
   <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
   <style>
-    .video-container video {
+    /* .video-container video {
       max-width: 300px;
       max-height: 180px;
       width: 100%;
@@ -19,7 +19,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-    }
+    } */
   </style>
 </head>
 <body>
@@ -28,17 +28,17 @@
     <div class="steps">
       <div class="page">
         <!-- Adjusted steps with Bootstrap styling -->
-        <p class="numbers-not-active">1</p>
-        <p class="dash">---</p>
-        <p class="numbers-not-active">2</p>
-        <p class="dash">---</p>
-        <p class="numbers-not-active">3</p>
-        <p class="dash">---</p>
-        <p class="numbers-active">4</p>
-        <p class="dash">---</p>
-        <p class="numbers-not-active">5</p>
-        <p class="dash">---</p>
-        <p class="numbers-not-active">6</p>
+          <%= button_to '1', edit_1_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+
+          <%= button_to '2', edit_2_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>   
+         
+          <%= button_to '3', edit_3_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+
+          <button type="button" class="btn btn-primary circular-button btn-blue">4</button>
+
+          <%= button_to '5', edit_5_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          
+          <%= button_to '6', @form, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
       </div>
     </div>
 
@@ -49,49 +49,67 @@
     <%= form_with(model: @form, url: edit_4_form_path(@form), method: :patch, local: true, html: { multipart: true }) do |form| %>
       <div class="row">
         <!-- Step 1: Physical Video -->
-        <div class="col-md-6 video-box">
-          <div class="box g-5 mb-4">
+        <div class="col-md-6 box">
             <h3>Step 1</h3>
             <hr/>
             <h4>Upload Physical Video</h4>
+            Film a video of the patient moving around the house
+            <div class="video-preview" style="margin-top: 20px;">
+            <video class = "rounded-video" width="100%" height="300" controls>
+                <source src="/videos/videoUploadForm1.mp4" type="video/mp4">
+            </video>
+            </div>
+            <br>
+            Video should contain patient moving around the house just like how he/she would on a daily basis
             <%= form.file_field :physical_video, accept: 'video/*', class: 'form-control mb-3' %>
             <%= form.submit 'Upload Physical Video', name: 'commit', value: 'Upload Physical Video', class: 'btn btn-primary me-2' %>
             <% if @form.physical_video.attached? %>
-              <div class="video-container text-center mt-3">
-                <p>Physical Video Uploaded:</p>
-                <%= video_tag url_for(@form.physical_video), controls: true, class: "img-thumbnail" %>
-              </div>
+
+            <div class="video-container text-center mt-3">
+                  <p>Physical Video Uploaded:</p>
+                  <%= video_tag url_for(@form.physical_video), controls: true, class: "img-thumbnail video-preview rounded-video" %>
+            </div>
             <% end %>
           </div>
-        </div>
 
         <!-- Step 2: Mental Video -->
-        <div class="col-md-6 video-box">
-          <div class="box g-5 mb-4">
+        <%# <div class="col-md-6 video-box"> %>
+        <div class="col-md-6 box">
             <h3>Step 2</h3>
             <hr/>
             <h4>Upload Mental Video</h4>
+            Film a video of the patient conversing with family
+            <div class="video-preview" style="margin-top: 20px;">
+            <video class = "rounded-video" width="100%" height="300" controls>
+                <source src="/videos/videoUploadForm2.mp4" type="video/mp4">
+            </video>
+            </div>
+            <br>
+            Possible Questions: “How are you today?”, “What is your name?”, “What day is it today?”, “Who is this person?”
             <%= form.file_field :mental_video, accept: 'video/*', class: 'form-control mb-3' %>
             <%= form.submit 'Upload Mental Video', name: 'commit', value: 'Upload Mental Video', class: 'btn btn-primary me-2' %>
             <% if @form.mental_video.attached? %>
+
               <div class="video-container text-center mt-3">
-                <p>Mental Video Uploaded:</p>
-                <%= video_tag url_for(@form.mental_video), controls: true, class: "img-thumbnail" %>
+                <p>Video Uploaded:</p>
+                  <%= video_tag url_for(@form.mental_video), controls: true, class: "img-thumbnail video-preview rounded-video",width:" 100%", height:"10" %>
               </div>
             <% end %>
-          </div>
         </div>
       </div>
 
       <!-- Navigation Buttons -->
-      <div class="d-flex justify-content-center mt-5">
-        <%= link_to "Back", edit_3_form_path(@form), class: "btn btn-secondary me-2" %>
-        <%= form.submit "Next", class: "btn btn-primary", name: 'commit', value: 'Next' %>
+
+      <div class="d-flex justify-content-center mt-5 mb-5">
+        <%= link_to "Back", edit_3_form_path(@form), class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
+        <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green me-2", style: 'float: left; margin-right: 5px;' %>
+        <%= form.submit "Next", name: 'commit', value: 'Next',  class: "btn btn-lg btn-blue rounded-pill", style: 'float: left; margin-right: 5px;'%>
+
       </div>
     <% end %>
   </div>
 
   <!-- Bootstrap Bundle JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.netnpm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

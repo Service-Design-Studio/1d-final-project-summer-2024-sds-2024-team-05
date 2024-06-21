@@ -11,17 +11,18 @@
   <div class="container">
     <div class="steps">
       <div class="page">
-        <p class="numbers-active">1</p>
-        <p class="dash">---</p>
-        <p class="numbers-not-active">2</p>
-        <p class="dash">---</p>
-        <p class="numbers-not-active">3</p>
-        <p class="dash">---</p>
-        <p class="numbers-not-active">4</p>
-        <p class="dash">---</p>
-        <p class="numbers-not-active">5</p>
-        <p class="dash">---</p>
-        <p class="numbers-not-active">6</p>
+          <button type="button" class="btn btn-primary circular-button btn-blue">1</button>
+          <%= button_to '2', edit_2_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+         
+          
+          <%= button_to '3', edit_3_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+         
+          <%= button_to '4', edit_4_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          
+          <%= button_to '5', edit_5_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          
+          <%= button_to '6', @form, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+
       </div>
     </div>
     <h1><%= @form_origin_text %> - Step 1</h1>
@@ -118,11 +119,13 @@
         </div>
       </div>
 
-    <%= link_to "Back", forms_path, class: "btn btn-secondary" %>
-      <%= form.submit "Next", class: "btn btn-primary" %>
+  <div class="row mb-5">
+    <%= link_to "Back", forms_path, class:"btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
+    <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green", style: 'float: left; margin-right: 5px;' %>
+    <%= form.submit "Next", class: "btn btn-lg btn-blue rounded-pill", style: 'float: left; margin-right: 5px;' %>
     <% end %>
+    </div>
   </div>
-
   <%= javascript_include_tag "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js", integrity: "sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz", crossorigin: "anonymous" %>
 </body>
 </html>

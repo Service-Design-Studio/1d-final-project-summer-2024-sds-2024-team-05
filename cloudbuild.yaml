@@ -30,9 +30,9 @@ steps:
       ]
 
 substitutions:
-  _REGION: 'asia-southeast1'
-  _SERVICE_NAME: 'sdsteam5-sprint1'
-  _INSTANCE_NAME: 'sprint1-instance'
+  _REGION: "asia-southeast1"
+  _SERVICE_NAME: "ninkatec-1"
+  _INSTANCE_NAME: "ninkatec-sql"
 
 images:
   - "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}"

@@ -36,5 +36,4 @@
 
 # Ignore sensitive information
 /dbpassword
-/Dockerfile
 /config/secret.yml

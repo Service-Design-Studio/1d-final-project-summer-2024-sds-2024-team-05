@@ -11,17 +11,16 @@
   <div class="container">
     <div class="steps">
       <div class="page">
-        <p class="numbers-not-active">1</p>
-        <p class="dash">---</p>
-        <p class="numbers-active">2</p>
-        <p class="dash">---</p>
-        <p class="numbers-not-active">3</p>
-        <p class="dash">---</p>
-        <p class="numbers-not-active">4</p>
-        <p class="dash">---</p>
-        <p class="numbers-not-active">5</p>
-        <p class="dash">---</p>
-        <p class="numbers-not-active">6</p>
+          <%= button_to '1', "/forms/4/edit_1", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <button type="button" class="btn btn-primary circular-button btn-blue">2</button>   
+
+          <%= button_to '3', "/forms/4/edit_3", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+         
+          <%= button_to '4', "/forms/4/edit_4", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          
+          <%= button_to '5', "/forms/4/edit_5", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          
+          <%= button_to '6', "/forms/4", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
       </div>
     </div>
     <h1><%= @form_origin_text %> - Step 2</h1>
@@ -74,10 +73,11 @@
           </div>
         <% end %>
       </div>
-
-      <%= link_to "Back", edit_1_form_path(@form), class: "btn btn-secondary" %>
+      <br>
+      <%= link_to "Back", edit_1_form_path(@form), class:"btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
       <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-success" %>
-      <%= form.submit "Next",  name: "commit", value: "Next", class: "btn btn-primary" %>
+      <%= form.submit "Next", class:"btn btn-lg btn-blue rounded-pill", style: 'float: left; margin-right: 5px;' %>
+
     <% end %>
   </div>
 

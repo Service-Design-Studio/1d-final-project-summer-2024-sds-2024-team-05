@@ -23,19 +23,20 @@
   <div class="container">
     <div class="steps">
       <div class="page">
-          <%= button_to '1', edit_1_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '1', @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
 
-          <%= button_to '2', edit_2_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>   
+          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>   
          
-          <%= button_to '3', edit_3_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
           
-          <%= button_to '4', edit_4_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>         
+          <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>         
 
-          <%= button_to '5', edit_5_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
           <button type="button" class="btn btn-primary circular-button btn-blue">6</button>
         <!-- Steps bar content will go here -->
       </div>
     </div>
+
     <h1>Form Details</h1>
     <div class="card">
       <div class="card-body">
@@ -107,6 +108,7 @@
       <%= link_to 'Back to List', forms_path, class: 'btn btn-lg btn-outline-black rounded-pill', style: 'float: left; margin-right: 5px;' %>
     </div>
   </div>
+  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -28,17 +28,17 @@
     <div class="steps">
       <div class="page">
         <!-- Adjusted steps with Bootstrap styling -->
-          <%= button_to '1', edit_1_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '1', @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
 
-          <%= button_to '2', edit_2_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>   
+          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>   
          
-          <%= button_to '3', edit_3_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
 
           <button type="button" class="btn btn-primary circular-button btn-blue">4</button>
 
-          <%= button_to '5', edit_5_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
           
-          <%= button_to '6', @form, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '6', @form.persisted? ? @form : show_error_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
       </div>
     </div>
 
@@ -46,7 +46,7 @@
     <h1 class="mt-3 mb-5">Video Analysis</h1>
 
     <!-- Video Upload Section -->
-    <%= form_with(model: @form, url: edit_4_form_path(@form), method: :patch, local: true, html: { multipart: true }) do |form| %>
+    <%= form_with(model: @form, url: @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :patch, local: true, html: { multipart: true }) do |form| %>
       <div class="row">
         <!-- Step 1: Physical Video -->
         <div class="col-md-6 box">
@@ -101,7 +101,7 @@
       <!-- Navigation Buttons -->
 
       <div class="d-flex justify-content-center mt-5 mb-5">
-        <%= link_to "Back", edit_3_form_path(@form), class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
+        <%= link_to "Back", @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
         <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green me-2", style: 'float: left; margin-right: 5px;' %>
         <%= form.submit "Next", name: 'commit', value: 'Next',  class: "btn btn-lg btn-blue rounded-pill", style: 'float: left; margin-right: 5px;'%>
 

@@ -11,22 +11,22 @@
   <div class="container">
     <div class="steps">
       <div class="page">
-          <%= button_to "1", edit_1_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to "1", @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
           <button type="button" class="btn btn-primary circular-button btn-blue">2</button>   
 
-          <%= button_to '3', edit_3_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
           
          
-          <%= button_to '4', edit_4_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
           
-          <%= button_to '5', edit_5_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
           
-          <%= button_to '6', @form, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '6', @form.persisted? ? @form : show_error_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
       </div>
     </div>
     <h1><%= @form_origin_text %> - Step 2</h1>
     
-    <%= form_with(model: @form, url: edit_2_form_path(@form), method: :patch, local: true, multipart: true) do |form| %>
+    <%= form_with(model: @form, url: @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :patch, local: true, multipart: true) do |form| %>
       <div class="form-group">
         <%= form.label :height %>
         <%= form.number_field :height, class: "form-control" %>
@@ -75,7 +75,7 @@
         <% end %>
       </div>
       <br>
-      <%= link_to "Back", edit_1_form_path(@form), class:"btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
+      <%= link_to "Back", @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, class:"btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
       <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green", style: 'float: left; margin-right: 5px;' %>
       <%= form.submit "Next", class:"btn btn-lg btn-blue rounded-pill", style: 'float: left; margin-right: 5px;' %>
 

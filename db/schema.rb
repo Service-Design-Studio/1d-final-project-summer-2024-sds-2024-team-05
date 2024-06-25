@@ -50,9 +50,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_18_045718) do
     t.integer "height"
     t.integer "weight"
     t.string "conditions"
+    t.text "conditions_other"
     t.string "medication"
     t.boolean "hospital"
     t.string "services"
+    t.text "services_other"
     t.date "start_date"
     t.date "end_date"
     t.datetime "created_at", null: false

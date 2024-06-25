@@ -27,10 +27,32 @@
     <h1><%= @form_origin_text %> - Step 3</h1>
     
     <%= form_with(model: @form, url: edit_3_form_path(@form), method: :patch, local: true) do |form| %>
-      <div class="form-group">
-        <%= form.label :services %>
-        <%= form.text_field :services, class: "form-control" %>
+      <div class="row d-flex justify-content-left mt-4">
+        <div class="col-sm-12">
+          <fieldset>
+            <div class="form-check form-check-inline">
+              <%= check_box_tag 'form[services][]', 'Showering', checked_services('Showering'), id: 'services_showering', class: 'form-check-input' %>
+              <%= label_tag 'services_showering', 'Showering', style: "display: block", class: 'form-check-label' %>
+              
+            </div>
+            <div class="form-check form-check-inline">
+              <%= check_box_tag 'form[services][]', 'Toileting', checked_services('Toileting'), id: 'services_toileting', class: 'form-check-input' %>
+              <%= label_tag 'services_toileting', 'Toileting', style: "display: block", class: 'form-check-label'  %>
+              
+            </div>
+            <div class="form-check form-check-inline">
+              <%= check_box_tag 'form[services][]', 'Companionship', checked_services('Companionship'), id: 'services_companionship', class: 'form-check-input' %>
+              <%= label_tag 'services_companionship', 'Companionship', style: "display: block", class: 'form-check-label'  %>
+              
+            </div>
+          </fieldset>
+        </div>
+        <div class="form-group">
+          <%= label_tag 'services_other', 'Other Services:', style: "display: block", class: 'form-check-label'  %>
+          <%= form.text_field :services_other, class: "form-control", id: "services_other"%>
+        </div>
       </div>
+            
 
       <div class="form-group">
         <%= form.label :start_date %>

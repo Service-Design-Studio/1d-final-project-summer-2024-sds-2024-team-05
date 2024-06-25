@@ -52,6 +52,7 @@
         <p class="card-text"><strong>Height:</strong> <%= @form.height %></p>
         <p class="card-text"><strong>Weight:</strong> <%= @form.weight %></p>
         <p class="card-text"><strong>Conditions:</strong> <%= @form.conditions %></p>
+        <p class="card-text"><strong>Other Conditions:</strong> <%= @form.conditions_other %></p>
         <p class="card-text"><strong>Medication:</strong> <%= @form.medication %></p>
         <p class="card-text"><strong>Hospitalised recently:</strong> <%= @form.hospital.nil? ? "" : (@form.hospital ? "Yes" : "No") %></p>
 
@@ -65,6 +66,7 @@
         
         <h5 class="card-title">Service Information</h5>
         <p class="card-text"><strong>Services:</strong> <%= @form.services %></p>
+        <p class="card-text"><strong>Services Other:</strong> <%= @form.services_other %></p>
         <p class="card-text"><strong>Start Date:</strong> <%= @form.start_date %></p>
         <p class="card-text"><strong>End Date:</strong> <%= @form.end_date %></p>
       </div>

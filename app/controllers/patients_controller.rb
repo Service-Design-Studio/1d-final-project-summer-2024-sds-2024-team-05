@@ -198,6 +198,15 @@ class PatientsController < ApplicationController
     redirect_to forms_path
   end
 
+  def update_1
+    @form = Form.find(params[:id])
+    if @form.update(form_params_step1)
+      redirect_to @form, notice: 'Form was successfully updated.'
+    else
+      render :edit_1 # Renders the edit_1 template again with @form and validation errors
+    end
+  end
+
   private
 
   def set_form
@@ -220,11 +229,11 @@ class PatientsController < ApplicationController
   end
 
   def form_params_step2
-    params.require(:form).permit(:height, :weight, :conditions, :medication, :hospital, :discharge_summary)
+    params.require(:form).permit(:height, :weight, :medication, :hospital, :discharge_summary, :conditions_other, conditions:[])
   end
 
   def form_params_step3
-    params.require(:form).permit(:services, :start_date, :end_date)
+    params.require(:form).permit(:start_date, :end_date, :services_other, services:[])
   end
 
   def form_params_step4

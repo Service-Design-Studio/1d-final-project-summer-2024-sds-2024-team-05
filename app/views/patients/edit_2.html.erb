@@ -37,10 +37,34 @@
         <%= form.number_field :weight, class: "form-control" %>
       </div>
 
-      <div class="form-group">
-        <%= form.label :conditions %>
-        <%= form.text_field :conditions, class: "form-control" %>
-      </div>
+      <div class="row d-flex justify-content-left mt-4">
+        <div class="col-sm-12">
+          <fieldset>
+            <p>Has the Patient been Hospitalised Recently?</p>
+            <div class="form-check form-check-inline">
+              <%= check_box_tag 'form[conditions][]', 'Dementia', checked_conditions('Dementia'), id: 'conditions_dementia', class: 'form-check-input'%>
+              <%= label_tag 'conditions_dementia', 'Dementia', style: "display: block", class: 'form-check-label' %>
+            </div>
+            <div class="form-check form-check-inline">
+              <%= check_box_tag 'form[conditions][]', 'Stroke', checked_conditions('Stroke'), id: 'conditions_stroke', class: 'form-check-input' %>
+              <%= label_tag 'conditions_stroke', 'Stroke', style: "display: block", class: 'form-check-label' %>
+            </div>
+            <div class="form-check form-check-inline">
+              <%= check_box_tag 'form[conditions][]', 'Cancer', checked_conditions('Cancer'), id: 'conditions_cancer', class: 'form-check-input' %>
+              <%= label_tag 'conditions_cancer', 'Cancer', style: "display: block", class: 'form-check-label' %>
+            </div>
+            <div class="form-check form-check-inline">
+              <%= check_box_tag 'form[conditions][]', 'Fracture', checked_conditions('Fracture'), id: 'conditions_fracture', class: 'form-check-input' %>
+              <%= label_tag 'conditions_fracture', 'Fracture', style: "display: block", class: 'form-check-label' %>
+            </div>
+          </fieldset>
+
+        </div>
+        <div class="form-group">
+          <%= label_tag 'conditions_other', 'Other Conditions:', style: "display: block" %>
+          <%= form.text_field :conditions_other, class: "form-control", id: "conditions_other" %>
+        </div>
+      </div>  
 
       <div class="form-group">
         <%= form.label :medication %>

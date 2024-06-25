@@ -100,13 +100,13 @@
             </div>
 
             <div class="form-check form-check-inline">
-              <%= form.radio_button :relationship, "Others", class: "form-check-input", id: "others", checked: @form.relationship == "Others" %>
+              <%= form.radio_button :relationship, "Others", class: "form-check-input", id: "others", checked: !["Direct Family member", "Relative", "Employer - Domestic Helper", ""].include?(@form.relationship) %>
               <%= form.label "others", class: "form-check-label", for: "others" do %>
                 Others:
               <% end %>
             </div>
             <div class="form-check form-check-inline">
-              <%= form.text_field :others_text, class: "form-control", id: "others_text", placeholder: "Please Fill", style: "font-style: italic; width: 150px;" %>
+              <%= form.text_field :others_text, class: "form-control", id: "others_text", placeholder: "Please Fill", style: "font-style: italic; width: 150px;", value: (!["Direct Family member", "Relative", "Employer - Domestic Helper", ""].include?(@form.relationship)) ? @form.relationship : '' %>
             </div>
           </fieldset>
         </div>

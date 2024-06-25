@@ -55,6 +55,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_18_045718) do
     t.string "services"
     t.date "start_date"
     t.date "end_date"
+    t.boolean "submitted"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

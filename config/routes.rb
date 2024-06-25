@@ -47,6 +47,7 @@ Rails.application.routes.draw do
       patch 'edit_4', to: 'patients#update_4'
       get 'edit_5', to: 'patients#edit_5'
       patch 'edit_5', to: 'patients#update_5'
+      patch 'update_submission_status', to: 'patients#update_submission_status'
     end
     collection do
       get 'edit_1', to: 'patients#edit_1'

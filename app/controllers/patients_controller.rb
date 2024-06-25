@@ -2,7 +2,7 @@ class PatientsController < ApplicationController
    before_action :set_form, only: [:show, :edit_1, :update_1, :edit_2, :update_2, :edit_3, :update_3, :edit_4, :update_4, :edit_5, :update_5]
 
   def index
-    @forms = Form.select(:id, :first_name, :last_name, :start_date)
+    @forms = Form.select(:id, :first_name, :last_name, :start_date, :submitted)
     @form = Form.new
     session[:form_origin] = 'index'
   end
@@ -313,6 +313,14 @@ class PatientsController < ApplicationController
     else
       # Handle unexpected values for params[:commit]
       render :edit_5
+    end
+  end
+
+  def update_submission_status
+    @form = Form.find(params[:id]) # Find your form
+
+    if @form.update(submitted: true)
+      redirect_to forms_path, notice: 'Form submitted successfully.'
     end
   end
 

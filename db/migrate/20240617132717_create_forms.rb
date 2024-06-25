@@ -16,6 +16,7 @@ class CreateForms < ActiveRecord::Migration[7.1]
       t.string :services
       t.date :start_date
       t.date :end_date
+      t.boolean :submitted
 
       t.timestamps
     end

@@ -103,8 +103,12 @@
 
     
     <div class="d-flex justify-content-center mt-5 mb-5">
-      <%= link_to "Back", edit_5_form_path(@form), class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
-      <%= link_to 'Edit', edit_1_form_path(@form), class: "btn btn-lg btn-blue rounded-pill", style: 'float: left; margin-right: 5px;' %>
+      <% unless @form.submitted? %>
+        <%= link_to "Back", edit_5_form_path(@form), class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
+        <%= form_tag(update_submission_status_form_path(@form), method: :patch) do %>
+          <%= submit_tag 'Submit', class: "btn btn-lg btn-blue rounded-pill", style: 'float: left; margin-right: 5px;' %>
+        <% end %>
+      <% end %>
       <%= link_to 'Back to List', forms_path, class: 'btn btn-lg btn-outline-black rounded-pill', style: 'float: left; margin-right: 5px;' %>
     </div>
   </div>

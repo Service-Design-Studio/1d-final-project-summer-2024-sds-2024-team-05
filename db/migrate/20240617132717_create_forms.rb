@@ -18,6 +18,12 @@ class CreateForms < ActiveRecord::Migration[7.1]
       t.text :services_other
       t.date :start_date
       t.date :end_date
+      t.boolean :edit_1_valid
+      t.boolean :edit_2_valid
+      t.boolean :edit_3_valid
+      t.boolean :mental_uploaded
+      t.boolean :physical_uploaded
+      t.boolean :environment_uploaded
 
       t.timestamps
     end

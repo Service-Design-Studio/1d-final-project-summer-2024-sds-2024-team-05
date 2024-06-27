@@ -14,13 +14,14 @@
     <!-- Steps Bar -->
     <div class="steps">
       <div class="page">
-          <%= button_to '1', edit_1_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '1', edit_1_form_path, method: :get, class: @valid_button_1_class %>
 
-          <%= button_to '2', edit_2_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>   
-         
-          <%= button_to '3', edit_3_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '2', edit_2_form_path, method: :get, class: @valid_button_2_class %>   
+        
+          <%= button_to '3', edit_3_form_path, method: :get, class: @valid_button_3_class %>
           
-          <%= button_to '4', edit_4_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>         
+          <%= button_to '4', edit_4_form_path, method: :get, class: @valid_button_4_class %>         
+       
           <button type="button" class="btn btn-primary circular-button btn-blue">5</button>
           
           <%= button_to '6', @form, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
@@ -34,6 +35,7 @@
     <!-- Video Upload Section -->
     <%= form_with(model: @form, url: edit_5_form_path(@form), method: :patch, local: true, html: { multipart: true }) do |form| %>
       <div class="row">
+
         <!-- Step 1: Environment Video -->
         <div class="box-video g-5">
 

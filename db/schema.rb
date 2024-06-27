@@ -57,6 +57,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_18_045718) do
     t.text "services_other"
     t.date "start_date"
     t.date "end_date"
+    t.boolean "edit_1_valid"
+    t.boolean "edit_2_valid"
+    t.boolean "edit_3_valid"
+    t.boolean "mental_uploaded"
+    t.boolean "physical_uploaded"
+    t.boolean "environment_uploaded"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

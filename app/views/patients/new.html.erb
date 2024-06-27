@@ -28,15 +28,19 @@
     
     <%= form_with(model: @form, local: true) do |form| %>
 
+      <div>
+        <%= hidden_field_tag 'form[edit_1_valid]', false %>
+      </div>
+
       <div class="row mb-3">
         <div class="col-4">
           <%= form.label :first_name, "Patient's First Name" %>
-          <%= form.text_field :first_name, class: "form-control", id: "first_name", :required => true %>
+          <%= form.text_field :first_name, class: "form-control", id: "first_name" %>
         </div>
 
         <div class="col-4">
           <%= form.label :last_name, "Patient's Last Name" %>
-          <%= form.text_field :last_name, class: "form-control", id: "last_name", :required => true %>
+          <%= form.text_field :last_name, class: "form-control", id: "last_name" %>
         </div>
       </div>
 

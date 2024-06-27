@@ -11,15 +11,15 @@
   <div class="container">
     <div class="steps">
       <div class="page">
-          <%= button_to '1', edit_1_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '1', edit_1_form_path, method: :get, class: @valid_button_1_class %>
 
-          <%= button_to '2', edit_2_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
-
-          <button type="button" class="btn btn-primary circular-button btn-blue">3</button>   
+          <%= button_to '2', edit_2_form_path, method: :get, class: @valid_button_2_class %>   
          
-          <%= button_to '4', edit_4_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <button type="button" class="btn btn-primary circular-button btn-blue">3</button> 
           
-          <%= button_to '5', edit_5_form_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '4', edit_4_form_path, method: :get, class: @valid_button_4_class %>         
+
+          <%= button_to '5', edit_5_form_path, method: :get, class: @valid_button_5_class %>
           
           <%= button_to '6', @form, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
       </div>
@@ -30,6 +30,7 @@
       <div class="row d-flex justify-content-left mt-4">
         <div class="col-sm-12">
           <fieldset>
+            <p>What Services are Required?</p>
             <div class="form-check form-check-inline">
               <%= check_box_tag 'form[services][]', 'Showering', checked_services('Showering'), id: 'services_showering', class: 'form-check-input' %>
               <%= label_tag 'services_showering', 'Showering', style: "display: block", class: 'form-check-label' %>

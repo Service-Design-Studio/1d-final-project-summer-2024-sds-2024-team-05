@@ -11,6 +11,22 @@ class PatientsController < ApplicationController
   def new
     @form = Form.new
     session[:form_origin] = 'new'
+    @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue"
+    if @form.edit_1_valid == false
+      @valid_button_1_class = "btn btn-primary circular-button btn-red"
+    end
+    if @form.edit_2_valid == false
+      @valid_button_2_class = "btn btn-primary circular-button btn-red"
+    end
+    if @form.edit_3_valid == false
+      @valid_button_3_class = "btn btn-primary circular-button btn-red"
+    end
+    if @form.mental_uploaded != true || @form.physical_uploaded != true
+      @valid_button_4_class = "btn btn-primary circular-button btn-blue"
+    end
+    if @form.environment_uploaded != true
+      @valid_button_5_class = "btn btn-primary circular-button btn-blue"
+    end
   end
 
   # Save step 1 form data and move to step 2
@@ -64,6 +80,7 @@ class PatientsController < ApplicationController
   # PATCH /forms/1/update_2
   def update_2
     @form = Form.find(params[:id])
+    required_values = Form.page2_required
     case params[:commit]
     when 'Save'
       if @form.update(form_params_step2)
@@ -87,6 +104,7 @@ class PatientsController < ApplicationController
   # PATCH /forms/1/update_3
   def update_3
     @form = Form.find(params[:id])
+    required_values = Form.page3_required
     case params[:commit]
     when 'Save'
       if @form.update(form_params_step3)
@@ -105,40 +123,64 @@ class PatientsController < ApplicationController
   def edit_4
     @form = Form.find(params[:id])
     @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
+    @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue"
+    if @form.edit_1_valid == false
+      @valid_button_1_class = "btn btn-primary circular-button btn-outline-red"
+    end
+    if @form.edit_2_valid == false
+      @valid_button_2_class = "btn btn-primary circular-button btn-outline-red"
+    end
+    if @form.edit_3_valid == false
+      @valid_button_3_class = "btn btn-primary circular-button btn-outline-red"
+    end
+    if @form.mental_uploaded != true || @form.physical_uploaded != true
+      @valid_button_4_class = "btn btn-primary circular-button btn-outline-red"
+    end
+    if @form.environment_uploaded != true
+      @valid_button_5_class = "btn btn-primary circular-button btn-outline-red"
+    end
   end
 
 # PATCH /forms/1/update_4
   def update_4
-    puts 'test'
     @form = Form.find(params[:id])
     Rails.logger.debug "params[:commit]: #{params[:commit]}"
     Rails.logger.debug "params[:form]: #{params[:form]}"
 
     case params[:commit]
     when 'Upload Physical Video'
+      if @form.update(form_params_step4)
+        puts 'works!!'
+      end
       if params[:form].present? && params[:form][:physical_video].present?
         @form.physical_video.attach(params[:form][:physical_video])
       end
       # Redirect or render to update view to show the uploaded file
       redirect_to edit_4_form_path(@form), notice: 'Physical video uploaded successfully.'
     when 'Upload Mental Video'
-      if params[:form].present? && params[:form][:mental_video].present?
-        @form.mental_video.attach(params[:form][:mental_video])
+      if @form.update(form_params_step4)
+        if params[:form].present? && params[:form][:mental_video].present?
+          @form.mental_video.attach(params[:form][:mental_video])
+        end
+        # Redirect or render to update view to show the uploaded file
+        redirect_to edit_4_form_path(@form), notice: 'Mental video uploaded successfully.'
       end
-      # Redirect or render to update view to show the uploaded file
-      redirect_to edit_4_form_path(@form), notice: 'Mental video uploaded successfully.'
     when 'Save'
-      if params[:form].present?
-        @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
-        @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+      if @form.update(form_params_step4)
+        if params[:form].present?
+          @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
+          @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+        end
+        redirect_to edit_4_form_path(@form)
       end
-      redirect_to edit_4_form_path(@form)
     when 'Next'
-      if params[:form].present?
-        @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
-        @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+      if @form.update(form_params_step4)
+        if params[:form].present?
+          @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
+          @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+        end
+        redirect_to edit_5_form_path(@form)
       end
-      redirect_to edit_5_form_path(@form)
     else
       puts 'hello'
       # Handle unexpected values for params[:commit]
@@ -151,6 +193,22 @@ class PatientsController < ApplicationController
   def edit_5
     @form = Form.find(params[:id])
     @form_origin_text = determine_form_origin_text # Changes my header based on my origin new or edit
+    @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue"
+    if @form.edit_1_valid == false
+      @valid_button_1_class = "btn btn-primary circular-button btn-outline-red"
+    end
+    if @form.edit_2_valid == false
+      @valid_button_2_class = "btn btn-primary circular-button btn-outline-red"
+    end
+    if @form.edit_3_valid == false
+      @valid_button_3_class = "btn btn-primary circular-button btn-outline-red"
+    end
+    if @form.mental_uploaded != true || @form.physical_uploaded != true
+      @valid_button_4_class = "btn btn-primary circular-button btn-outline-red"
+    end
+    if @form.environment_uploaded != true
+      @valid_button_5_class = "btn btn-primary circular-button btn-outline-red"
+    end
   end
 
   # PATCH /forms/1/update_5
@@ -161,26 +219,34 @@ class PatientsController < ApplicationController
 
     case params[:commit]
     when 'Upload Environment Video'
-      if params[:form].present? && params[:form][:environment_video].present?
-        @form.environment_video.attach(params[:form][:environment_video])
-        redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
+      if @form.update(form_params_step5)
+        if params[:form].present? && params[:form][:environment_video].present?
+          @form.environment_video.attach(params[:form][:environment_video])
+          redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
+        end
       end
     when 'Save'
-      if params[:form].present? && params[:form][:environment_video].present?
-        @form.environment_video.attach(params[:form][:environment_video])
-        redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
+      if @form.update(form_params_step5)
+        if params[:form].present? && params[:form][:environment_video].present?
+          @form.environment_video.attach(params[:form][:environment_video])
+          redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
+        end
       end
-    when 'Submit'
-      if params[:form].present?
-        @form.environment_video.attach(params[:form][:environment_video]) if params[:form][:environment_video].present?
-      end
+    when 'Next'
+      puts params
+        if params[:form].present?
+          @form.environment_video.attach(params[:form][:environment_video]) if params[:form][:environment_video].present?
+          if form_params_step5.present?
+            @form.update(form_params_step5)
+          end
+        end
       redirect_to @form
     else
       # Handle unexpected values for params[:commit]
+      puts 'its fucked'
       redirect_to edit_5_form_path(@form), alert: 'Invalid action.'
     end
   end
-
 
   def determine_form_origin_text
     if session[:form_origin] == 'new'
@@ -198,50 +264,80 @@ class PatientsController < ApplicationController
     redirect_to forms_path
   end
 
-  def update_1
-    @form = Form.find(params[:id])
-    if @form.update(form_params_step1)
-      redirect_to @form, notice: 'Form was successfully updated.'
-    else
-      render :edit_1 # Renders the edit_1 template again with @form and validation errors
-    end
-  end
-
   private
 
   def set_form
     @form = Form.find(params[:id])
+    @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue"
+    if @form.edit_1_valid == false
+      @valid_button_1_class = "btn btn-primary circular-button btn-outline-red"
+    end
+    if @form.edit_2_valid == false
+      @valid_button_2_class = "btn btn-primary circular-button btn-outline-red"
+    end
+    if @form.edit_3_valid == false
+      @valid_button_3_class = "btn btn-primary circular-button btn-outline-red"
+    end
+    if @form.mental_uploaded != true || @form.physical_uploaded != true
+      @valid_button_4_class = "btn btn-primary circular-button btn-outline-red"
+    end
+    if @form.environment_uploaded != true
+      @valid_button_5_class = "btn btn-primary circular-button btn-outline-red"
+    end
   end
 
-  def form_params
-    params.require(:form).permit(:first_name, :last_name, :gender, :date_of_birth, :address, :relationship, :hobbies, :height, :weight, :conditions, :medication, :services, :start_date, :end_date)
-
-  end
   def form_params_step1
-    permitted_params = params.require(:form).permit(:first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text)
+    permitted_params = params.require(:form).permit(:first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :edit_1_valid)
 
     # Check if 'Others' is selected for relationship
     if params[:form][:relationship] == "Others"
       permitted_params[:relationship] = params[:form][:others_text]
     end
 
+    permitted_params[:edit_1_valid] = Form.page1_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
+    
     permitted_params
   end
 
   def form_params_step2
-    params.require(:form).permit(:height, :weight, :medication, :hospital, :discharge_summary, :conditions_other, conditions:[])
+    permitted_params = params.require(:form).permit(:height, :weight, :medication, :hospital, :discharge_summary, :conditions_other, :edit_2_valid, conditions:[])
+
+    permitted_params[:edit_2_valid] = Form.page2_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
+
+    permitted_params
   end
 
   def form_params_step3
-    params.require(:form).permit(:start_date, :end_date, :services_other, services:[])
+    permitted_params = params.require(:form).permit(:start_date, :end_date, :services_other, :edit_3_valid, services:[])
+
+    permitted_params[:edit_3_valid] = Form.page3_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
+
+    permitted_params
   end
 
   def form_params_step4
-    params.require(:form).permit(:physical_video, :mental_video)
+    permitted_params = params.require(:form).permit(:physical_video, :mental_video, :physical_uploaded, :mental_uploaded)
+    if permitted_params[:physical_video].present?
+      permitted_params[:physical_uploaded] = true
+    end
+
+    if permitted_params[:mental_video].present?
+      permitted_params[:mental_uploaded] = true
+    end
+
+    permitted_params
   end
 
   def form_params_step5
-    params.require(:form).permit(:environment_video)
+    permitted_params = params.require(:form).permit(:environment_video, :environment_uploaded)
+    if permitted_params[:environment_video].present?
+      permitted_params[:environment_uploaded] = true
+    end
+
+    permitted_params
   end
 
+  def page_valid?(form_parameters, required_values)
+    required_values.all? { |key| form_parameters.key?(key) && form_parameters[key].present? }
+  end
 end

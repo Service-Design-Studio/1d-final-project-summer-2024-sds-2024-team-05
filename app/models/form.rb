@@ -5,6 +5,10 @@ class Form < ApplicationRecord
         bool1 && bool2 && bool3 && bool4 && bool5 && bool6
     end
     
+    def self.all_required
+        return ['edit_1_valid', 'edit_2_valid', 'edit_3_valid', 'mental_uploaded', 'physical_uploaded', 'environment_uploaded']
+    end
+
     def self.page1_required
        return ['first_name', 'last_name', 'gender', 'address', 'relationship']
     end

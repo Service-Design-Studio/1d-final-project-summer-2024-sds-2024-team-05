@@ -21,10 +21,10 @@ class PatientsController < ApplicationController
     if @form.edit_3_valid == false
       @valid_button_3_class = "btn btn-primary circular-button btn-red"
     end
-    if @form.mental_uploaded != true || @form.physical_uploaded != true
+    if @form.mental_uploaded == false || @form.physical_uploaded == false
       @valid_button_4_class = "btn btn-primary circular-button btn-blue"
     end
-    if @form.environment_uploaded != true
+    if @form.environment_video.attached? == false
       @valid_button_5_class = "btn btn-primary circular-button btn-blue"
     end
   end
@@ -197,10 +197,10 @@ class PatientsController < ApplicationController
     if @form.edit_3_valid == false
       @valid_button_3_class = "btn btn-primary circular-button btn-outline-red"
     end
-    if @form.mental_uploaded != true || @form.physical_uploaded != true
+    if @form.mental_uploaded == false || @form.physical_uploaded == false
       @valid_button_4_class = "btn btn-primary circular-button btn-outline-red"
     end
-    if @form.environment_uploaded != true
+    if @form.environment_uploaded == false
       @valid_button_5_class = "btn btn-primary circular-button btn-outline-red"
     end
   end
@@ -310,7 +310,7 @@ class PatientsController < ApplicationController
     if @form.mental_uploaded != true || @form.physical_uploaded != true
       @valid_button_4_class = "btn btn-primary circular-button btn-outline-red"
     end
-    if @form.environment_uploaded != true
+    if @form.environment_uploaded == false
       @valid_button_5_class = "btn btn-primary circular-button btn-outline-red"
     end
   end
@@ -440,7 +440,7 @@ class PatientsController < ApplicationController
       if form.mental_uploaded != true || form.physical_uploaded != true
         @valid_button_4_class = "btn btn-primary circular-button btn-outline-red"
       end
-      if form.environment_uploaded != true
+      if form.environment_uploaded == false
         @valid_button_5_class = "btn btn-primary circular-button btn-outline-red"
       end
       form
@@ -457,7 +457,7 @@ class PatientsController < ApplicationController
       permitted_params[:relationship] = params[:form][:others_text]
     end
     if params[:form].present? && params[:form].values.any?(&:present?)
-      params[:form][:edit_1_valid] = Form.page1_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
+      permitted_params[:edit_1_valid] = Form.page1_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
       Rails.logger.debug "params[:form]: #{params[:form][:edit_1_valid]}"
     end
 
@@ -505,6 +505,8 @@ class PatientsController < ApplicationController
   def form_params_step5
     permitted_params = params.require(:form).permit(:environment_video, :environment_uploaded)
     if permitted_params[:environment_video].present?
+      permitted_params[:environment_uploaded] = true
+    else
       permitted_params[:environment_uploaded] = true
     end
 

@@ -28,15 +28,16 @@
     <div class="steps">
       <div class="page">
         <!-- Adjusted steps with Bootstrap styling -->
-          <%= button_to '1', @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+        
+          <%= button_to '1', @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: :get, class: @form.persisted? ? @valid_button_1_class : "btn btn-primary circular-button btn-outline-blue" %>
 
-          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>   
+          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: @form.persisted? ? @valid_button_2_class : "btn btn-primary circular-button btn-outline-blue" %>   
          
-          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: @form.persisted? ? @valid_button_3_class : "btn btn-primary circular-button btn-outline-blue" %>
 
           <button type="button" class="btn btn-primary circular-button btn-blue">4</button>
 
-          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: @form.persisted? ? @valid_button_5_class : "btn btn-primary circular-button btn-outline-blue" %>
           
           <%= button_to '6', @form.persisted? ? @form : show_error_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
       </div>
@@ -47,6 +48,7 @@
 
     <!-- Video Upload Section -->
     <%= form_with(model: @form, url: @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :patch, local: true, html: { multipart: true }) do |form| %>
+    
       <div class="row">
         <!-- Step 1: Physical Video -->
         <div class="col-md-6 box">

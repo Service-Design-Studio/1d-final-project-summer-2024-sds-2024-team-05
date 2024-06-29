@@ -21,17 +21,22 @@
 </head>
 <body>
   <div class="container">
+    <% if !Form.submittable(@form.edit_1_valid, @form.edit_2_valid, @form.edit_3_valid, @form.physical_uploaded, @form.mental_uploaded, @form.environment_uploaded) %>
+      <h1 style="text-align: center; background-color: red; color: white;">!!PLZ FIX ERRORS ON PAGES IN RED!!</h1>
+    <% end %>
     <div class="steps">
       <div class="page">
-          <%= button_to '1', @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
 
-          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>   
+          <%= button_to '1', @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: :get, class: @form.persisted? ? @valid_button_1_class : "btn btn-primary circular-button btn-outline-blue" %>
+
+          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: @form.persisted? ? @valid_button_2_class : "btn btn-primary circular-button btn-outline-blue" %>   
          
-          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: @form.persisted? ? @valid_button_3_class : "btn btn-primary circular-button btn-outline-blue" %>
           
-          <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>         
+          <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: @form.persisted? ? @valid_button_4_class : "btn btn-primary circular-button btn-outline-blue" %>         
 
-          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: @form.persisted? ? @valid_button_5_class : "btn btn-primary circular-button btn-outline-blue" %>
+
           <button type="button" class="btn btn-primary circular-button btn-blue">6</button>
         <!-- Steps bar content will go here -->
       </div>
@@ -53,8 +58,18 @@
         <p class="card-text"><strong>Height:</strong> <%= @form.height %></p>
         <p class="card-text"><strong>Weight:</strong> <%= @form.weight %></p>
         <p class="card-text"><strong>Conditions:</strong> <%= @form.conditions %></p>
+        <p class="card-text"><strong>Other Conditions:</strong> <%= @form.conditions_other %></p>
         <p class="card-text"><strong>Medication:</strong> <%= @form.medication %></p>
         <p class="card-text"><strong>Hospitalised recently:</strong> <%= @form.hospital.nil? ? "" : (@form.hospital ? "Yes" : "No") %></p>
+        <p class="card-text"><strong>VALIDATION</strong> <%= "#{@form.edit_1_valid} #{@form.edit_2_valid} #{@form.edit_3_valid}" %></p>
+
+        <p class="card-text"><strong>Weight:</strong> <%= @form.mental_video %></p>
+        <p class="card-text"><strong>Weight:</strong> <%= @form.physical_video %></p>
+        <p class="card-text"><strong>Weight:</strong> <%= @form.environment_video %></p>
+
+        <p class="card-text"><strong>M.U</strong> <%= @form.mental_uploaded %></p>
+        <p class="card-text"><strong>P.U</strong> <%= @form.physical_uploaded %></p>
+        <p class="card-text"><strong>E.U</strong> <%= @form.environment_uploaded %></p>
 
         <% if @form.discharge_summary.attached? %>
           <div class="mt-3">
@@ -66,6 +81,7 @@
         
         <h5 class="card-title">Service Information</h5>
         <p class="card-text"><strong>Services:</strong> <%= @form.services %></p>
+        <p class="card-text"><strong>Services Other:</strong> <%= @form.services_other %></p>
         <p class="card-text"><strong>Start Date:</strong> <%= @form.start_date %></p>
         <p class="card-text"><strong>End Date:</strong> <%= @form.end_date %></p>
       </div>
@@ -106,9 +122,12 @@
       <% unless @form.submitted? %>
         <%= link_to "Back", edit_5_form_path(@form), class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
         <%= form_tag(update_submission_status_form_path(@form), method: :patch) do %>
-          <%= submit_tag 'Submit', class: "btn btn-lg btn-blue rounded-pill", style: 'float: left; margin-right: 5px;' %>
+          <% if Form.submittable(@form.edit_1_valid, @form.edit_2_valid, @form.edit_3_valid, @form.physical_uploaded, @form.mental_uploaded, @form.environment_uploaded) %>
+            <%= submit_tag 'Submit', class: "btn btn-lg rounded-pill btn-outline-green me-2", style: 'float: left; margin-right: 5px;' %>
+          <% else %>
+            <%= submit_tag 'Submit', class: "btn btn-lg rounded-pill btn-outline-green me-2", style: 'float: left; margin-right: 5px;', disabled: true %>
+          <% end %>
         <% end %>
-      <% end %>
       <%= link_to 'Back to List', forms_path, class: 'btn btn-lg btn-outline-black rounded-pill', style: 'float: left; margin-right: 5px;' %>
     </div>
   </div>

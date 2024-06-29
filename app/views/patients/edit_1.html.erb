@@ -104,7 +104,7 @@
             </div>
 
             <div class="form-check form-check-inline">
-              <%= form.radio_button :relationship, "Others", class: "form-check-input", id: "others", checked: !["Direct Family member", "Relative", "Employer - Domestic Helper", ""].include?(@form.relationship) %>
+              <%= form.radio_button :relationship, "Others", class: "form-check-input", id: "others", checked: !["Direct Family member", "Relative", "Employer - Domestic Helper", ""].include?(@form.relationship.to_s.strip) %>
               <%= form.label "others", class: "form-check-label", for: "others" do %>
                 Others:
               <% end %>

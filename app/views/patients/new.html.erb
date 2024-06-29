@@ -28,9 +28,9 @@
     
     <%= form_with(model: @form, local: true) do |form| %>
 
-      <div>
-        <%= hidden_field_tag 'form[edit_1_valid]', false %>
-      </div>
+<!--       <div>
+        <%= form.hidden_field :edit_1_valid, value: false %>
+      </div> -->
 
       <div class="row mb-3">
         <div class="col-4">

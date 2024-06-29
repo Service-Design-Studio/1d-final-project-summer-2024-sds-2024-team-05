@@ -237,13 +237,14 @@ class PatientsController < ApplicationController
         redirect_to edit_4_form_path(@form)
       end
     when 'Next'
-      if @form.update(form_params_step4)
-        if params[:form].present?
-          @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
-          @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+      if params[:form].present?
+        @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
+        @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+        if form_params_step5.present?
+          @form.update(form_params_step5)
         end
-        redirect_to edit_5_form_path(@form)
       end
+    redirect_to edit_5_form_path(@form)
     else
       # Handle unexpected values for params[:commit]
       redirect_to edit_4_form_path(@form), alert: 'Invalid action.'
@@ -337,6 +338,7 @@ class PatientsController < ApplicationController
 #         @form.environment_video.attach(params[:form][:environment_video])
 #         redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
 #       end
+      end
     when 'Next' #hubert
       puts params
         if params[:form].present?
@@ -422,23 +424,26 @@ class PatientsController < ApplicationController
 
   def set_form
     @form = if params[:id].present?
-      Form.find(params[:id])
+      # Form.find(params[:id])
+      form = Form.find(params[:id])
+      Rails.logger.debug "params[:edit]: #{form.edit_2_valid}"
       @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue"
-      if @form.edit_1_valid == false
+      if form.edit_1_valid == false
         @valid_button_1_class = "btn btn-primary circular-button btn-outline-red"
       end
-      if @form.edit_2_valid == false
+      if form.edit_2_valid == false
         @valid_button_2_class = "btn btn-primary circular-button btn-outline-red"
       end
-      if @form.edit_3_valid == false
+      if form.edit_3_valid == false
         @valid_button_3_class = "btn btn-primary circular-button btn-outline-red"
       end
-      if @form.mental_uploaded != true || @form.physical_uploaded != true
+      if form.mental_uploaded != true || form.physical_uploaded != true
         @valid_button_4_class = "btn btn-primary circular-button btn-outline-red"
       end
-      if @form.environment_uploaded != true
+      if form.environment_uploaded != true
         @valid_button_5_class = "btn btn-primary circular-button btn-outline-red"
       end
+      form
     else
       Form.new
     end
@@ -451,8 +456,12 @@ class PatientsController < ApplicationController
     if params[:form][:relationship] == "Others"
       permitted_params[:relationship] = params[:form][:others_text]
     end
+    if params[:form].present? && params[:form].values.any?(&:present?)
+      params[:form][:edit_1_valid] = Form.page1_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
+      Rails.logger.debug "params[:form]: #{params[:form][:edit_1_valid]}"
+    end
 
-    permitted_params[:edit_1_valid] = Form.page1_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
+    #permitted_params[:edit_1_valid] = Form.page1_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
     
     permitted_params
   end
@@ -460,7 +469,11 @@ class PatientsController < ApplicationController
   def form_params_step2
     permitted_params = params.require(:form).permit(:height, :weight, :medication, :hospital, :discharge_summary, :conditions_other, :edit_2_valid, conditions:[])
 
-    permitted_params[:edit_2_valid] = Form.page2_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
+    # permitted_params[:edit_2_valid] = Form.page2_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
+    if params[:form].present? && params[:form].values.any?(&:present?)
+      permitted_params[:edit_2_valid] = Form.page2_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
+    end
+
 
     permitted_params
   end
@@ -468,7 +481,10 @@ class PatientsController < ApplicationController
   def form_params_step3
     permitted_params = params.require(:form).permit(:start_date, :end_date, :services_other, :edit_3_valid, services:[])
 
-    permitted_params[:edit_3_valid] = Form.page3_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
+    # permitted_params[:edit_3_valid] = Form.page3_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
+    if params[:form].present? && params[:form].values.any?(&:present?)
+      permitted_params[:edit_3_valid] = Form.page3_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
+    end
 
     permitted_params
   end

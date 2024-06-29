@@ -24,6 +24,8 @@ class CreateForms < ActiveRecord::Migration[7.1]
       t.boolean :mental_uploaded
       t.boolean :physical_uploaded
       t.boolean :environment_uploaded
+      t.boolean :submitted
+
 
       t.timestamps
     end

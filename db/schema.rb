@@ -63,6 +63,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_18_045718) do
     t.boolean "mental_uploaded"
     t.boolean "physical_uploaded"
     t.boolean "environment_uploaded"
+    t.boolean "submitted"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

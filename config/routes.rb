@@ -47,6 +47,20 @@ Rails.application.routes.draw do
       patch 'edit_4', to: 'patients#update_4'
       get 'edit_5', to: 'patients#edit_5'
       patch 'edit_5', to: 'patients#update_5'
+      patch 'update_submission_status', to: 'patients#update_submission_status'
+    end
+    collection do
+      get 'edit_1', to: 'patients#edit_1'
+      patch 'edit_1', to: 'patients#update_1_collection'
+      get 'edit_2', to: 'patients#edit_2'
+      patch 'edit_2', to: 'patients#update_2_collection'
+      get 'edit_3', to: 'patients#edit_3'
+      patch 'edit_3', to: 'patients#update_3_collection'
+      get 'edit_4', to: 'patients#edit_4'
+      patch 'edit_4', to: 'patients#update_4_collection'
+      get 'edit_5', to: 'patients#edit_5'
+      patch 'edit_5', to: 'patients#update_5_collection'
+      get 'show_error', to: 'patients#show_error'
     end
   end
   root 'patients#index'

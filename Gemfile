@@ -43,7 +43,9 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 #able to use .env file or smth
 gem 'dotenv-rails'
 
-
+gem 'devise', '~> 4.9', '>= 4.9.3'
+gem 'devise-jwt'
+gem 'jwt'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false

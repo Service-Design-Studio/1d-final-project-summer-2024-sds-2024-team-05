@@ -10,7 +10,7 @@ class Form < ApplicationRecord
     end
 
     def self.page1_required
-       return ['first_name', 'last_name', 'gender', 'address', 'relationship']
+       return ['first_name', 'last_name', 'gender', 'address', 'relationship', 'languages']
     end
 
     def self.page2_required
@@ -22,6 +22,7 @@ class Form < ApplicationRecord
      end
 
     before_save do
+        self.languages.gsub!(/[\[\]\"]/,"") if attribute_present?("languages")
         self.conditions.gsub!(/[\[\]\"]/,"") if attribute_present?("conditions")
         self.services.gsub!(/[\[\]\"]/,"") if attribute_present?("services")
     end
@@ -30,4 +31,6 @@ class Form < ApplicationRecord
     has_one_attached :physical_video
     has_one_attached :mental_video
     has_one_attached :environment_video
+    has_one_attached :service_agreement_form
+    belongs_to :user
 end

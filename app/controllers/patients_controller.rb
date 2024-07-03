@@ -1,16 +1,29 @@
 class PatientsController < ApplicationController
    before_action :set_form, only: [:show, :edit_1, :update_1, :edit_2, :update_2, :edit_3, :update_3, :edit_4, :update_4, :edit_5, :update_5]
    before_action :check_valid_params, only: [:show]
+   before_action :authenticate_user!
+
+  def show
+    @form = Form.includes(:user).find(params[:id])
+  end
 
   def index
-    @forms = Form.select(:id, :first_name, :last_name, :start_date, :submitted)
-    @form = Form.new
+    @forms = current_user.forms.select(:id, :first_name, :last_name, :start_date, :submitted)
+    @form = current_user.forms.build
+    @user = current_user
+    session[:form_origin] = 'index'
+  end
+
+  def dashboard
+    @submittedforms = Form.where(submitted: true)
+    @incompleteforms = Form.where(submitted: [false, nil])
+    @user = current_user
     session[:form_origin] = 'index'
   end
 
   # Step 1 of form creation
   def new
-    @form = Form.new
+    @form = current_user.forms.build
     session[:form_origin] = 'new'
     @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue"
 
@@ -21,7 +34,7 @@ class PatientsController < ApplicationController
     case params[:commit]
     when 'Save'
       if params[:form].present? && params[:form].values.any?(&:present?)
-        @form = Form.new(form_params_step1)
+        @form = current_user.forms.build(form_params_step1)
         if @form.save
           session[:form_origin] = 'new'
           redirect_to edit_1_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
@@ -29,7 +42,7 @@ class PatientsController < ApplicationController
       end
     when 'Next'
       if params[:form].present? && params[:form].values.any?(&:present?)
-        @form = Form.new(form_params_step1)
+        @form = current_user.forms.build(form_params_step1)
         if @form.save
           redirect_to edit_2_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
         end
@@ -67,7 +80,7 @@ class PatientsController < ApplicationController
     case params[:commit]
     when 'Save'
       if params[:form].present? && params[:form].values.any?(&:present?)
-        @form = Form.new(form_params_step1)
+        @form = current_user.forms.build(form_params_step1)
         if @form.save
           session[:form_origin] = 'new'
           redirect_to edit_1_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
@@ -75,7 +88,7 @@ class PatientsController < ApplicationController
       end
     when 'Next'
       if params[:form].present? && params[:form].values.any?(&:present?)
-        @form = Form.new(form_params_step1)
+        @form = current_user.forms.build(form_params_step1)
         if @form.save
           redirect_to edit_2_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
         end
@@ -113,7 +126,7 @@ class PatientsController < ApplicationController
       case params[:commit]
       when 'Save'
         if params[:form].present? && params[:form].values.any?(&:present?)
-          @form = Form.new(form_params_step2)
+          @form = current_user.forms.build(form_params_step2)
           if @form.save
             session[:form_origin] = 'new'
             redirect_to edit_2_form_path(@form), notice: 'Step 2 of form creation was successfully saved.'
@@ -121,7 +134,7 @@ class PatientsController < ApplicationController
         end
       when 'Next'
         if params[:form].present? && params[:form].values.any?(&:present?)
-          @form = Form.new(form_params_step2)
+          @form = current_user.forms.build(form_params_step2)
           if @form.save
             redirect_to edit_3_form_path(@form), notice: 'Step 2 of form creation was successfully saved.'
           end
@@ -159,7 +172,7 @@ class PatientsController < ApplicationController
     case params[:commit]
     when 'Save'
       if params[:form].present? && params[:form].values.any?(&:present?)
-        @form = Form.new(form_params_step3)
+        @form = current_user.forms.build(form_params_step3)
         if @form.save
           session[:form_origin] = 'new'
           redirect_to edit_3_form_path(@form), notice: 'Step 2 of form creation was successfully saved.'
@@ -167,7 +180,7 @@ class PatientsController < ApplicationController
       end
     when 'Next'
       if params[:form].present? && params[:form].values.any?(&:present?)
-        @form = Form.new(form_params_step3)
+        @form = current_user.forms.build(form_params_step3)
         if @form.save
           redirect_to edit_4_form_path(@form), notice: 'Step 2 of form creation was successfully saved.'
         end
@@ -219,10 +232,11 @@ class PatientsController < ApplicationController
       if params[:form].present?
         @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
         @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
-        if form_params_step5.present?
-          @form.update(form_params_step5)
+        if form_params_step4.present?
+          @form.update(form_params_step4)
         end
       end
+
     redirect_to edit_5_form_path(@form)
     else
       # Handle unexpected values for params[:commit]
@@ -235,7 +249,7 @@ class PatientsController < ApplicationController
     case params[:commit]
     when 'Upload Physical Video'
       if params[:form].present? && params[:form][:physical_video].present?
-        @form = Form.new(form_params_step4)
+        @form = current_user.forms.build(form_params_step4)
         @form.save
         @form.physical_video.attach(params[:form][:physical_video])
         # Redirect or render to update view to show the uploaded file
@@ -243,7 +257,7 @@ class PatientsController < ApplicationController
       end
     when 'Upload Mental Video'
       if params[:form].present? && params[:form][:mental_video].present?
-        @form = Form.new(form_params_step4)
+        @form = current_user.forms.build(form_params_step4)
         @form.save
         @form.mental_video.attach(params[:form][:mental_video])
         # Redirect or render to update view to show the uploaded file
@@ -251,7 +265,7 @@ class PatientsController < ApplicationController
       end
     when 'Save'
       if params[:form].present?
-        @form = Form.new(form_params_step4)
+        @form = current_user.forms.build(form_params_step4)
         @form.save
         @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
         @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
@@ -259,7 +273,7 @@ class PatientsController < ApplicationController
       end
     when 'Next'
       if params[:form].present?
-        @form = Form.new(form_params_step4)
+        @form = current_user.forms.build(form_params_step4)
         @form.save
         @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
         @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
@@ -327,21 +341,21 @@ class PatientsController < ApplicationController
     case params[:commit]
     when 'Upload Environment Video'
       if params[:form].present? && params[:form][:environment_video].present?
-        @form = Form.new(form_params_step5)
+        @form = current_user.forms.build(form_params_step5)
         @form.save
         @form.environment_video.attach(params[:form][:environment_video])
         redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
       end
     when 'Save'
       if params[:form].present? && params[:form][:environment_video].present?
-        @form = Form.new(form_params_step5)
+        @form = current_user.forms.build(form_params_step5)
         @form.save
         @form.environment_video.attach(params[:form][:environment_video])
         redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
       end
     when 'Next'
       if params[:form].present?
-        @form = Form.new(form_params_step5)
+        @form = current_user.forms.build(form_params_step5)
         @form.save
         @form.environment_video.attach(params[:form][:environment_video]) if params[:form][:environment_video].present?
         redirect_to @form
@@ -357,8 +371,72 @@ class PatientsController < ApplicationController
   def update_submission_status
     @form = Form.find(params[:id]) # Find your form
 
-    if @form.update(submitted: true)
-      redirect_to forms_path, notice: 'Form submitted successfully.'
+    if @form.update(submitted: true, status: 'Pending Assessment')
+      if current_user.admin?
+        redirect_to patients_dashboard_path, notice: 'Form submitted successfully.'
+      else
+        redirect_to forms_path, notice: 'Form submitted successfully.'
+      end
+    end
+  end
+
+  def physical_assessment
+    @form = Form.find(params[:id])
+    @form_origin_text = determine_form_origin_text
+  end
+
+  def update_physical_assessment
+    @form = Form.find(params[:id])
+
+    case params[:commit]
+    when 'Save'
+      if @form.update(physical_assessment_params)
+        redirect_to edit_physical_assessment_form_path, notice: 'Physical Assessment Updated'
+      end
+    when 'Back'
+      redirect_to @form, notice: 'Physical Assessment Updated'
+    else
+      redirect_to physical_assessment_path, alert: 'Invalid action.'
+    end
+  end
+
+  def mental_assessment
+    @form = Form.find(params[:id])
+    @form_origin_text = determine_form_origin_text
+  end
+
+  def update_mental_assessment
+    @form = Form.find(params[:id])
+
+    case params[:commit]
+    when 'Save'
+      if @form.update(mental_assessment_params)
+        redirect_to edit_mental_assessment_form_path, notice: 'Mental Assessment Updated'
+      end
+    when 'Back'
+      redirect_to @form, notice: 'Mental Assessment Updated'
+    else
+      redirect_to mental_assessment_path, alert: 'Invalid action.'
+    end
+  end
+
+  def environment_assessment
+    @form = Form.find(params[:id])
+    @form_origin_text = determine_form_origin_text
+  end
+
+  def update_environment_assessment
+    @form = Form.find(params[:id])
+
+    case params[:commit]
+    when 'Save'
+      if @form.update(environment_assessment_params)
+        redirect_to edit_environment_assessment_form_path, notice: 'Environmental Assessment Updated'
+      end
+    when 'Back'
+      redirect_to @form, notice: 'Environmental Assessment Updated'
+    else
+      redirect_to environment_assessment_path, alert: 'Invalid action.'
     end
   end
 
@@ -408,7 +486,7 @@ class PatientsController < ApplicationController
       end
       form
     else
-      Form.new
+      current_user.forms.build
     end
   end
 
@@ -431,7 +509,11 @@ class PatientsController < ApplicationController
   end
 
   def form_params_step1
-    permitted_params = params.require(:form).permit(:first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :edit_1_valid)
+    if current_user.admin?
+      permitted_params = params.require(:form).permit(:nok_address, :nok_contact_no, :nok_email, :nok_first_name, :nok_last_name, :first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :edit_1_valid, :languages_other, languages:[])
+    else
+      permitted_params = params.require(:form).permit(:first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :edit_1_valid, :languages_other, languages:[])
+    end
 
     # Check if 'Others' is selected for relationship
     if params[:form][:relationship] == "Others"
@@ -440,6 +522,13 @@ class PatientsController < ApplicationController
     if params[:form].present? && params[:form].values.any?(&:present?)
       permitted_params[:edit_1_valid] = Form.page1_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
       Rails.logger.debug "params[:form]: #{params[:form][:edit_1_valid]}"
+    end
+    if !current_user.admin?
+      permitted_params[:nok_address] = current_user.user_address
+      permitted_params[:nok_contact_no] = current_user.user_contact_number
+      permitted_params[:nok_email] = current_user.email
+      permitted_params[:nok_first_name] = current_user.user_first_name
+      permitted_params[:nok_last_name] = current_user.user_last_name
     end
 
     #permitted_params[:edit_1_valid] = Form.page1_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
@@ -454,8 +543,6 @@ class PatientsController < ApplicationController
     if params[:form].present? && params[:form].values.any?(&:present?)
       permitted_params[:edit_2_valid] = Form.page2_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
     end
-
-
     permitted_params
   end
 
@@ -474,7 +561,7 @@ class PatientsController < ApplicationController
     if params[:id].present?
       @form = Form.find(params[:id])
     else
-      @form = Form.new()
+      @form = current_user.forms.build()
     end
     permitted_params = params.require(:form).permit(:physical_video, :mental_video, :physical_uploaded, :mental_uploaded)
     if permitted_params[:physical_video].present? || @form.physical_video.attached?
@@ -493,13 +580,47 @@ class PatientsController < ApplicationController
   end
 
   def form_params_step5
-    permitted_params = params.require(:form).permit(:environment_video, :environment_uploaded)
+    permitted_params = params.require(:form).permit(:environment_video, :environment_uploaded,)
     if permitted_params[:environment_video].present?
       permitted_params[:environment_uploaded] = true
     else
       permitted_params[:environment_uploaded] = false
     end
 
+    permitted_params
+  end
+
+  def physical_assessment_params
+    if params[:id].present?
+      @form = Form.find(params[:id])
+    end
+    permitted_params = params.require(:form).permit(:physical_assessment, :status)
+    if @form.physical_assessment.present? && @form.environment_assessment.present?
+      permitted_params[:status] = 'Meeting Date Pending'
+    end
+    permitted_params
+  end
+
+  def mental_assessment_params
+    if params[:id].present?
+      @form = Form.find(params[:id])
+    end
+    permitted_params = params.require(:form).permit(:mental_assessment, :status)
+    if @form.physical_assessment.present? && @form.environment_assessment.present?
+      permitted_params[:status] = 'Meeting Date Pending'
+    end
+    permitted_params
+  end
+
+  def environment_assessment_params
+    if params[:id].present?
+      @form = Form.find(params[:id])
+    end
+    permitted_params = params.require(:form).permit(:environment_assessment, :status)
+
+    if @form.physical_assessment.present? && @form.mental_assessment.present?
+      permitted_params[:status] = 'Meeting Date Pending'
+    end
     permitted_params
   end
 

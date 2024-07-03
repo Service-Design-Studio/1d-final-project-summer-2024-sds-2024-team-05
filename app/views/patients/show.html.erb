@@ -46,6 +46,17 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Personal Information</h5>
+          <p class="card-text"><strong>STATUS</strong> <%= @form.status %></p>
+
+          <p class="card-text"><strong>User ID:</strong> <%= @form.user_id %></p>
+          <p class="card-text"><strong>NOK Full Name:</strong> <%= "#{@form.nok_first_name} #{@form.nok_last_name}" %></p>
+          <p class="card-text"><strong>NOK Contact No.:</strong> <%= @form.nok_contact_no%></p>
+          <p class="card-text"><strong>NOK Address:</strong> <%= @form.nok_address %></p>
+          <p class="card-text"><strong>NOK Email Address:</strong> <%= @form.nok_email %></p>
+          <% if !@form.user.present? %>
+            <p class="card-text"><strong>Associated User not found</strong></p>
+          <% end %>
+
         <p class="card-text"><strong>First Name:</strong> <%= @form.first_name %></p>
         <p class="card-text"><strong>Last Name:</strong> <%= @form.last_name %></p>
         <p class="card-text"><strong>Gender:</strong> <%= @form.gender %></p>
@@ -53,6 +64,8 @@
         <p class="card-text"><strong>Address:</strong> <%= @form.address %></p>
         <p class="card-text"><strong>Relationship:</strong> <%= @form.relationship %></p>
         <p class="card-text"><strong>Hobbies:</strong> <%= @form.hobbies %></p>
+        <p class="card-text"><strong>Languages Spoken:</strong> <%= @form.languages %></p>
+        <p class="card-text"><strong>Other Languages Spoken:</strong> <%= @form.languages_other %></p>
         
         <h5 class="card-title">Health Information</h5>
         <p class="card-text"><strong>Height:</strong> <%= @form.height %></p>
@@ -92,6 +105,11 @@
             <p>Physical Video:</p>
             <% if @form.physical_video.attached? %>
               <%= video_tag url_for(@form.physical_video), controls: true, class: "img-thumbnail" %>
+              <% if @form.submitted %>
+                <p class="card-text"><strong>Primary Physical Assessment:</strong><%= @form.physical_primary_assessment %></p>
+                <p class="card-text"><strong>Final Physical Assessment:</strong><%= @form.physical_assessment %></p>
+                <%= link_to 'Review Assessment', edit_physical_assessment_form_path(@form), class: 'btn btn-lg btn-outline-black rounded-pill', style: 'float: left; margin-right: 5px;' %>
+              <% end %>
             <% end %>
           </div>
         </div>
@@ -100,6 +118,11 @@
             <p>Mental Video:</p>
             <% if @form.mental_video.attached? %>
               <%= video_tag url_for(@form.mental_video), controls: true, class: "img-thumbnail" %>
+              <% if @form.submitted %>
+                <p class="card-text"><strong>Primary Mental Assessment:</strong><%= @form.mental_primary_assessment %></p>
+                <p class="card-text"><strong>Final Mental Assessment:</strong><%= @form.mental_assessment %></p>
+                <%= link_to 'Review Assessment', edit_mental_assessment_form_path(@form), class: 'btn btn-lg btn-outline-black rounded-pill', style: 'float: left; margin-right: 5px;' %>
+              <% end %>
             <% end %>
           </div>
         </div>
@@ -112,6 +135,11 @@
             <p>Environment Video:</p>
             <% if @form.environment_video.attached? %>
               <%= video_tag url_for(@form.environment_video), controls: true, class: "img-thumbnail" %>
+              <% if @form.submitted %>
+                <p class="card-text"><strong>Primary Environment Assessment:</strong><%= @form.environment_primary_assessment %></p>
+                <p class="card-text"><strong>Final Environment Assessment:</strong><%= @form.environment_assessment %></p>
+                <%= link_to 'Review Assessment', edit_environment_assessment_form_path(@form), class: 'btn btn-lg btn-outline-black rounded-pill', style: 'float: left; margin-right: 5px;' %>
+              <% end %>
             <% end %>
           </div>
         </div>
@@ -128,8 +156,15 @@
             <%= submit_tag 'Submit', class: "btn btn-lg rounded-pill btn-outline-green me-2", style: 'float: left; margin-right: 5px;', disabled: true %>
           <% end %>
         <% end %>
-     <% end %>
-      <%= link_to 'Back to List', forms_path, class: 'btn btn-lg btn-outline-black rounded-pill', style: 'float: left; margin-right: 5px;' %>
+      <% end %>
+      <% if @form.status == 'Meeting Date Pending' %>
+        <%= link_to 'Update Meeting Date', patients_dashboard_path, class: 'btn btn-lg rounded-pill btn-green me-2', style: 'float: right; margin-right: 5px;' %>
+      <% end %>
+      <% if current_user.admin? %>
+        <%= link_to 'Back to List', patients_dashboard_path, class: 'btn btn-lg btn-outline-black rounded-pill', style: 'float: left; margin-left: 5px;' %>
+      <% else %>
+        <%= link_to 'Back to List', forms_path, class: 'btn btn-lg btn-outline-black rounded-pill', style: 'float: left; margin-left: 5px;' %>
+      <% end %>
     </div>
   </div>
   

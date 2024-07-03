@@ -25,6 +25,21 @@ class CreateForms < ActiveRecord::Migration[7.1]
       t.boolean :physical_uploaded
       t.boolean :environment_uploaded
       t.boolean :submitted
+      t.string :status
+      t.string :languages
+      t.text :languages_other
+      t.text :mental_primary_assessment
+      t.text :physical_primary_assessment
+      t.text :environment_primary_assessment
+      t.text :mental_assessment
+      t.text :physical_assessment
+      t.text :environment_assessment
+      t.datetime :meet_date
+      t.string :nok_address
+      t.string :nok_contact_no
+      t.string :nok_first_name
+      t.string :nok_last_name
+      t.string :nok_email
 
 
       t.timestamps

@@ -6,4 +6,8 @@ module PatientsHelper
     def checked_services(area)
         @form.services.nil? ? false : @form.services.match(area)
     end
+
+    def checked_languages(area)
+        @form.languages.nil? ? false : @form.languages.match(area)
+    end
 end

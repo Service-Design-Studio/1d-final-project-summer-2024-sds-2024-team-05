@@ -27,6 +27,41 @@
     <h1>New Form - Step 1</h1>
     
     <%= form_with(model: @form, local: true) do |form| %>
+      <% if current_user.admin? %>
+        <div class="row mb-3">
+          <div class="col-4">
+            <%= form.label :first_name, "NOK's First Name" %>
+            <%= form.text_field :nok_first_name, class: "form-control", id: "first_name" %>
+          </div>
+
+          <div class="col-4">
+            <%= form.label :last_name, "NOK's Last Name" %>
+            <%= form.text_field :nok_last_name, class: "form-control", id: "last_name" %>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-8">
+            <%= form.label :address, "NOK's Address" %>
+            <%= form.text_field :nok_address, class: "form-control", id: "address" %>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-8">
+            <%= form.label :address, "NOK's Contact No." %>
+            <%= form.text_field :nok_contact_no, class: "form-control", id: "address" %>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-8">
+            <%= form.label :address, "NOK's Email" %>
+            <%= form.text_field :nok_email, class: "form-control", id: "address" %>
+          </div>
+        </div>
+        
+      <% end %>
 
       <div class="row mb-3">
         <div class="col-4">
@@ -59,12 +94,45 @@
         </div>
       </div>
 
-    <div class="row mb-3">
-        <div class="col-4">
-          <%= form.label :date_of_birth, "Date of Birth" %>
-          <%= form.date_field :date_of_birth, class: "form-control", id: "date_of_birth" %>
-        </div>
-    </div>
+      <div class="row mb-3">
+          <div class="col-4">
+            <%= form.label :date_of_birth, "Date of Birth" %>
+            <%= form.date_field :date_of_birth, class: "form-control", id: "date_of_birth" %>
+          </div>
+      </div>
+
+      <br></br>
+
+      <div class="col-sm-12">
+        <fieldset>
+          <p>Languages Spoken</p>
+          <div class="form-check form-check-inline">
+            <%= check_box_tag 'form[languages][]', 'English', checked_services('English'), id: 'languages_english', class: 'form-check-input' %>
+            <%= label_tag 'languages_english', 'English', style: "display: block", class: 'form-check-label' %>
+            
+          </div>
+          <div class="form-check form-check-inline">
+            <%= check_box_tag 'form[languages][]', 'Mandarin', checked_services('Mandarin'), id: 'languages_mandarin', class: 'form-check-input' %>
+            <%= label_tag 'languages_mandarin', 'Mandarin', style: "display: block", class: 'form-check-label'  %>
+            
+          </div>
+          <div class="form-check form-check-inline">
+            <%= check_box_tag 'form[languages][]', 'Malay', checked_services('Malay'), id: 'languages_malay', class: 'form-check-input' %>
+            <%= label_tag 'languages_malay', 'Malay', style: "display: block", class: 'form-check-label'  %>
+            
+          </div>
+          <div class="form-check form-check-inline">
+            <%= check_box_tag 'form[languages][]', 'Tamil', checked_services('Tamil'), id: 'languages_tamil', class: 'form-check-input' %>
+            <%= label_tag 'languages_tamil', 'Tamil', style: "display: block", class: 'form-check-label'  %>
+            
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag 'languages_other', 'Other Spoken Languages:', style: "display: block" %>
+        <%= form.text_field :languages_other, class: "form-control", id: "languages_other" %>
+      </div>
 
       <div class="row mb-3">
         <div class="col-8">
@@ -118,7 +186,11 @@
           <%= form.text_area :hobbies, class: "form-control", id: "hobbies", style: "width: 50%; height: 100px; text-align: left;" %>
         </div>
       </div>
-        <%= link_to "Back", forms_path, class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
+        <% if current_user.admin? %>
+          <%= link_to "Back", patients_dashboard_path, class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
+        <% else %>
+          <%= link_to "Back", forms_path, class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
+        <% end %>
         <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green me-2", style: 'float: left; margin-right: 5px;'  %>
         <%= form.submit "Next", name: 'commit', value: 'Next', class:"btn btn-lg btn-blue rounded-pill", style: 'float: left; margin-right: 5px;' %>
     <% end %>

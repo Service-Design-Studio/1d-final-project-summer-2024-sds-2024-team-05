@@ -108,7 +108,9 @@
               <% if @form.submitted %>
                 <p class="card-text"><strong>Primary Physical Assessment:</strong><%= @form.physical_primary_assessment %></p>
                 <p class="card-text"><strong>Final Physical Assessment:</strong><%= @form.physical_assessment %></p>
-                <%= link_to 'Review Assessment', edit_physical_assessment_form_path(@form), class: 'btn btn-lg btn-outline-black rounded-pill', style: 'float: left; margin-right: 5px;' %>
+                <% if current_user.admin? %>
+                  <%= link_to 'Review Assessment', edit_physical_assessment_form_path(@form), class: 'btn btn-lg btn-outline-black rounded-pill', style: 'float: left; margin-right: 5px;' %>
+                <% end %>
               <% end %>
             <% end %>
           </div>
@@ -121,8 +123,10 @@
               <% if @form.submitted %>
                 <p class="card-text"><strong>Primary Mental Assessment:</strong><%= @form.mental_primary_assessment %></p>
                 <p class="card-text"><strong>Final Mental Assessment:</strong><%= @form.mental_assessment %></p>
-                <%= link_to 'Review Assessment', edit_mental_assessment_form_path(@form), class: 'btn btn-lg btn-outline-black rounded-pill', style: 'float: left; margin-right: 5px;' %>
-              <% end %>
+                <% if current_user.admin? %>
+                  <%= link_to 'Review Assessment', edit_mental_assessment_form_path(@form), class: 'btn btn-lg btn-outline-black rounded-pill', style: 'float: left; margin-right: 5px;' %>
+                <% end %>
+              <% end %>    
             <% end %>
           </div>
         </div>
@@ -138,7 +142,9 @@
               <% if @form.submitted %>
                 <p class="card-text"><strong>Primary Environment Assessment:</strong><%= @form.environment_primary_assessment %></p>
                 <p class="card-text"><strong>Final Environment Assessment:</strong><%= @form.environment_assessment %></p>
-                <%= link_to 'Review Assessment', edit_environment_assessment_form_path(@form), class: 'btn btn-lg btn-outline-black rounded-pill', style: 'float: left; margin-right: 5px;' %>
+                <% if current_user.admin? %>
+                  <%= link_to 'Review Assessment', edit_environment_assessment_form_path(@form), class: 'btn btn-lg btn-outline-black rounded-pill', style: 'float: left; margin-right: 5px;' %>
+                <% end %>
               <% end %>
             <% end %>
           </div>

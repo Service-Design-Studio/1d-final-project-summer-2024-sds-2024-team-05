@@ -11,16 +11,16 @@
   <div class="container">
     <div class="steps">
       <div class="page">
-          <button type="button" class="btn btn-primary circular-button btn-blue">1</button>
-          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>   
+          <button type="button" class="btn btn-primary circular-button btn-outline-blue">1</button>
+          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: "btn btn-primary circular-button btn-blue" %>   
          
-          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: "btn btn-primary circular-button btn-blue" %>
           
-          <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>         
+          <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: "btn btn-primary circular-button btn-blue" %>         
 
-          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: "btn btn-primary circular-button btn-blue" %>
           
-          <%= button_to '6', @form.persisted? ? @form : show_error_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '6', @form.persisted? ? @form : show_error_forms_path, method: :get, class: "btn btn-primary circular-button btn-blue" %>
         <!-- Steps bar content will go here -->
       </div>
     </div>

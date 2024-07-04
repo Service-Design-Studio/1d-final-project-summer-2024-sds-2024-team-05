@@ -25,7 +25,7 @@ class PatientsController < ApplicationController
   def new
     @form = current_user.forms.build
     session[:form_origin] = 'new'
-    @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue"
+    @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue"
 
   end
 
@@ -468,7 +468,7 @@ class PatientsController < ApplicationController
       # Form.find(params[:id])
       form = Form.find(params[:id])
       Rails.logger.debug "params[:edit]: #{form.edit_2_valid}"
-      @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue"
+      @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue"
       if form.edit_1_valid == false
         @valid_button_1_class = "btn btn-primary circular-button btn-outline-red"
       end

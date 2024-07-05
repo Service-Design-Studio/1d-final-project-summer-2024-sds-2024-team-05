@@ -31,7 +31,7 @@ class PatientsController < ApplicationController
   end
   def search
     @query = params[:query]
-    @forms = Form.where("first_name LIKE ?",["%#{@query}%"])
+    @forms = Form.where("first_name LIKE ? OR last_name LIKE ?", "%#{@query}%", "%#{@query}%")
     @user = current_user
     @submittedforms = @forms.where(submitted: true)
     @incompleteforms = @forms.where(submitted: [false, nil])

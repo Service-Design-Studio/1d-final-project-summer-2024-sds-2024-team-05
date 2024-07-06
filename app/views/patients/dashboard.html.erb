@@ -28,9 +28,19 @@
       <tbody>
         <% @submittedforms&.each do |form| %>
           <tr>
-            <td><%= "#{form.first_name} #{form.last_name}" %></td>
+            <td>
+              <%= "#{form.first_name} #{form.last_name}" %>
+              <% if !form.last_viewed.nil? && !form.last_edit.nil? %>
+                <% if form.unseen_changes %>
+                  <br>
+                  <span style="font-size: 12px; color: #3498db;"><%= "New Changes Made!" %></span>
+                <% end %>
+              <% end %>
+            </td>
             <td><%= "#{form.mental_uploaded} #{form.physical_uploaded} #{form.environment_uploaded}" %></td>
-            <td><%= form.status %></td>
+            <td style="color: <%= form.status_colour %>">
+              <%= form.status %>
+            </td>
             <td><%= form.address %></td>
             <td><%= form.start_date %></td>
             <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info' %></td>

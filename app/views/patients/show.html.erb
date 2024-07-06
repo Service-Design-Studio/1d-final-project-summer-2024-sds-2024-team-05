@@ -27,15 +27,15 @@
     <div class="steps">
       <div class="page">
 
-          <%= button_to '1', @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: :get, class: @form.persisted? ? @valid_button_1_class : "btn btn-primary circular-button btn-outline-blue", :disabled => @form.submitted? %>
+          <%= button_to '1', @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: :get, class: @form.persisted? ? @valid_button_1_class : "btn btn-primary circular-button btn-outline-blue"%>
 
-          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: @form.persisted? ? @valid_button_2_class : "btn btn-primary circular-button btn-outline-blue", :disabled => @form.submitted?  %>   
+          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: @form.persisted? ? @valid_button_2_class : "btn btn-primary circular-button btn-outline-blue"%>   
          
-          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: @form.persisted? ? @valid_button_3_class : "btn btn-primary circular-button btn-outline-blue", :disabled => @form.submitted?  %>
+          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: @form.persisted? ? @valid_button_3_class : "btn btn-primary circular-button btn-outline-blue"%>
           
-          <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: @form.persisted? ? @valid_button_4_class : "btn btn-primary circular-button btn-outline-blue", :disabled => @form.submitted?  %>         
+          <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: @form.persisted? ? @valid_button_4_class : "btn btn-primary circular-button btn-outline-blue"%>         
 
-          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: @form.persisted? ? @valid_button_5_class : "btn btn-primary circular-button btn-outline-blue", :disabled => @form.submitted?  %>
+          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: @form.persisted? ? @valid_button_5_class : "btn btn-primary circular-button btn-outline-blue"%>
 
           <button type="button" class="btn btn-primary circular-button btn-outline-blue">6</button>
         <!-- Steps bar content will go here -->
@@ -47,6 +47,8 @@
       <div class="card-body">
         <h5 class="card-title">Personal Information</h5>
           <p class="card-text"><strong>STATUS</strong> <%= @form.status %></p>
+          <p class="card-text"><strong>Last Edit</strong> <%= @form.last_edit %></p>
+          <p class="card-text"><strong>Last Viewed</strong> <%= @form.last_viewed %></p>
 
           <p class="card-text"><strong>User ID:</strong> <%= @form.user_id %></p>
           <p class="card-text"><strong>NOK Full Name:</strong> <%= "#{@form.nok_first_name} #{@form.nok_last_name}" %></p>
@@ -153,11 +155,18 @@
 
     
     <div class="d-flex justify-content-center mt-5 mb-5">
-      <% unless @form.submitted? %>
-        <%= link_to "Back", edit_5_form_path(@form), class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
-        <%= form_tag(update_submission_status_form_path(@form), method: :patch) do %>
-          <% if Form.submittable(@form.edit_1_valid, @form.edit_2_valid, @form.edit_3_valid, @form.physical_uploaded, @form.mental_uploaded, @form.environment_uploaded) %>
-            <%= submit_tag 'Submit', class: "btn btn-lg rounded-pill btn-green me-2", style: 'float: left; margin-right: 5px;' %>
+      
+      <%= link_to "Back", edit_5_form_path(@form), class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
+      <%= form_tag(update_submission_status_form_path(@form), method: :patch) do %>
+        <% if Form.submittable(@form.edit_1_valid, @form.edit_2_valid, @form.edit_3_valid, @form.physical_uploaded, @form.mental_uploaded, @form.environment_uploaded) %>
+          <% if @form.submitted? %>
+            <%= submit_tag 'Update', class: "btn btn-lg rounded-pill btn-green me-2", style: 'float: left; margin-right: 5px;'%>
+          <% else %>
+            <%= submit_tag 'Submit', class: "btn btn-lg rounded-pill btn-green me-2", style: 'float: left; margin-right: 5px;'%>
+          <% end %>
+        <% else %>
+          <% if @form.submitted? %>
+            <%= submit_tag 'Update', class: "btn btn-lg rounded-pill btn-outline-green me-2", style: 'float: left; margin-right: 5px;', disabled: true %>
           <% else %>
             <%= submit_tag 'Submit', class: "btn btn-lg rounded-pill btn-outline-green me-2", style: 'float: left; margin-right: 5px;', disabled: true %>
           <% end %>

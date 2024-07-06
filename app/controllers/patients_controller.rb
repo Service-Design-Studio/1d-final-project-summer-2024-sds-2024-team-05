@@ -458,7 +458,11 @@ class PatientsController < ApplicationController
     @form = Form.find(params[:id])
     @form.destroy
     flash[:notice] = "Form for '#{@form.first_name}' deleted."
-    redirect_to forms_path
+    if current_user.admin?
+      redirect_to patients_dashboard_path
+    else
+      redirect_to forms_path
+    end
   end
 
   private
@@ -505,6 +509,9 @@ class PatientsController < ApplicationController
         flash[alert:] = 'ohnoes'
       end
       set_form
+      if current_user.admin?
+        @form.update_last_viewed
+      end
     end
   end
 

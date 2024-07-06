@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Ninkatec Onboarding | Summary</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
+</head>
+
+<body>
+    <div class="container">
+        <div class="steps">
+        <div class="page">
+
+          <%= button_to '1', "/forms/personal", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+
+          <%= button_to '2', "/forms/med_cond", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+
+          <%= button_to '3', "/forms/serv_req", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+         
+          <%= button_to '4', "/videos/new", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          
+          <%= button_to '5', "/photos/new", method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          
+          <button type="button" class="btn btn-primary circular-button btn-blue">5</button>
+
+        </div>
+        </div>
+
+        <h1>Review and Submission Page</h1> 
+
+        <!-- Personal Information Container -->
+        <div class="col-6 text-left mt-4">
+        <h5><b>Personal Information</b></h5>
+        </div>
+
+        <div class="row d-flex justify-content-left">
+            <div class="col-sm-2">
+            <form>
+                <label for="first_name"><u>Patient's First Name</u></label><br>
+                <input type="text" id="first_name" name="first_name" placeholder="John" style="width: 100%; text-align: left"><br><br>
+            </form>
+            </div>
+            <div class="col-sm-2">
+            <form>
+                <label for="last_name"><u>Patient's Last Name</u></label><br>
+                <input type="text" id="last_name" name="last_name" placeholder="Tan" style="width: 100%; text-align: left">
+            </form>
+            </div>
+        </div>
+
+        <div class="row d-flex justify-content-left mt-1">
+            <div class="col-sm-2">
+                <form>
+                <p><u>Gender</u></p>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="male" name="gender" value="Male">
+                        <label class="form-check-label" for="male">Male</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="female" name="gender" value="Female">
+                        <label class="form-check-label" for="female">Female</label>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row d-flex justify-content-center mt-4">
+            <form>
+                <label for="dateofbirth"><u>Date of birth</u></label>
+                <input id="dateofbirth" class="form-control" type="date" style="width: 200px;"/>
+            </form>
+        </div>
+
+        <div class="row d-flex justify-content-left mt-4">
+            <form>
+                <label for="address"><u>Address</u></label>
+                <input type="text" id="address" name="address" style="width: 100%; text-align: left">
+            </form>
+        </div>
+
+        <div class="row d-flex justify-content-left mt-4">
+            <div class="col-sm-12">
+                <form>
+                <fieldset>
+                    <p><u>Relationship to Account Holder</u></p>
+                    <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="family" name="relationship" value="Direct Family member">
+                    <label class="form-check-label" for="family">Direct Family member</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="relative" name="relationship" value="Relative">
+                    <label class="form-check-label" for="relative">Relative</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="employer" name="relationship" value="Employer - Domestic Helper">
+                    <label class="form-check-label" for="employer">Employer - Domestic Helper</label>
+                    </div>
+                    <div class="form-group form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="others" name="relationship" value="Others">
+                    <label class="form-check-label" for="others">Others:</label>
+                    <input type="text" id="others" name="others" placeholder="Please Fill" style="font-style:italic">
+                    </div>
+                </fieldset>
+                </form>
+            </div>
+        </div>
+
+        <div class="row d-flex justify-content-left mt-4">
+            <form>
+                <label for="hobbies"><u>Hobbies and Pastime</u></label><br>
+                <input type="text" id="hobbies" name="hobbies" style="width: 50%; height: 100px; text-align: left;">
+            </form>
+        </div>
+
+        <!-- Medical Information Container -->
+        <div class="row mt-4">
+            <div class="col text-left">
+            <h5><b>Medical Information</b></h5>
+            </div>
+        </div> 
+
+        <div class="row">
+            <div class="col-sm-2">
+            <form>
+                <label for="height"><u>Height:</u></label><br>
+                <input type="text" id="height" name="height" placeholder="/cm" style="text-align: right"><br>
+            </form>
+            </div>
+
+            <div class="col-sm-2">
+            <form>
+                <label for="weight"><u>Weight:</u></label><br>
+                <input type="text" id="weight" name="weight" placeholder="/Kg" style="text-align: right">
+            </form>
+            </div>
+            
+            <div class="col-sm-12">
+            <br>
+            <p><u>Medical Conditions</u></p>
+            <form>
+                <input type="radio" id="dementia" name="med_cond" value="Dementia">
+                <label for="dementia">Dementia</label>
+                <input type="radio" id="stroke" name="med_cond" value="Stroke">
+                <label for="stroke">Stroke</label>
+                <input type="radio" id="cancer" name="med_cond" value="Cancer">
+                <label for="cancer">Cancer</label>
+                <input type="radio" id="fracture" name="med_cond" value="Fracture">
+                <label for="Fracture">Fracture</label>
+                <input type="radio" id="Parkinsons" name="med_cond" value="Parkinsons">
+                <label for="Parkinsons">Parkinsons</label><br><br>
+                <label for="others">Others:</label>
+                <input type="text" id="others" name="med_cond" placeholder="Please Fill" style="font-style:italic"> 
+            </form>
+            </div>
+
+            <div class="col-sm-12">
+            <br>
+            <p><u>Medication</u></p>
+            <input type="text" style="width: 500px;height:150px" id="others" name="med_cond" placeholder="Antihistamines/Ibuprofen/Antacids" style="text-align:center">
+            <br>
+            <br>
+            <p><u>Has the patient recently been admitted into Hospital?</u></p>
+            <label for="hospital_recent_y">Yes: </label>
+            <input type="radio" id="Yes" name="hospital_recent_y" value="Yes">
+            <label for="hospital_recent_n">No: </label>
+            <input type="radio" id="No" name="hospital_recent_n" value="No">
+            <p><i>If yes, please upload the relevant discharge summar (optional)</i></p>
+            <form action="/action_page.php">
+                <input type="file" id="myFile" name="filename">
+                <br>
+                <input type="submit">
+            </form>
+            <br>
+            </div>
+        </div>
+
+        <!-- Service Information Container -->
+        <div class="row mt-4">
+            <div class="col text-left">
+            <h5><b>Service Information</b></h5>
+            </div>
+        </div>  
+            
+        <div class="row">
+            <div class="col-sm-12">
+            <br>
+            <p><u>Services Requested</u></p>
+            <form>
+                <input type="radio" id="showering" name="serv_req" value="Showering">
+                <label for="showering">Showering</label>
+                <input type="radio" id="toileting" name="serv_req" value="Toileting">
+                <label for="toileting">Toileting</label>
+                <input type="radio" id="companionship" name="serv_req" value="Companionship">
+                <label for="companionship">Companionship</label><br>
+                <label for="others">Others:</label>
+                <br>
+                <input type="text" id="others" name="med_cond" placeholder="Please Fill" style="font-style:italic;height:100px;width:500px">   
+            </form>
+        </div>
+                
+        <div class="col-sm-6">
+            <br>
+            <p><u>Services Requested Start Date</u></p>
+            <input id="startDate" class="form-control" type="date" style="width: 200px;"/>
+            <br>
+            <p><u>Service Requested End Date</u></p>
+            <input id="endDate" class="form-control" type="date" style="width: 200px;"/>
+            <br>
+            <br>
+            </div>
+        </div>
+
+        <!-- Video Analysis Container -->
+        <div class="row mt-4">
+            <div class="col text-left">
+            <h5><b>Video Analysis</b></h5>
+            </div>
+            <p><u>Video of Patient Walking</u></p>
+            <p><u>Video of Patient Talking</u></p>
+        </div>
+
+        <!-- Environmental Analysis Container -->
+        <div class="row mt-4">
+            <div class="col text-left">
+            <h5><b>Environmental Analysis</b></h5>
+            </div>
+            <p><u>Video of living area</u></p>
+            </div>  
+        </div>
+    </div>
+
+    <!-- Button Container -->
+    <div class="col my-5 text-center">
+            <%= link_to "Back", "/photos/new", class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: center; margin-right: 5px;'%>
+            <%= link_to "Save", "#", class: "btn btn-lg btn-outline-save rounded-pill", style: 'float: center; margin-right: 5px;'%>
+
+            <%= link_to "Submit", "#", class: "btn btn-lg btn-blue rounded-pill", style: 'float: center;' %>
+    </div>
+</body>

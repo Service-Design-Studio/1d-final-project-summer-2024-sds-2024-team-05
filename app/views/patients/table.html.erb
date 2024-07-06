@@ -1,0 +1,22 @@
+<!-- app/views/forms/table.html.erb -->
+<h1>Forms Table</h1>
+<table>
+  <thead>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Start Date</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @forms.each do |form| %>
+      <tr>
+        <td><%= form.first_name %></td>
+        <td><%= form.last_name %></td>
+        <td><%= form.start_date %></td>
+        <td><%= link_to 'Edit', edit_form_path(form) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

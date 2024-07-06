@@ -20,6 +20,7 @@
           <th>Last Name</th>
           <th>Start Date</th>
           <th class="text-center">Summary</th>
+          <th class="text-center">Submitted?</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
@@ -34,13 +35,18 @@
           <div class="d-flex justify-content-center align-items-center">
             <% if form.submitted? %>
               <span class="text-success fw-bold">Submitted</span>
-            <% else %>
-              <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2' %>
-              <%= form_with(model: form, method: :delete, url: form_path(form), data: { confirm: 'Are you sure?' }) do |f| %>
-                <%= f.submit 'Delete', class: 'btn btn-danger' %>
-              <% end %>
             <% end %>
+          </td>
           </div>
+          <td class="text-center">
+        <div class="d-flex justify-content-center align-items-center">
+          <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2' %>
+          <% unless form.submitted %>
+            <%= form_with(model: form, method: :delete, url: form_path(form), data: { confirm: 'Are you sure?' }) do |f| %>
+              <%= f.submit 'Delete', class: 'btn btn-danger' %>
+            <% end %>
+          <% end %>
+        </div>
             </td>
 
           </tr>

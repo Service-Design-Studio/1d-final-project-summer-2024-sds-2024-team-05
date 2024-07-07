@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Edit Form - Step 2</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+</head>
+<body>
+  <div class="container">
+    <div class="steps">
+      <div class="page">
+
+          <%= button_to "1", @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: :get, class: @form.persisted? ? @valid_button_1_class : "btn btn-primary circular-button btn-blue" %>
+          
+          <button type="button" class="btn btn-primary circular-button btn-outline-blue">2</button>   
+
+          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: @form.persisted? ? @valid_button_3_class : "btn btn-primary circular-button btn-blue" %>
+          
+         
+          <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: @form.persisted? ? @valid_button_4_class : "btn btn-primary circular-button btn-blue" %>
+          
+          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: @form.persisted? ? @valid_button_5_class : "btn btn-primary circular-button btn-blue" %>
+          
+          <%= button_to '6', @form.persisted? ? @form : show_error_forms_path, method: :get, class: "btn btn-primary circular-button btn-blue" %>
+      </div>
+    </div>
+    <h1><%= @form_origin_text %> - Step 2</h1>
+    
+    <%= form_with(model: @form, url: @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :patch, local: true, multipart: true) do |form| %>
+      <div class="form-group">
+        <%= form.label :height %>
+        <%= form.number_field :height, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :weight %>
+        <%= form.number_field :weight, class: "form-control" %>
+      </div>
+
+      <div class="row d-flex justify-content-left mt-4">
+        <div class="col-sm-12">
+          <fieldset>
+            <p>Patient's Medical Conditions</p>
+            <div class="form-check form-check-inline">
+              <%= check_box_tag 'form[conditions][]', 'Dementia', checked_conditions('Dementia'), id: 'conditions_dementia', class: 'form-check-input'%>
+              <%= label_tag 'conditions_dementia', 'Dementia', style: "display: block", class: 'form-check-label' %>
+            </div>
+            <div class="form-check form-check-inline">
+              <%= check_box_tag 'form[conditions][]', 'Stroke', checked_conditions('Stroke'), id: 'conditions_stroke', class: 'form-check-input' %>
+              <%= label_tag 'conditions_stroke', 'Stroke', style: "display: block", class: 'form-check-label' %>
+            </div>
+            <div class="form-check form-check-inline">
+              <%= check_box_tag 'form[conditions][]', 'Cancer', checked_conditions('Cancer'), id: 'conditions_cancer', class: 'form-check-input' %>
+              <%= label_tag 'conditions_cancer', 'Cancer', style: "display: block", class: 'form-check-label' %>
+            </div>
+            <div class="form-check form-check-inline">
+              <%= check_box_tag 'form[conditions][]', 'Fracture', checked_conditions('Fracture'), id: 'conditions_fracture', class: 'form-check-input' %>
+              <%= label_tag 'conditions_fracture', 'Fracture', style: "display: block", class: 'form-check-label' %>
+            </div>
+          </fieldset>
+
+        </div>
+        <div class="form-group">
+          <%= label_tag 'conditions_other', 'Other Conditions:', style: "display: block" %>
+          <%= form.text_field :conditions_other, class: "form-control", id: "conditions_other" %>
+        </div>
+      </div>  
+
+      <div class="form-group">
+        <%= form.label :medication %>
+        <%= form.text_field :medication, class: "form-control" %>
+      </div>
+
+      <div class="row d-flex justify-content-left mt-4">
+        <div class="col-sm-12">
+          <fieldset>
+            <p>Has the Patient been Hospitalised Recently?</p>
+            <div class="form-check form-check-inline">
+              <%= form.radio_button :hospital, '1', class: 'form-check-input', checked: @form.hospital == true %>
+              <%= form.label :hospital_yes, "Yes", class: 'form-check-label' %>
+            </div>
+            <div class="form-check form-check-inline">
+              <%= form.radio_button :hospital, '0', class: 'form-check-input', checked: @form.hospital == false %>
+              <%= form.label :hospital_no, "No", class: 'form-check-label' %>
+            </div>
+          </fieldset>
+          <p><i>If yes, please upload the relevant discharge summary (optional)</i></p>
+        </div>
+          <div class="form-group">
+            <%= form.label :discharge_summary, "Upload Discharge Summary (JPG or PNG)" %>
+            <%= form.file_field :discharge_summary, class: "form-control" %>
+          </div>
+        <% if @form.discharge_summary.attached? %>
+          <div class="mt-1 mb-4"> <!-- Add margin-top for spacing -->
+            <p>Discharge Summary Preview:</p>
+            <%= image_tag @form.discharge_summary, class: "img-thumbnail", style: "max-width: 300px;" %>
+            <!--<%= link_to "Download Discharge Summary", rails_blob_path(@form.discharge_summary, disposition: "attachment") %>--> 
+          </div>
+        <% end %>
+      </div>
+      <br>
+      <%= link_to "Back", @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, class:"btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
+      <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green", style: 'float: left; margin-right: 5px;' %>
+      <%= form.submit "Next", class:"btn btn-lg btn-blue rounded-pill", style: 'float: left; margin-right: 5px;' %>
+
+    <% end %>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

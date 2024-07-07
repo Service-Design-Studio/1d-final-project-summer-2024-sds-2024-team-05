@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Forms</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+</head>
+<body>
+  <div class="container">
+    <h1 class="card-text"><%= "#{'Welcome'} #{@user.user_first_name} #{'!'}" %></h1>
+    <h1>Submitted Forms</h1>
+    
+    <!-- Table of Submitted forms -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>
+            Name
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_form", class: "d-inline") do %>
+              <%= check_box_tag :sort, "alphabetical", params[:sort] == "alphabetical", onchange: "this.form.submit();" %>
+              <%= label_tag :sort %>
+            <% end %>
+          </th>
+          <th>
+            Gender
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_gender_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_female, "female", params[:sort_female] == "female", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_female, "F" %>
+            <% end %>
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_gender_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_male, "male", params[:sort_male] == "male", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_male, "M" %>
+            <% end %>
+
+          </th>
+          <th>Media</th>
+          <th>
+            Action Required
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_status_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_status, "true", params[:sort_status] == "true", onchange: "this.form.submit();" %>
+            <% end %>
+          </th>
+          <th>
+            Address
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_address_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_address, "alphabetical", params[:sort_address] == "alphabetical", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_address, "Sort" %>
+            <% end %>
+          </th>
+          <th>
+            Start
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_date_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_date, "earliest", params[:sort_date] == "earliest", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_date, "Sort" %>
+            <% end %>
+          </th>
+          <th>
+            End
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_date_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_end_date, "earliest", params[:sort_end_date] == "earliest", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_end_date, "Sort" %>
+            <% end %>
+          </th>
+          <th class="text-center">Summary</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @submittedforms&.each do |form| %>
+          <tr>
+            <td><%= "#{form.first_name} #{form.last_name}" %></td>
+            <td><%= form.gender %></td>
+            <td><%= "#{form.mental_uploaded} #{form.physical_uploaded} #{form.environment_uploaded}" %></td>
+            <td>
+              <%= form_with model: form, url: update_status_form_path(form), method: :patch, local: true do |f| %>
+                <%= f.select :status, [['Pending Assessment', 'Pending Assessment'], ['Scheduled Assessment', 'Scheduled Assessment']], {}, { onchange: 'this.form.submit();' } %>
+              <% end %>
+            </td>
+            <td><%= form.address %></td>
+            <td><%= form.start_date %></td>
+            <td><%= form.end_date %></td>
+            <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info' %></td>
+            <td class="text-center">
+          <div class="d-flex justify-content-center align-items-center">
+            <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2' %>
+            <%= form_with(model: form, method: :delete, url: form_path(form), data: { confirm: 'Are you sure?' }) do |f| %>
+              <%= f.submit 'Delete', class: 'btn btn-danger' %>
+            <% end %>
+          </div>
+            </td>
+
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    
+    <br></br>
+
+    <h1>Ongoing Forms</h1>
+
+    <!-- Table of Ongoing forms -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>
+            First Name
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_form", class: "d-inline") do %>
+              <%= check_box_tag :sort, "alphabetical", params[:sort] == "alphabetical", onchange: "this.form.submit();" %>
+              <%= label_tag :sort, "Sort" %>
+            <% end %>
+          </th>
+          <th>
+            Last Name
+            <%= form_tag(patients_dashboard_path, method: :get, class: "d-inline") do %>
+              <%= check_box_tag :sort_last_name, "alphabetical", params[:sort_last_name] == "alphabetical", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_last_name, "Sort" %>
+            <% end %>
+          </th>
+          <th>
+            Gender
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_gender_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_female, "female", params[:sort_female] == "female", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_female, "F" %>
+            <% end %>
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_gender_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_male, "male", params[:sort_male] == "male", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_male, "M" %>
+            <% end %>
+          </th>
+          <th>
+            Address
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_address_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_address, "alphabetical", params[:sort_address] == "alphabetical", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_address, "Sort" %>
+            <% end %>
+          </th>
+          <th>
+            Start Date
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_date_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_date, "earliest", params[:sort_date] == "earliest", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_date, "Sort" %>
+            <% end %>
+          </th>
+          <th>
+            End Date
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_date_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_end_date, "earliest", params[:sort_end_date] == "earliest", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_end_date, "Sort" %>
+            <% end %>
+          </th>
+          <th class="text-center">Summary</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @incompleteforms&.each do |form| %>
+          <tr>
+            <td><%= form.first_name %></td>
+            <td><%= form.last_name %></td>
+            <td><%= form.gender %></td>
+            <td><%= form.address %></td>
+            <td><%= form.start_date %></td>
+            <td><%= form.end_date %></td>
+            <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info' %></td>
+            <td class="text-center">
+          <div class="d-flex justify-content-center align-items-center">
+            <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2' %>
+            <%= form_with(model: form, method: :delete, url: form_path(form), data: { confirm: 'Are you sure?' }) do |f| %>
+              <%= f.submit 'Delete', class: 'btn btn-danger' %>
+
+            <% end %>
+          </div>
+            </td>
+
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <!-- Link to new form creation page -->
+    <%= link_to 'Create New Form', new_form_path, class: 'btn btn-primary' %>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

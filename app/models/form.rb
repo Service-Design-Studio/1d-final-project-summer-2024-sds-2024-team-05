@@ -4,7 +4,7 @@ class Form < ApplicationRecord
     def self.submittable(bool1, bool2, bool3, bool4, bool5, bool6)
         bool1 && bool2 && bool3 && bool4 && bool5 && bool6
     end
-    
+
     def self.all_required
         return ['edit_1_valid', 'edit_2_valid', 'edit_3_valid', 'mental_uploaded', 'physical_uploaded', 'environment_uploaded']
     end

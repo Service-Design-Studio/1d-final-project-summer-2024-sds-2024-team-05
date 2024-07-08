@@ -59,6 +59,10 @@
               <%= check_box_tag 'form[conditions][]', 'Fracture', checked_conditions('Fracture'), id: 'conditions_fracture', class: 'form-check-input' %>
               <%= label_tag 'conditions_fracture', 'Fracture', style: "display: block", class: 'form-check-label' %>
             </div>
+            <div class="form-check form-check-inline">
+              <%= check_box_tag 'form[conditions][]', 'Others', checked_conditions('Others'), id: 'conditions_etc', class: 'form-check-input' %>
+              <%= label_tag 'conditions_etc', 'Others', style: "display: block", class: 'form-check-label' %>
+            </div>
           </fieldset>
 
         </div>

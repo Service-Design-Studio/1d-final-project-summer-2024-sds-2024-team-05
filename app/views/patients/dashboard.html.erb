@@ -32,8 +32,13 @@
               <%= "#{form.first_name} #{form.last_name}" %>
               <% if !form.last_edit.nil? %>
                 <% if form.unseen_changes %>
-                  <br>
-                  <span style="font-size: 12px; color: #3498db;"><%= "New Changes Made!" %></span>
+                  <% if form.last_viewed.nil? %>
+                    <br>
+                    <span style="font-size: 12px; color: #155724;"><%= "New Submission!" %></span>
+                  <% else %>
+                    <br>
+                    <span style="font-size: 12px; color: #3498db;"><%= "New Changes Made!" %></span>
+                  <% end %>
                 <% end %>
               <% end %>
             </td>
@@ -66,8 +71,8 @@
     <table class="table">
       <thead>
         <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
+          <th>Patient Name</th>
+          <th>NOK Name</th>
           <th>Start Date</th>
           <th class="text-center">Summary</th>
           <th class="text-center">Actions</th>
@@ -76,8 +81,8 @@
       <tbody>
         <% @incompleteforms&.each do |form| %>
           <tr>
-            <td><%= form.first_name %></td>
-            <td><%= form.last_name %></td>
+            <td><%= "#{form.first_name} #{form.last_name}" %></td>
+            <td><%= "#{form.nok_first_name} #{form.nok_last_name}" %></td>
             <td><%= form.start_date %></td>
             <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info' %></td>
             <td class="text-center">

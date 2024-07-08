@@ -126,6 +126,11 @@
             <%= label_tag 'languages_tamil', 'Tamil', style: "display: block", class: 'form-check-label'  %>
             
           </div>
+          <div class="form-check form-check-inline">
+            <%= check_box_tag 'form[languages][]', 'Others', checked_languages('Others'), id: 'languages_etc', class: 'form-check-input' %>
+            <%= label_tag 'languages_etc', 'Others', style: "display: block", class: 'form-check-label'  %>
+            
+          </div>
         </fieldset>
       </div>
 

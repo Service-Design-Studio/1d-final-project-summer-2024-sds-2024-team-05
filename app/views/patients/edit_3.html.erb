@@ -48,6 +48,11 @@
               <%= label_tag 'services_companionship', 'Companionship', style: "display: block", class: 'form-check-label'  %>
               
             </div>
+            <div class="form-check form-check-inline">
+              <%= check_box_tag 'form[services][]', 'Others', checked_services('Others'), id: 'services_etc', class: 'form-check-input' %>
+              <%= label_tag 'services_etc', 'Others', style: "display: block", class: 'form-check-label'  %>
+              
+            </div>
           </fieldset>
         </div>   
     

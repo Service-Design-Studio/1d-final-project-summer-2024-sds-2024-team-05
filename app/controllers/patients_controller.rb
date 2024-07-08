@@ -1,4 +1,6 @@
 class PatientsController < ApplicationController
+
+
    before_action :set_form, only: [:show, :edit_1, :update_1, :edit_2, :update_2, :edit_3, :update_3, :edit_4, :update_4, :edit_5, :update_5]
    before_action :check_valid_params, only: [:show]
    before_action :authenticate_user!
@@ -14,21 +16,70 @@ class PatientsController < ApplicationController
     session[:form_origin] = 'index'
   end
 
-  def dashboard
-    @submittedforms = Form.where(submitted: true)
-    @incompleteforms = Form.where(submitted: [false, nil])
-    @user = current_user
-    session[:form_origin] = 'index'
-  end
+
+def dashboard
+   @user = current_user
+   @submittedforms = Form.where(submitted: true)
+   @incompleteforms = Form.where(submitted: [false, nil])
+
+   # Handle sorting for submitted forms based on first name, last name, or address
+   if params[:sort] == "alphabetical"
+    @submittedforms = @submittedforms.order(Arel.sql("LOWER(first_name || ' ' || last_name) ASC"))
+    @incompleteforms = @incompleteforms.order(Arel.sql("LOWER(first_name || ' ' || last_name) ASC"))
+   elsif params[:sort_nok_name] == "alphabetical"
+     @submittedforms = @submittedforms.order(Arel.sql("LOWER(nok_first_name || ' ' || nok_last_name) ASC"))
+     @incompleteforms = @incompleteforms.order(Arel.sql("LOWER(nok_first_name || ' ' || nok_last_name) ASC"))
+   elsif params[:sort_address] == "alphabetical"
+     @submittedforms = @submittedforms.order("LOWER(address) ASC")
+     @incompleteforms = @incompleteforms.order("LOWER(address) ASC")
+   end
+
+   # Handle sorting by dates
+   if params[:sort_date] == "earliest"
+     @submittedforms = @submittedforms.order('start_date ASC')
+     @incompleteforms = @incompleteforms.order('start_date ASC')
+   elsif params[:sort_end_date] == "earliest"
+     @submittedforms = @submittedforms.order('end_date ASC')
+     @incompleteforms = @incompleteforms.order('end_date ASC')
+   end
+
+   # Handle gender-based sorting independently
+   if params[:sort_female]
+     @submittedforms = @submittedforms.order(Arel.sql("CASE WHEN gender = 'Female' THEN 0 ELSE 1 END, first_name ASC, last_name ASC"))
+     @incompleteforms = @incompleteforms.order(Arel.sql("CASE WHEN gender = 'Female' THEN 0 ELSE 1 END, first_name ASC, last_name ASC"))
+   elsif params[:sort_male]
+     @submittedforms = @submittedforms.order(Arel.sql("CASE WHEN gender = 'Male' THEN 0 ELSE 1 END, first_name ASC, last_name ASC"))
+     @incompleteforms = @incompleteforms.order(Arel.sql("CASE WHEN gender = 'Male' THEN 0 ELSE 1 END, first_name ASC, last_name ASC"))
+   end
+
+   if params[:sort_status]
+     @submittedforms = @submittedforms.order(Arel.sql("CASE WHEN status = 'Pending Assessment' THEN 0 ELSE 1 END"))
+     @incompleteforms = @incompleteforms.order(Arel.sql("CASE WHEN status = 'Pending Assessment' THEN 0 ELSE 1 END"))
+   end
+ end
+
+
+
+>>>>>>> main
 
   # Step 1 of form creation
   def new
     @form = current_user.forms.build
     session[:form_origin] = 'new'
-    @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue"
+
+    @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue"
 
   end
-
+  def search
+    @query = params[:query]
+    @forms = Form.where("first_name LIKE :query OR last_name LIKE :query OR CONCAT(first_name, ' ', last_name) LIKE :query OR 
+                        nok_first_name LIKE :query OR nok_last_name LIKE :query OR CONCAT(nok_first_name, ' ', nok_last_name) LIKE :query", query: "%#{@query}%")
+    @user = current_user
+    @submittedforms = @forms.where(submitted: true)
+    @incompleteforms = @forms.where(submitted: [false, nil])
+    render :dashboard
+  end
+>>>>>>> main
   # Save step 1 form data and move to step 2
   def create
     case params[:commit]
@@ -312,11 +363,13 @@ class PatientsController < ApplicationController
           @form.environment_video.attach(params[:form][:environment_video])
           redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
         end
+
+
 #       if params[:form].present? && params[:form][:environment_video].present? #mine
 #         @form.environment_video.attach(params[:form][:environment_video])
 #         redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
-#       end
       end
+
     when 'Next' #hubert
         if params[:form].present?
           @form.environment_video.attach(params[:form][:environment_video]) if params[:form][:environment_video].present?
@@ -325,11 +378,13 @@ class PatientsController < ApplicationController
           end
         end
       redirect_to @form
+
 #     when 'Next' mine
 #       if params[:form].present?
 #         @form.environment_video.attach(params[:form][:environment_video]) if params[:form][:environment_video].present?
 #       end
 #       redirect_to @form
+
     else
       # Handle unexpected values for params[:commit]
       redirect_to edit_5_form_path(@form), alert: 'Invalid action.'
@@ -458,7 +513,13 @@ class PatientsController < ApplicationController
     @form = Form.find(params[:id])
     @form.destroy
     flash[:notice] = "Form for '#{@form.first_name}' deleted."
-    redirect_to forms_path
+
+    if current_user.admin?
+      redirect_to patients_dashboard_path
+    else
+      redirect_to forms_path
+    end
+
   end
 
   private
@@ -504,6 +565,9 @@ class PatientsController < ApplicationController
         flash[alert:] = 'ohnoes'
       end
       set_form
+      if current_user.admin?
+        @form.update_last_viewed
+      end
     end
   end
 
@@ -522,6 +586,11 @@ class PatientsController < ApplicationController
       permitted_params[:edit_1_valid] = Form.page1_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
       Rails.logger.debug "params[:form]: #{params[:form][:edit_1_valid]}"
     end
+
+    if params[:form][:languages].present?
+      permitted_params[:languages] = params[:form][:languages].to_s.gsub!(/[\[\]\"]/,"")
+    end
+
     if !current_user.admin?
       permitted_params[:nok_address] = current_user.user_address
       permitted_params[:nok_contact_no] = current_user.user_contact_number
@@ -542,6 +611,11 @@ class PatientsController < ApplicationController
     if params[:form].present? && params[:form].values.any?(&:present?)
       permitted_params[:edit_2_valid] = Form.page2_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
     end
+
+    if params[:form][:conditions].present?
+      permitted_params[:conditions] = params[:form][:conditions].to_s.gsub!(/[\[\]\"]/,"")
+    end
+
     permitted_params
   end
 
@@ -551,6 +625,10 @@ class PatientsController < ApplicationController
     # permitted_params[:edit_3_valid] = Form.page3_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
     if params[:form].present? && params[:form].values.any?(&:present?)
       permitted_params[:edit_3_valid] = Form.page3_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
+    end
+
+    if params[:form][:services].present?
+      permitted_params[:services] = params[:form][:services].to_s.gsub!(/[\[\]\"]/,"")
     end
 
     permitted_params

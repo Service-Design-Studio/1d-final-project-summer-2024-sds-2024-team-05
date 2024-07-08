@@ -30,6 +30,42 @@
     
     <%= form_with(model: @form, url: @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: :patch, local: true, class: "mb-4") do |form| %>
 
+      <% if current_user.admin? %>
+        <div class="row mb-3">
+          <div class="col-4">
+            <%= form.label :first_name, "NOK's First Name" %>
+            <%= form.text_field :nok_first_name, class: "form-control", id: "first_name" %>
+          </div>
+
+          <div class="col-4">
+            <%= form.label :last_name, "NOK's Last Name" %>
+            <%= form.text_field :nok_last_name, class: "form-control", id: "last_name" %>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-8">
+            <%= form.label :address, "NOK's Address" %>
+            <%= form.text_field :nok_address, class: "form-control", id: "address" %>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-8">
+            <%= form.label :address, "NOK's Contact No." %>
+            <%= form.text_field :nok_contact_no, class: "form-control", id: "address" %>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-8">
+            <%= form.label :address, "NOK's Email" %>
+            <%= form.text_field :nok_email, class: "form-control", id: "address" %>
+          </div>
+        </div>
+        
+      <% end %>
+
       <div class="row mb-3">
         <div class="col-4">
           <%= form.label :first_name, "Patient's First Name" %>
@@ -89,6 +125,11 @@
           <div class="form-check form-check-inline">
             <%= check_box_tag 'form[languages][]', 'Tamil', checked_languages('Tamil'), id: 'languages_tamil', class: 'form-check-input' %>
             <%= label_tag 'languages_tamil', 'Tamil', style: "display: block", class: 'form-check-label'  %>
+            
+          </div>
+          <div class="form-check form-check-inline">
+            <%= check_box_tag 'form[languages][]', 'Others', checked_languages('Others'), id: 'languages_etc', class: 'form-check-input' %>
+            <%= label_tag 'languages_etc', 'Others', style: "display: block", class: 'form-check-label'  %>
             
           </div>
         </fieldset>

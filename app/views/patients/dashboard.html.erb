@@ -75,28 +75,11 @@
         </tr>
       </thead>
       
-
-<!--       <tbody>
-        <% @submittedforms&.each do |form| %>
-          <tr>
-            <td><%= "#{form.first_name} #{form.last_name}" %></td>
-            <td><%= form.gender %></td>
-            <td><%= "#{form.mental_uploaded} #{form.physical_uploaded} #{form.environment_uploaded}" %></td>
-            <td>
-              <%= form_with model: form, url: update_status_form_path(form), method: :patch, local: true do |f| %>
-                <%= f.select :status, [['Pending Assessment', 'Pending Assessment'], ['Scheduled Assessment', 'Scheduled Assessment']], {}, { onchange: 'this.form.submit();' } %>
-              <% end %>
-            </td>
-            <td><%= form.address %></td>
-            <td><%= form.start_date %></td>
-            <td><%= form.end_date %></td> -->
-
       <tbody> 
         <% @submittedforms&.each do |form| %>
           <tr>
             <td>
               <%= "#{form.first_name} #{form.last_name}" %>
-            <td><%= form.gender %></td>
               <% if !form.last_viewed.nil? && !form.last_edit.nil? %>
                 <% if form.unseen_changes %>
                   <br>
@@ -108,6 +91,7 @@
             <td style="color: <%= form.status_colour %>">
               <%= form.status %>
             </td>
+            <td><%= form.gender %></td>
             <td><%= form.address %></td>
             <td><%= form.start_date %></td>
             <td><%= form.end_date %></td>

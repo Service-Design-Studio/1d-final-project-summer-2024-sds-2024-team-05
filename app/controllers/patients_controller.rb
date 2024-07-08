@@ -361,7 +361,7 @@ def dashboard
 #       if params[:form].present? && params[:form][:environment_video].present? #mine
 #         @form.environment_video.attach(params[:form][:environment_video])
 #         redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
-#       end
+      end
 
     when 'Next' #hubert
         if params[:form].present?

@@ -9,30 +9,94 @@
 </head>
 <body>
   <div class="container">
+
     <h1 class="card-text" style ="padding-bottom: 30px"><%= "#{'Welcome'} #{@user.user_first_name} #{'!'}" %></h1>
     <h2>Submitted Forms</h2>
     <form class = "d-flex" method = "GET" action= "/search" >
       <input class="form-control me-2" type = "search" name = "query" placeholder="Enter Client's first name">
       <button class = "btn btn-primary" type ="submit">Search</button>
     </form>
+
     <!-- Table of Submitted forms -->
     <table class="table">
       <thead>
         <tr>
-          <th>Patient Name</th>
-          <th>Media Uploaded</th>
-          <th>Action Required</th>
-          <th>Address</th>
-          <th>Start Date</th>
+
+          <th>
+            Name
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_form", class: "d-inline") do %>
+              <%= check_box_tag :sort, "alphabetical", params[:sort] == "alphabetical", onchange: "this.form.submit();" %>
+              <%= label_tag :sort %>
+            <% end %>
+          </th>
+          <th>
+            Gender
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_gender_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_female, "female", params[:sort_female] == "female", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_female, "F" %>
+            <% end %>
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_gender_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_male, "male", params[:sort_male] == "male", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_male, "M" %>
+            <% end %>
+
+          </th>
+          <th>Media</th>
+          <th>
+            Action Required
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_status_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_status, "true", params[:sort_status] == "true", onchange: "this.form.submit();" %>
+            <% end %>
+          </th>
+          <th>
+            Address
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_address_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_address, "alphabetical", params[:sort_address] == "alphabetical", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_address, "Sort" %>
+            <% end %>
+          </th>
+          <th>
+            Start
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_date_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_date, "earliest", params[:sort_date] == "earliest", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_date, "Sort" %>
+            <% end %>
+          </th>
+          <th>
+            End
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_date_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_end_date, "earliest", params[:sort_end_date] == "earliest", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_end_date, "Sort" %>
+            <% end %>
+          </th>
+
           <th class="text-center">Summary</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
+      
+
+<!--       <tbody>
+        <% @submittedforms&.each do |form| %>
+          <tr>
+            <td><%= "#{form.first_name} #{form.last_name}" %></td>
+            <td><%= form.gender %></td>
+            <td><%= "#{form.mental_uploaded} #{form.physical_uploaded} #{form.environment_uploaded}" %></td>
+            <td>
+              <%= form_with model: form, url: update_status_form_path(form), method: :patch, local: true do |f| %>
+                <%= f.select :status, [['Pending Assessment', 'Pending Assessment'], ['Scheduled Assessment', 'Scheduled Assessment']], {}, { onchange: 'this.form.submit();' } %>
+              <% end %>
+            </td>
+            <td><%= form.address %></td>
+            <td><%= form.start_date %></td>
+            <td><%= form.end_date %></td> -->
+
       <tbody> 
         <% @submittedforms&.each do |form| %>
           <tr>
             <td>
               <%= "#{form.first_name} #{form.last_name}" %>
+            <td><%= form.gender %></td>
               <% if !form.last_viewed.nil? && !form.last_edit.nil? %>
                 <% if form.unseen_changes %>
                   <br>
@@ -46,6 +110,8 @@
             </td>
             <td><%= form.address %></td>
             <td><%= form.start_date %></td>
+            <td><%= form.end_date %></td>
+
             <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info' %></td>
             <td class="text-center">
           <div class="d-flex justify-content-center align-items-center">
@@ -63,15 +129,62 @@
     
     <br></br>
 
+
     <h2>Ongoing Forms</h2>
+
 
     <!-- Table of Ongoing forms -->
     <table class="table">
       <thead>
         <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Start Date</th>
+
+          <th>
+            First Name
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_form", class: "d-inline") do %>
+              <%= check_box_tag :sort, "alphabetical", params[:sort] == "alphabetical", onchange: "this.form.submit();" %>
+              <%= label_tag :sort, "Sort" %>
+            <% end %>
+          </th>
+          <th>
+            Last Name
+            <%= form_tag(patients_dashboard_path, method: :get, class: "d-inline") do %>
+              <%= check_box_tag :sort_last_name, "alphabetical", params[:sort_last_name] == "alphabetical", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_last_name, "Sort" %>
+            <% end %>
+          </th>
+          <th>
+            Gender
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_gender_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_female, "female", params[:sort_female] == "female", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_female, "F" %>
+            <% end %>
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_gender_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_male, "male", params[:sort_male] == "male", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_male, "M" %>
+            <% end %>
+          </th>
+          <th>
+            Address
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_address_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_address, "alphabetical", params[:sort_address] == "alphabetical", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_address, "Sort" %>
+            <% end %>
+          </th>
+          <th>
+            Start Date
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_date_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_date, "earliest", params[:sort_date] == "earliest", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_date, "Sort" %>
+            <% end %>
+          </th>
+          <th>
+            End Date
+            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_date_form", class: "d-inline") do %>
+              <%= check_box_tag :sort_end_date, "earliest", params[:sort_end_date] == "earliest", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_end_date, "Sort" %>
+            <% end %>
+          </th>
+
           <th class="text-center">Summary</th>
           <th class="text-center">Actions</th>
         </tr>
@@ -81,7 +194,12 @@
           <tr>
             <td><%= form.first_name %></td>
             <td><%= form.last_name %></td>
+
+            <td><%= form.gender %></td>
+            <td><%= form.address %></td>
             <td><%= form.start_date %></td>
+            <td><%= form.end_date %></td>
+
             <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info' %></td>
             <td class="text-center">
           <div class="d-flex justify-content-center align-items-center">

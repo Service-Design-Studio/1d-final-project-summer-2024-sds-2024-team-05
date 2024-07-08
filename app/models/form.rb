@@ -20,7 +20,10 @@ class Form < ApplicationRecord
 
     def update_last_edit
         unless changed_attributes.except('last_edit', 'last_viewed').empty?
+            puts "Changed attributes: #{changed_attributes.keys}"
             self.last_edit = DateTime.now
+        else
+            puts "No attributes (excluding 'last_edit' and 'last_viewed') have been changed."
         end
     end
 
@@ -53,11 +56,11 @@ class Form < ApplicationRecord
         return ['services', 'start_date', 'end_date']
      end
 
-    before_save do
-        self.languages.gsub!(/[\[\]\"]/,"") if attribute_present?("languages")
-        self.conditions.gsub!(/[\[\]\"]/,"") if attribute_present?("conditions")
-        self.services.gsub!(/[\[\]\"]/,"") if attribute_present?("services")
-    end
+    # before_save do
+    #     self.languages.gsub!(/[\[\]\"]/,"") if attribute_present?("languages")
+    #     self.conditions.gsub!(/[\[\]\"]/,"") if attribute_present?("conditions")
+    #     self.services.gsub!(/[\[\]\"]/,"") if attribute_present?("services")
+    # end
 
     has_one_attached :discharge_summary
     has_one_attached :physical_video

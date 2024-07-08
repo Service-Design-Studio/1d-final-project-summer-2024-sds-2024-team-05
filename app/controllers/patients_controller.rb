@@ -18,7 +18,6 @@ class PatientsController < ApplicationController
     @submittedforms = Form.where(submitted: true)
     @incompleteforms = Form.where(submitted: [false, nil])
     @user = current_user
-    Rails.logger.debug "Current user: #{@user}"
     session[:form_origin] = 'index'
   end
 
@@ -29,14 +28,7 @@ class PatientsController < ApplicationController
     @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue"
 
   end
-  def search
-    @query = params[:query]
-    @forms = Form.where("first_name LIKE ? OR last_name LIKE ?", "%#{@query}%", "%#{@query}%")
-    @user = current_user
-    @submittedforms = @forms.where(submitted: true)
-    @incompleteforms = @forms.where(submitted: [false, nil])
-    render :dashboard
-  end
+
   # Save step 1 form data and move to step 2
   def create
     case params[:commit]

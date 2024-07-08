@@ -9,12 +9,9 @@
 </head>
 <body>
   <div class="container">
-    <h1 class="card-text" style ="padding-bottom: 30px"><%= "#{'Welcome'} #{@user.user_first_name} #{'!'}" %></h1>
-    <h2>Submitted Forms</h2>
-    <form class = "d-flex" method = "GET" action= "/search" >
-      <input class="form-control me-2" type = "search" name = "query" placeholder="Enter Client's first name">
-      <button class = "btn btn-primary" type ="submit">Search</button>
-    </form>
+    <h1 class="card-text"><%= "#{'Welcome'} #{@user.user_first_name} #{'!'}" %></h1>
+    <h1>Submitted Forms</h1>
+    
     <!-- Table of Submitted forms -->
     <table class="table">
       <thead>
@@ -28,7 +25,7 @@
           <th class="text-center">Actions</th>
         </tr>
       </thead>
-      <tbody> 
+      <tbody>
         <% @submittedforms&.each do |form| %>
           <tr>
             <td>
@@ -63,7 +60,7 @@
     
     <br></br>
 
-    <h2>Ongoing Forms</h2>
+    <h1>Ongoing Forms</h1>
 
     <!-- Table of Ongoing forms -->
     <table class="table">

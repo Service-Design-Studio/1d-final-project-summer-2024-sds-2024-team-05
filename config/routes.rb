@@ -10,7 +10,6 @@ Rails.application.routes.draw do
   end
 
   get 'patients/dashboard', to: 'patients#dashboard', as: :patients_dashboard
-  get '/search', to: "patients#search"
   # get 'patients/new'
   # get 'patients/edit'
   # get 'patients/show'

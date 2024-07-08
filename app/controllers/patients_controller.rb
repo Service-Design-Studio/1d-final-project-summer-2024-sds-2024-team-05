@@ -22,11 +22,11 @@ def dashboard
 
    # Handle sorting for submitted forms based on first name, last name, or address
    if params[:sort] == "alphabetical"
-     @submittedforms = @submittedforms.order("LOWER(first_name) ASC, LOWER(last_name) ASC")
-     @incompleteforms = @incompleteforms.order("LOWER(first_name) ASC, LOWER(last_name) ASC")
-   elsif params[:sort_last_name] == "alphabetical"
-     @submittedforms = @submittedforms.order("LOWER(last_name) ASC")
-     @incompleteforms = @incompleteforms.order("LOWER(last_name) ASC")
+    @submittedforms = @submittedforms.order(Arel.sql("LOWER(first_name || ' ' || last_name) ASC"))
+    @incompleteforms = @incompleteforms.order(Arel.sql("LOWER(first_name || ' ' || last_name) ASC"))
+   elsif params[:sort_nok_name] == "alphabetical"
+     @submittedforms = @submittedforms.order(Arel.sql("LOWER(nok_first_name || ' ' || nok_last_name) ASC"))
+     @incompleteforms = @incompleteforms.order(Arel.sql("LOWER(nok_first_name || ' ' || nok_last_name) ASC"))
    elsif params[:sort_address] == "alphabetical"
      @submittedforms = @submittedforms.order("LOWER(address) ASC")
      @incompleteforms = @incompleteforms.order("LOWER(address) ASC")

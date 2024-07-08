@@ -11,11 +11,15 @@
   <div class="container">
 
     <h1 class="card-text" style ="padding-bottom: 30px"><%= "#{'Welcome'} #{@user.user_first_name} #{'!'}" %></h1>
-    <h2>Submitted Forms</h2>
     <form class = "d-flex" method = "GET" action= "/search" >
-      <input class="form-control me-2" type = "search" name = "query" placeholder="Enter Client's first name">
-      <button class = "btn btn-primary" type ="submit">Search</button>
+      <input class="form-control me-2" type = "search" name = "query" placeholder="Enter Client's Name">
+      <button class = "btn btn-primary me-2" type ="submit">Search</button>
+      <button class="btn btn-secondary" type="submit" name="submit_empty_search">Clear</button>
     </form>
+
+    <br></br>
+
+    <h2>Submitted Forms</h2>
 
     <!-- Table of Submitted forms -->
     <table class="table">
@@ -23,7 +27,7 @@
         <tr>
 
           <th>
-            Name
+            Patient Name
             <%= form_tag(patients_dashboard_path, method: :get, id: "sort_form", class: "d-inline") do %>
               <%= check_box_tag :sort, "alphabetical", params[:sort] == "alphabetical", onchange: "this.form.submit();" %>
               <%= label_tag :sort %>
@@ -74,7 +78,7 @@
           <th class="text-center">Actions</th>
         </tr>
       </thead>
-      
+
       <tbody> 
         <% @submittedforms&.each do |form| %>
           <tr>
@@ -92,11 +96,11 @@
                 <% end %>
               <% end %>
             </td>
+            <td><%= form.gender %></td>
             <td><%= "#{form.mental_uploaded} #{form.physical_uploaded} #{form.environment_uploaded}" %></td>
             <td style="color: <%= form.status_colour %>">
               <%= form.status %>
             </td>
-            <td><%= form.gender %></td>
             <td><%= form.address %></td>
             <td><%= form.start_date %></td>
             <td><%= form.end_date %></td>
@@ -127,17 +131,17 @@
       <thead>
         <tr>
           <th>
-            First Name
+            Patient Name
             <%= form_tag(patients_dashboard_path, method: :get, id: "sort_form", class: "d-inline") do %>
               <%= check_box_tag :sort, "alphabetical", params[:sort] == "alphabetical", onchange: "this.form.submit();" %>
               <%= label_tag :sort, "Sort" %>
             <% end %>
           </th>
           <th>
-            Last Name
+            NOK Name
             <%= form_tag(patients_dashboard_path, method: :get, class: "d-inline") do %>
-              <%= check_box_tag :sort_last_name, "alphabetical", params[:sort_last_name] == "alphabetical", onchange: "this.form.submit();" %>
-              <%= label_tag :sort_last_name, "Sort" %>
+              <%= check_box_tag :sort_nok_name, "alphabetical", params[:sort_nok_name] == "alphabetical", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_nok_name, "Sort" %>
             <% end %>
           </th>
           <th>
@@ -179,8 +183,8 @@
       <tbody>
         <% @incompleteforms&.each do |form| %>
           <tr>
-            <td><%= form.first_name %></td>
-            <td><%= form.last_name %></td>
+            <td><%= "#{form.first_name} #{form.last_name}" %></td>
+            <td><%= "#{form.nok_first_name} #{form.nok_last_name}" %></td>
             <td><%= form.gender %></td>
             <td><%= form.address %></td>
             <td><%= form.start_date %></td>

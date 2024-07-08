@@ -68,7 +68,8 @@ def dashboard
   end
   def search
     @query = params[:query]
-    @forms = Form.where("first_name LIKE ? OR last_name LIKE ?", "%#{@query}%", "%#{@query}%")
+    @forms = Form.where("first_name LIKE :query OR last_name LIKE :query OR CONCAT(first_name, ' ', last_name) LIKE :query OR 
+                        nok_first_name LIKE :query OR nok_last_name LIKE :query OR CONCAT(nok_first_name, ' ', nok_last_name) LIKE :query", query: "%#{@query}%")
     @user = current_user
     @submittedforms = @forms.where(submitted: true)
     @incompleteforms = @forms.where(submitted: [false, nil])

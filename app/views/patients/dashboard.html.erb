@@ -12,7 +12,7 @@
 
     <h1 class="card-text" style ="padding-bottom: 30px"><%= "#{'Welcome'} #{@user.user_first_name} #{'!'}" %></h1>
     <form class = "d-flex" method = "GET" action= "/search" >
-      <input class="form-control me-2" type = "search" name = "query" placeholder="Enter Client's Name">
+      <input class="form-control me-2" type = "search" name = "query" placeholder="Enter Client's/NOK's Name">
       <button class = "btn btn-primary me-2" type ="submit">Search</button>
       <button class="btn btn-secondary" type="submit" name="submit_empty_search">Clear</button>
     </form>

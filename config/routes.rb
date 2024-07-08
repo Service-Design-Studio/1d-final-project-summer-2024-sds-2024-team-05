@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   end
 
   get 'patients/dashboard', to: 'patients#dashboard', as: :patients_dashboard
+
+  get '/search', to: "patients#search"
+
   # get 'patients/new'
   # get 'patients/edit'
   # get 'patients/show'
@@ -65,7 +68,9 @@ Rails.application.routes.draw do
       get 'edit_environment_assessment', to: 'patients#environment_assessment'
       patch 'edit_environment_assessment', to: 'patients#update_environment_assessment'
       patch 'update_submission_status', to: 'patients#update_submission_status'
-      patch :update_status
+
+#       patch :update_status
+
 
 
     end

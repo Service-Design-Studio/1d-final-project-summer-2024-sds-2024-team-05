@@ -1,10 +1,43 @@
 class Form < ApplicationRecord
     attr_accessor :others_text
 
+
+    before_save :update_last_edit
+
+    def status_colour
+        if !self.status.nil?
+            case self.status
+            when 'Pending Assessment'
+                '#721c24'
+            when 'Meeting Date Pending'
+                '#ff9800'
+            when 'Pending Service Agreement Form'
+                '#721c24'
+            else
+                '#155724'
+            end
+        end
+    end
+
+    def update_last_edit
+        unless changed_attributes.except('last_edit', 'last_viewed').empty?
+            self.last_edit = DateTime.now
+        end
+    end
+
+    def update_last_viewed
+        self.last_viewed = DateTime.now
+        save
+    end
+
+    def unseen_changes
+        self.last_edit > self.last_viewed
+    end
+
     def self.submittable(bool1, bool2, bool3, bool4, bool5, bool6)
         bool1 && bool2 && bool3 && bool4 && bool5 && bool6
     end
-
+    
     def self.all_required
         return ['edit_1_valid', 'edit_2_valid', 'edit_3_valid', 'mental_uploaded', 'physical_uploaded', 'environment_uploaded']
     end

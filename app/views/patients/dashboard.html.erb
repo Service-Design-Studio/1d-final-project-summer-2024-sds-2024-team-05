@@ -9,13 +9,19 @@
 </head>
 <body>
   <div class="container">
-    <h1 class="card-text"><%= "#{'Welcome'} #{@user.user_first_name} #{'!'}" %></h1>
-    <h1>Submitted Forms</h1>
-    
+
+    <h1 class="card-text" style ="padding-bottom: 30px"><%= "#{'Welcome'} #{@user.user_first_name} #{'!'}" %></h1>
+    <h2>Submitted Forms</h2>
+    <form class = "d-flex" method = "GET" action= "/search" >
+      <input class="form-control me-2" type = "search" name = "query" placeholder="Enter Client's first name">
+      <button class = "btn btn-primary" type ="submit">Search</button>
+    </form>
+
     <!-- Table of Submitted forms -->
     <table class="table">
       <thead>
         <tr>
+
           <th>
             Name
             <%= form_tag(patients_dashboard_path, method: :get, id: "sort_form", class: "d-inline") do %>
@@ -63,11 +69,14 @@
               <%= label_tag :sort_end_date, "Sort" %>
             <% end %>
           </th>
+
           <th class="text-center">Summary</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
-      <tbody>
+      
+
+<!--       <tbody>
         <% @submittedforms&.each do |form| %>
           <tr>
             <td><%= "#{form.first_name} #{form.last_name}" %></td>
@@ -80,7 +89,29 @@
             </td>
             <td><%= form.address %></td>
             <td><%= form.start_date %></td>
+            <td><%= form.end_date %></td> -->
+
+      <tbody> 
+        <% @submittedforms&.each do |form| %>
+          <tr>
+            <td>
+              <%= "#{form.first_name} #{form.last_name}" %>
+            <td><%= form.gender %></td>
+              <% if !form.last_viewed.nil? && !form.last_edit.nil? %>
+                <% if form.unseen_changes %>
+                  <br>
+                  <span style="font-size: 12px; color: #3498db;"><%= "New Changes Made!" %></span>
+                <% end %>
+              <% end %>
+            </td>
+            <td><%= "#{form.mental_uploaded} #{form.physical_uploaded} #{form.environment_uploaded}" %></td>
+            <td style="color: <%= form.status_colour %>">
+              <%= form.status %>
+            </td>
+            <td><%= form.address %></td>
+            <td><%= form.start_date %></td>
             <td><%= form.end_date %></td>
+
             <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info' %></td>
             <td class="text-center">
           <div class="d-flex justify-content-center align-items-center">
@@ -98,12 +129,15 @@
     
     <br></br>
 
-    <h1>Ongoing Forms</h1>
+
+    <h2>Ongoing Forms</h2>
+
 
     <!-- Table of Ongoing forms -->
     <table class="table">
       <thead>
         <tr>
+
           <th>
             First Name
             <%= form_tag(patients_dashboard_path, method: :get, id: "sort_form", class: "d-inline") do %>
@@ -150,6 +184,7 @@
               <%= label_tag :sort_end_date, "Sort" %>
             <% end %>
           </th>
+
           <th class="text-center">Summary</th>
           <th class="text-center">Actions</th>
         </tr>
@@ -159,10 +194,12 @@
           <tr>
             <td><%= form.first_name %></td>
             <td><%= form.last_name %></td>
+
             <td><%= form.gender %></td>
             <td><%= form.address %></td>
             <td><%= form.start_date %></td>
             <td><%= form.end_date %></td>
+
             <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info' %></td>
             <td class="text-center">
           <div class="d-flex justify-content-center align-items-center">

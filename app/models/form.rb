@@ -33,7 +33,11 @@ class Form < ApplicationRecord
     end
 
     def unseen_changes
-        self.last_edit > self.last_viewed
+        if self.last_viewed.nil?
+            true
+        else
+            self.last_edit > self.last_viewed
+        end
     end
 
     def self.submittable(bool1, bool2, bool3, bool4, bool5, bool6)

@@ -13,3 +13,18 @@ Scenario: Save currently filled information
   When I reopen the form
   Then I should not have to re-enter the previously filled up fields
 
+Scenario: Going to a specific page in the form 
+  Given that I would like to go to a specific page in the form 
+  When I click on page number "4"
+  Then I should be brought to page 4 of the form
+
+Scenario: Incomplete Page 
+  Given that I missed filling up a field on one page 
+  When I move on to the next page 
+  Then I should see the page header of the page with unfilled information be highlighted in red
+
+Scenario: Submitting the form 
+  Given that I have submitted the form 
+  When I am in the main dashboard 
+  Then I should see the word "Submitted" in the actions
+  And I cannot edit or delete the form further

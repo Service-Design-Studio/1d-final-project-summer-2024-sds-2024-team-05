@@ -60,8 +60,6 @@ def dashboard
 
 
 
->>>>>>> main
-
   # Step 1 of form creation
   def new
     @form = current_user.forms.build
@@ -79,7 +77,7 @@ def dashboard
     @incompleteforms = @forms.where(submitted: [false, nil])
     render :dashboard
   end
->>>>>>> main
+
   # Save step 1 form data and move to step 2
   def create
     case params[:commit]

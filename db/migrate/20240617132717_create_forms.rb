@@ -41,11 +41,9 @@ class CreateForms < ActiveRecord::Migration[7.1]
       t.string :nok_last_name
       t.string :nok_email
 
+
       t.datetime :last_edit
       t.datetime :last_viewed
-
-
-
       t.timestamps
     end
   end

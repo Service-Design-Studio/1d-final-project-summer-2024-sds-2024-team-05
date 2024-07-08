@@ -1,5 +1,6 @@
 class PatientsController < ApplicationController
 
+
    before_action :set_form, only: [:show, :edit_1, :update_1, :edit_2, :update_2, :edit_3, :update_3, :edit_4, :update_4, :edit_5, :update_5]
    before_action :check_valid_params, only: [:show]
    before_action :authenticate_user!
@@ -14,6 +15,7 @@ class PatientsController < ApplicationController
     @user = current_user
     session[:form_origin] = 'index'
   end
+
 
 def dashboard
    @user = current_user
@@ -58,11 +60,11 @@ def dashboard
 
 
 
-
   # Step 1 of form creation
   def new
     @form = current_user.forms.build
     session[:form_origin] = 'new'
+
     @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue"
 
   end
@@ -75,6 +77,7 @@ def dashboard
     @incompleteforms = @forms.where(submitted: [false, nil])
     render :dashboard
   end
+
   # Save step 1 form data and move to step 2
   def create
     case params[:commit]
@@ -359,6 +362,7 @@ def dashboard
           redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
         end
 
+
 #       if params[:form].present? && params[:form][:environment_video].present? #mine
 #         @form.environment_video.attach(params[:form][:environment_video])
 #         redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
@@ -507,21 +511,22 @@ def dashboard
     @form = Form.find(params[:id])
     @form.destroy
     flash[:notice] = "Form for '#{@form.first_name}' deleted."
+
     if current_user.admin?
       redirect_to patients_dashboard_path
     else
       redirect_to forms_path
     end
+
   end
 
   private
 
   def set_form
     @form = if params[:id].present?
-      # Form.find(params[:id])
       form = Form.find(params[:id])
       Rails.logger.debug "params[:edit]: #{form.edit_2_valid}"
-      @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue"
+      @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue"
       if form.edit_1_valid == false
         @valid_button_1_class = "btn btn-primary circular-button btn-outline-red"
       end
@@ -575,7 +580,6 @@ def dashboard
     if params[:form][:relationship] == "Others"
       permitted_params[:relationship] = params[:form][:others_text]
     end
-
     if params[:form].present? && params[:form].values.any?(&:present?)
       permitted_params[:edit_1_valid] = Form.page1_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
       Rails.logger.debug "params[:form]: #{params[:form][:edit_1_valid]}"

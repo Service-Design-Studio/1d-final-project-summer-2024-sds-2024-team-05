@@ -574,10 +574,16 @@ def dashboard
     if params[:form][:relationship] == "Others"
       permitted_params[:relationship] = params[:form][:others_text]
     end
+
     if params[:form].present? && params[:form].values.any?(&:present?)
       permitted_params[:edit_1_valid] = Form.page1_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
       Rails.logger.debug "params[:form]: #{params[:form][:edit_1_valid]}"
     end
+
+    if params[:form][:languages].present?
+      permitted_params[:languages] = params[:form][:languages].to_s.gsub!(/[\[\]\"]/,"")
+    end
+
     if !current_user.admin?
       permitted_params[:nok_address] = current_user.user_address
       permitted_params[:nok_contact_no] = current_user.user_contact_number
@@ -598,6 +604,11 @@ def dashboard
     if params[:form].present? && params[:form].values.any?(&:present?)
       permitted_params[:edit_2_valid] = Form.page2_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
     end
+
+    if params[:form][:conditions].present?
+      permitted_params[:conditions] = params[:form][:conditions].to_s.gsub!(/[\[\]\"]/,"")
+    end
+
     permitted_params
   end
 
@@ -607,6 +618,10 @@ def dashboard
     # permitted_params[:edit_3_valid] = Form.page3_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
     if params[:form].present? && params[:form].values.any?(&:present?)
       permitted_params[:edit_3_valid] = Form.page3_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
+    end
+
+    if params[:form][:services].present?
+      permitted_params[:services] = params[:form][:services].to_s.gsub!(/[\[\]\"]/,"")
     end
 
     permitted_params

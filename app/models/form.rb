@@ -1,6 +1,7 @@
 class Form < ApplicationRecord
     attr_accessor :others_text
 
+
     before_save :update_last_edit
 
     def status_colour

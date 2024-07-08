@@ -79,8 +79,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_02_054328) do
     t.string "nok_first_name"
     t.string "nok_last_name"
     t.string "nok_email"
+
     t.datetime "last_edit"
     t.datetime "last_viewed"
+
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"

@@ -25,7 +25,7 @@
 
           <button type="button" class="btn btn-primary circular-button btn-blue">5</button>
           
-          <%= button_to '6', @form.persisted? ? @form : show_error_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '6', @form.persisted? ? @form : show_error_forms_path, method: :get, class: @form.persisted? ? @valid_button_summ_class : "btn btn-primary circular-button btn-outline-blue" %>
         <!-- Steps bar content will go here -->
       </div>
     </div>

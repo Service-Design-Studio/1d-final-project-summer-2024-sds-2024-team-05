@@ -65,8 +65,7 @@ def dashboard
     @form = current_user.forms.build
     session[:form_origin] = 'new'
 
-    @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue"
-
+    @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class, @valid_button_summ_class = ["btn btn-primary circular-button btn-blue"]*6
   end
   def search
     @query = params[:query]
@@ -86,6 +85,13 @@ def dashboard
         @form = current_user.forms.build(form_params_step1)
         if @form.save
           session[:form_origin] = 'new'
+          if current_user.admin?
+            if @form.transfer_to_new_user(:nok_email)
+              puts 'WOWW'
+            else
+              puts ':(('
+            end
+          end
           redirect_to edit_1_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
         end
       end
@@ -93,6 +99,13 @@ def dashboard
       if params[:form].present? && params[:form].values.any?(&:present?)
         @form = current_user.forms.build(form_params_step1)
         if @form.save
+          if current_user.admin?
+            if @form.transfer_to_new_user(:nok_email)
+              puts 'WOWW'
+            else
+              puts ':(('
+            end
+          end
           redirect_to edit_2_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
         end
       else
@@ -421,7 +434,7 @@ def dashboard
   def update_submission_status
     @form = Form.find(params[:id]) # Find your form
 
-    if @form.update(submitted: true, status: 'Pending Assessment')
+    if @form.update(submitted: true)
       if current_user.admin?
         redirect_to patients_dashboard_path, notice: 'Form submitted successfully.'
       else
@@ -522,22 +535,24 @@ def dashboard
   def set_form
     @form = if params[:id].present?
       form = Form.find(params[:id])
-      Rails.logger.debug "params[:edit]: #{form.edit_2_valid}"
-      @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue","btn btn-primary circular-button btn-outline-blue"
-      if form.edit_1_valid == false
+      @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class, @valid_button_summ_class =  ["btn btn-primary circular-button btn-blue"]*6   
+      if form.pg1_valid == false
         @valid_button_1_class = "btn btn-primary circular-button btn-outline-red"
       end
-      if form.edit_2_valid == false
+      if form.pg2_valid == false
         @valid_button_2_class = "btn btn-primary circular-button btn-outline-red"
       end
-      if form.edit_3_valid == false
+      if form.pg3_valid == false
         @valid_button_3_class = "btn btn-primary circular-button btn-outline-red"
       end
-      if form.mental_uploaded == false || form.physical_uploaded == false
+      if form.pg4_valid == false
         @valid_button_4_class = "btn btn-primary circular-button btn-outline-red"
       end
-      if form.environment_uploaded == false
+      if form.pg5_valid == false
         @valid_button_5_class = "btn btn-primary circular-button btn-outline-red"
+      end
+      if form.submittable == false
+        @valid_button_summ_class = "btn btn-primary circular-button btn-outline-red"
       end
       form
     else
@@ -547,18 +562,6 @@ def dashboard
 
   def check_valid_params
     if params[:id].present?
-      @form = Form.find(params[:id])
-      permitted_params = params.permit(:edit_1_valid, :edit_2_valid, :edit_3_valid, :mental_uploaded, :physical_uploaded, :environment_uploaded)
-      Form.all_required.each do |required|
-        unless @form.public_send(required.to_s) == true
-          permitted_params[required.to_sym] = false
-        end
-      end
-      if @form.update(permitted_params)
-        flash[notice:] = 'yeah works'
-      else
-        flash[alert:] = 'ohnoes'
-      end
       set_form
       if current_user.admin?
         @form.update_last_viewed
@@ -567,19 +570,24 @@ def dashboard
   end
 
   def form_params_step1
+    
     if current_user.admin?
-      permitted_params = params.require(:form).permit(:nok_address, :nok_contact_no, :nok_email, :nok_first_name, :nok_last_name, :first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :edit_1_valid, :languages_other, languages:[])
+      permitted_params = params.require(:form).permit(:autofill_address, :nok_address, :nok_contact_no, :nok_email, :nok_first_name, :nok_last_name, :first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :languages_other, languages:[])
     else
-      permitted_params = params.require(:form).permit(:first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :edit_1_valid, :languages_other, languages:[])
+      permitted_params = params.require(:form).permit(:autofill_address, :first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :languages_other, languages:[])
+    end
+    puts 'THIS ONE CORRECT', permitted_params[:autofill_address], permitted_params[:nok_address]
+    if permitted_params[:autofill_address]
+      if current_user.admin?
+        permitted_params[:address] = permitted_params[:nok_address]
+      else
+        permitted_params[:address] = current_user.user_address
+      end
     end
 
     # Check if 'Others' is selected for relationship
     if params[:form][:relationship] == "Others"
       permitted_params[:relationship] = params[:form][:others_text]
-    end
-    if params[:form].present? && params[:form].values.any?(&:present?)
-      permitted_params[:edit_1_valid] = Form.page1_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
-      Rails.logger.debug "params[:form]: #{params[:form][:edit_1_valid]}"
     end
 
     if params[:form][:languages].present?
@@ -594,33 +602,20 @@ def dashboard
       permitted_params[:nok_last_name] = current_user.user_last_name
     end
 
-    #permitted_params[:edit_1_valid] = Form.page1_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
-    
     permitted_params
   end
 
   def form_params_step2
-    permitted_params = params.require(:form).permit(:height, :weight, :medication, :hospital, :discharge_summary, :conditions_other, :edit_2_valid, conditions:[])
-
-    # permitted_params[:edit_2_valid] = Form.page2_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
-    if params[:form].present? && params[:form].values.any?(&:present?)
-      permitted_params[:edit_2_valid] = Form.page2_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
-    end
+    permitted_params = params.require(:form).permit(:height, :weight, :medication, :hospital, :discharge_summary, :conditions_other, conditions:[])
 
     if params[:form][:conditions].present?
       permitted_params[:conditions] = params[:form][:conditions].to_s.gsub!(/[\[\]\"]/,"")
     end
-
     permitted_params
   end
 
   def form_params_step3
-    permitted_params = params.require(:form).permit(:start_date, :end_date, :services_other, :edit_3_valid, services:[])
-
-    # permitted_params[:edit_3_valid] = Form.page3_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
-    if params[:form].present? && params[:form].values.any?(&:present?)
-      permitted_params[:edit_3_valid] = Form.page3_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
-    end
+    permitted_params = params.require(:form).permit(:start_date, :end_date, :services_other, services:[])
 
     if params[:form][:services].present?
       permitted_params[:services] = params[:form][:services].to_s.gsub!(/[\[\]\"]/,"")
@@ -635,63 +630,33 @@ def dashboard
     else
       @form = current_user.forms.build()
     end
-    permitted_params = params.require(:form).permit(:physical_video, :mental_video, :physical_uploaded, :mental_uploaded)
-    if permitted_params[:physical_video].present? || @form.physical_video.attached?
-      permitted_params[:physical_uploaded] = true
-    else
-      permitted_params[:physical_uploaded] = false
-    end
-
-    if permitted_params[:mental_video].present?
-      permitted_params[:mental_uploaded] = true
-    else
-      permitted_params[:mental_uploaded] = false
-    end
-
-    permitted_params
+    permitted_params = params.require(:form).permit(:physical_video, :mental_video)
   end
 
   def form_params_step5
-    permitted_params = params.require(:form).permit(:environment_video, :environment_uploaded,)
-    if permitted_params[:environment_video].present?
-      permitted_params[:environment_uploaded] = true
-    else
-      permitted_params[:environment_uploaded] = false
-    end
-
-    permitted_params
+    permitted_params = params.require(:form).permit(:environment_video)
   end
 
   def physical_assessment_params
-    if params[:id].present?
-      @form = Form.find(params[:id])
-    end
-    permitted_params = params.require(:form).permit(:physical_assessment, :status)
-    if @form.physical_assessment.present? && @form.environment_assessment.present?
-      permitted_params[:status] = 'Meeting Date Pending'
+    permitted_params = params.require(:form).permit(:physical_assessment)
+    if params[:form][:physical_assessment] == "Detailed Assessment Needed"
+      permitted_params[:physical_assessment] = params[:form][:others_text]
     end
     permitted_params
   end
 
   def mental_assessment_params
-    if params[:id].present?
-      @form = Form.find(params[:id])
-    end
-    permitted_params = params.require(:form).permit(:mental_assessment, :status)
-    if @form.physical_assessment.present? && @form.environment_assessment.present?
-      permitted_params[:status] = 'Meeting Date Pending'
+    permitted_params = params.require(:form).permit(:mental_assessment)
+    if params[:form][:mental_assessment] == "Detailed Assessment Needed"
+      permitted_params[:mental_assessment] = params[:form][:others_text]
     end
     permitted_params
   end
 
   def environment_assessment_params
-    if params[:id].present?
-      @form = Form.find(params[:id])
-    end
-    permitted_params = params.require(:form).permit(:environment_assessment, :status)
-
-    if @form.physical_assessment.present? && @form.mental_assessment.present?
-      permitted_params[:status] = 'Meeting Date Pending'
+    permitted_params = params.require(:form).permit(:environment_assessment)
+    if params[:form][:environment_assessment] == "Detailed Assessment Needed"
+      permitted_params[:environment_assessment] = params[:form][:others_text]
     end
     permitted_params
   end

@@ -97,9 +97,9 @@
               <% end %>
             </td>
             <td><%= form.gender %></td>
-            <td><%= "#{form.mental_uploaded} #{form.physical_uploaded} #{form.environment_uploaded}" %></td>
+            <td><%= "#{form.pg3_valid.inspect} #{form.pg4_valid.inspect} #{form.pg5_valid.inspect}" %></td>
             <td style="color: <%= form.status_colour %>">
-              <%= form.status %>
+              <%= form.application_status %>
             </td>
             <td><%= form.address %></td>
             <td><%= form.start_date %></td>

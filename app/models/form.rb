@@ -1,12 +1,33 @@
 class Form < ApplicationRecord
-    attr_accessor :others_text
+    attr_accessor :others_text, :autofill_address
 
 
     before_save :update_last_edit
 
+    def transfer_to_new_user(email_attribute)
+        new_user = User.find_by(email: self[email_attribute])
+        puts new_user.email, 'HERE LAH', new_user
+      
+        if new_user
+          self.user = new_user  # Update the user association of the form
+          save  # Save the form with the updated user association
+      
+          if user == new_user
+            puts'Form transferred to new user successfully. OI'
+            return true
+          else
+            puts 'Failed to transfer form to new user. OI'
+            return false
+          end
+        else
+          puts 'User with specified email address not found. OI'
+          return false
+        end
+      end
+
     def status_colour
-        if !self.status.nil?
-            case self.status
+        if !self.application_status.nil?
+            case application_status
             when 'Pending Assessment'
                 '#721c24'
             when 'Meeting Date Pending'
@@ -40,27 +61,56 @@ class Form < ApplicationRecord
             self.last_edit > self.last_viewed
         end
     end
-
-    def self.submittable(bool1, bool2, bool3, bool4, bool5, bool6)
-        bool1 && bool2 && bool3 && bool4 && bool5 && bool6
-    end
     
-    def self.all_required
+    def all_required
         return ['edit_1_valid', 'edit_2_valid', 'edit_3_valid', 'mental_uploaded', 'physical_uploaded', 'environment_uploaded']
     end
 
-    def self.page1_required
-       return ['first_name', 'last_name', 'gender', 'address', 'relationship', 'languages']
+    def page1_required
+       return ['date_of_birth', 'nok_address', 'nok_email', 'nok_contact_no', 'nok_first_name', 'nok_last_name', 'first_name', 'last_name', 'gender', 'address', 'relationship', 'languages']
     end
 
-    def self.page2_required
+    def pg1_valid
+        page1_required.all? { |key| self.send(key).present? }
+    end
+
+    def page2_required
         return ['height', 'weight', 'conditions', 'medication', 'hospital']
     end
 
-    def self.page3_required
+    def pg2_valid
+        page2_required.all? { |key| self.send(key).present? }
+    end
+
+    def page3_required
         return ['services', 'start_date', 'end_date']
      end
 
+    def pg3_valid
+        page3_required.all? { |key| self.send(key).present? }
+    end
+
+    def pg4_valid
+        physical_video.attached? && mental_video.attached?
+    end
+
+    def pg5_valid
+        environment_video.attached?
+    end
+
+    def submittable
+        pg1_valid && pg2_valid && pg3_valid && pg4_valid && pg5_valid 
+    end
+
+    def application_status
+        if physical_assessment.present? && environment_assessment.present?
+            'Meeting Date Pending'
+        elsif submitted
+            'Pending Assessment'
+        else
+            'NA'
+        end
+    end
     # before_save do
     #     self.languages.gsub!(/[\[\]\"]/,"") if attribute_present?("languages")
     #     self.conditions.gsub!(/[\[\]\"]/,"") if attribute_present?("conditions")

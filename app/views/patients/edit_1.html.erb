@@ -22,7 +22,7 @@
           
           <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: @form.persisted? ? @valid_button_5_class : "btn btn-primary circular-button btn-outline-blue" %>
           
-          <%= button_to '6', @form.persisted? ? @form : show_error_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '6', @form.persisted? ? @form : show_error_forms_path, method: :get, class: @form.persisted? ? @valid_button_5_class : "btn btn-primary circular-button btn-outline-blue" %>
 
       </div>
     </div>
@@ -146,6 +146,10 @@
         <div class="col-8">
           <%= form.label :address, "Address" %>
           <%= form.text_field :address, class: "form-control", id: "address", :required => false %>
+        </div>
+        <div class="col-8">
+          <%= form.check_box :autofill_address, checked: @form.autofill_address %>
+          <%= form.label :virtual_attribute, 'Same as Next-of-Kin' %>
         </div>
       </div>
 

@@ -144,6 +144,10 @@
           <%= form.label :address, "Address" %>
           <%= form.text_field :address, class: "form-control", id: "address" %>
         </div>
+        <label>
+          <%= form.check_box :autofill_address, checked: @form.autofill_address %>
+          <%= form.label :virtual_attribute, 'Same as Next-of-Kin' %>
+        </label>
       </div>
 
       <div class="row mb-3">

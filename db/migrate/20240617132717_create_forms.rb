@@ -18,14 +18,6 @@ class CreateForms < ActiveRecord::Migration[7.1]
       t.text :services_other
       t.date :start_date
       t.date :end_date
-      t.boolean :edit_1_valid
-      t.boolean :edit_2_valid
-      t.boolean :edit_3_valid
-      t.boolean :mental_uploaded
-      t.boolean :physical_uploaded
-      t.boolean :environment_uploaded
-      t.boolean :submitted
-      t.string :status
       t.string :languages
       t.text :languages_other
       t.text :mental_primary_assessment
@@ -40,8 +32,7 @@ class CreateForms < ActiveRecord::Migration[7.1]
       t.string :nok_first_name
       t.string :nok_last_name
       t.string :nok_email
-
-
+      t.boolean :submitted
       t.datetime :last_edit
       t.datetime :last_viewed
       t.timestamps

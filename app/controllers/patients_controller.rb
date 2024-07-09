@@ -254,28 +254,34 @@ def dashboard
 
     case params[:commit]
     when 'Upload Physical Video'
-      if @form.update(form_params_step4)
-        if params[:form].present? && params[:form][:physical_video].present?
-          @form.physical_video.attach(params[:form][:physical_video])
+      if params[:form].present? && params[:form][:physical_video].present?
+        @form.physical_video.attach(params[:form][:physical_video])
+        if @form.update(form_params_step4)
+        # Redirect or render to update view to show the uploaded file
+          redirect_to edit_4_form_path(@form), notice: 'Physical video uploaded successfully.'
+        else
+          redirect_to edit_4_form_path(@form), notice: 'Video upload unsuccessful.'
         end
-      # Redirect or render to update view to show the uploaded file
-        redirect_to edit_4_form_path(@form), notice: 'Physical video uploaded successfully.'
       end
     when 'Upload Mental Video'
-      if @form.update(form_params_step4)
-        if params[:form].present? && params[:form][:mental_video].present?
-          @form.mental_video.attach(params[:form][:mental_video])
+      if params[:form].present? && params[:form][:mental_video].present?
+        @form.mental_video.attach(params[:form][:mental_video])
+        if @form.update(form_params_step4)
+          # Redirect or render to update view to show the uploaded file
+          redirect_to edit_4_form_path(@form), notice: 'Mental video uploaded successfully.'
+        else
+          redirect_to edit_4_form_path(@form), notice: 'Video upload unsuccessful.'
         end
-        # Redirect or render to update view to show the uploaded file
-        redirect_to edit_4_form_path(@form), notice: 'Mental video uploaded successfully.'
       end
     when 'Save'
-      if @form.update(form_params_step4)
-        if params[:form].present?
-          @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
-          @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+      if params[:form].present?
+        @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
+        @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+        if @form.update(form_params_step4)
+          redirect_to edit_4_form_path(@form), notice: 'Videos uploaded successfully.'
+        else
+          redirect_to edit_4_form_path(@form), notice: 'Video upload unsuccessful.'
         end
-        redirect_to edit_4_form_path(@form)
       end
     when 'Next'
       if params[:form].present?
@@ -348,26 +354,24 @@ def dashboard
     Rails.logger.debug "params[:form]: #{params[:form]}"
 
     case params[:commit]
-    when 'Upload Environment Video'
-      if @form.update(form_params_step5)
-        if params[:form].present? && params[:form][:environment_video].present?
-          @form.environment_video.attach(params[:form][:environment_video])
+    when 'Upload Environment Video', 'Save'
+      if params[:form].present? && params[:form][:environment_video].present?
+        @form.environment_video.attach(params[:form][:environment_video])
+        if @form.update(form_params_step5)
           redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
+        else
+          redirect_to edit_5_form_path(@form), notice: 'Video upload unsuccessful.'
         end
       end
-    when 'Save'
-      if @form.update(form_params_step5)
-        if params[:form].present? && params[:form][:environment_video].present?
-          @form.environment_video.attach(params[:form][:environment_video])
-          redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
-        end
-
-
-#       if params[:form].present? && params[:form][:environment_video].present? #mine
-#         @form.environment_video.attach(params[:form][:environment_video])
-#         redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
-      end
-
+    # when 'Save'
+    #   if params[:form].present? && params[:form][:environment_video].present?
+    #     @form.environment_video.attach(params[:form][:environment_video])
+    #     if @form.update(form_params_step5)
+    #       redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
+    #     else
+    #       redirect_to edit_5_form_path(@form), notice: 'Video upload unsuccessful.'
+    #     end
+    #   end
     when 'Next' #hubert
         if params[:form].present?
           @form.environment_video.attach(params[:form][:environment_video]) if params[:form][:environment_video].present?
@@ -376,13 +380,6 @@ def dashboard
           end
         end
       redirect_to @form
-
-#     when 'Next' mine
-#       if params[:form].present?
-#         @form.environment_video.attach(params[:form][:environment_video]) if params[:form][:environment_video].present?
-#       end
-#       redirect_to @form
-
     else
       # Handle unexpected values for params[:commit]
       redirect_to edit_5_form_path(@form), alert: 'Invalid action.'

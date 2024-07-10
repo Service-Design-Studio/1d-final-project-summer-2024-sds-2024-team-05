@@ -6,21 +6,20 @@ class Form < ApplicationRecord
 
     def transfer_to_new_user(email_attribute)
         new_user = User.find_by(email: self[email_attribute])
-        puts new_user.email, 'HERE LAH', new_user
       
         if new_user
           self.user = new_user  # Update the user association of the form
           save  # Save the form with the updated user association
       
           if user == new_user
-            puts'Form transferred to new user successfully. OI'
+            puts'Form transferred to new user successfully.'
             return true
           else
-            puts 'Failed to transfer form to new user. OI'
+            puts 'Failed to transfer form to new user.'
             return false
           end
         else
-          puts 'User with specified email address not found. OI'
+          puts 'User with specified email address not found.'
           return false
         end
       end

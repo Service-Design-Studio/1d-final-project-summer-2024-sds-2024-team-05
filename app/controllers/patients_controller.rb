@@ -85,7 +85,7 @@ def dashboard
         @form = current_user.forms.build(form_params_step1)
         if @form.save
           session[:form_origin] = 'new'
-          if current_user.admin?
+          if current_user.admin? && params[:form][:nok_email].present?
             if @form.transfer_to_new_user(:nok_email)
               puts 'WOWW'
             else
@@ -576,7 +576,6 @@ def dashboard
     else
       permitted_params = params.require(:form).permit(:autofill_address, :first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :languages_other, languages:[])
     end
-    puts 'THIS ONE CORRECT', permitted_params[:autofill_address], permitted_params[:nok_address]
     if permitted_params[:autofill_address]
       if current_user.admin?
         permitted_params[:address] = permitted_params[:nok_address]

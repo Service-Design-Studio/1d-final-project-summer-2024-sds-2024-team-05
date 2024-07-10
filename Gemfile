@@ -85,4 +85,5 @@ group :test do
   gem 'rspec-rails'
   gem 'cucumber-rails'
   gem 'database_cleaner-active_record'
+  gem 'simplecov'
 end

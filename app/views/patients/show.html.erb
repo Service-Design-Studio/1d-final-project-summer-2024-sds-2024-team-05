@@ -21,27 +21,25 @@
 </head>
 <body>
   <div class="container">
-    <% if !Form.submittable(@form.edit_1_valid, @form.edit_2_valid, @form.edit_3_valid, @form.physical_uploaded, @form.mental_uploaded, @form.environment_uploaded) %>
-      <h1 style="text-align: center; background-color: red; color: white;">!!PLZ FIX ERRORS ON PAGES IN RED!!</h1>
+    <% if @form.submittable %>
+      <%# <h1 style="text-align: center; background-color: red; color: white;">!!PLZ FIX ERRORS ON PAGES IN RED!!</h1> %>
     <% end %>
     <div class="steps">
-      <div class="page">
+      <div data-controller="form">
+        <div class = page>
+          <%= button_to '1', @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: :get, class: @form.persisted? ? @valid_button_1_class : "btn btn-primary circular-button btn-outline-blue" %>
 
+          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: @form.persisted? ? @valid_button_2_class : "btn btn-primary circular-button btn-outline-blue" %>
 
+          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: @form.persisted? ? @valid_button_3_class : "btn btn-primary circular-button btn-outline-blue" %>
 
-          <%= button_to '1', @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: :get, class: @form.persisted? ? @valid_button_1_class : "btn btn-primary circular-button btn-outline-blue"%>
+          <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: @form.persisted? ? @valid_button_4_class : "btn btn-primary circular-button btn-outline-blue" %>
 
-          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: @form.persisted? ? @valid_button_2_class : "btn btn-primary circular-button btn-outline-blue"%>   
-         
-          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: @form.persisted? ? @valid_button_3_class : "btn btn-primary circular-button btn-outline-blue"%>
-          
-          <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: @form.persisted? ? @valid_button_4_class : "btn btn-primary circular-button btn-outline-blue"%>         
-
-          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: @form.persisted? ? @valid_button_5_class : "btn btn-primary circular-button btn-outline-blue"%>
-
-
-          <button type="button" class="btn btn-primary circular-button btn-outline-blue">6</button>
-        <!-- Steps bar content will go here -->
+          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: @form.persisted? ? @valid_button_5_class : "btn btn-primary circular-button btn-outline-blue" %>
+      
+          <button type="button" class="btn btn-primary circular-button btn-blue" id="btn6" data-action="click->form#validateForm">6</button>
+        </div>
+        <div data-form-target="popup"></div>
       </div>
     </div>
 
@@ -49,7 +47,16 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Personal Information</h5>
-          <p class="card-text"><strong>STATUS</strong> <%= @form.status %></p>
+          <p><%= @form.user.email %></p>
+
+          <p class="card-text"><strong>STATUS</strong> <%= @form.application_status %></p>
+          <p class="card-text"><strong>STATUS</strong> <%= @form.pg1_valid.inspect %></p>
+          <p class="card-text"><strong>STATUS</strong> <%= @form.pg2_valid.inspect %></p>
+          <p class="card-text"><strong>STATUS</strong> <%= @form.pg3_valid.inspect %></p>
+          <p class="card-text"><strong>STATUS</strong> <%= @form.pg4_valid.inspect %></p>
+          <p class="card-text"><strong>STATUS</strong> <%= @form.pg5_valid.inspect %></p>
+          <p class="card-text"><strong>STATUS</strong> <%= @form.submittable %></p>
+          <p class="card-text"><strong>STATUS!!</strong> <%= @form.application_status %></p>
 
           <p class="card-text"><strong>Last Edit</strong> <%= @form.last_edit %></p>
           <p class="card-text"><strong>Last Viewed</strong> <%= @form.last_viewed %></p>
@@ -82,15 +89,10 @@
         <p class="card-text"><strong>Other Conditions:</strong> <%= @form.conditions_other %></p>
         <p class="card-text"><strong>Medication:</strong> <%= @form.medication %></p>
         <p class="card-text"><strong>Hospitalised recently:</strong> <%= @form.hospital.nil? ? "" : (@form.hospital ? "Yes" : "No") %></p>
-        <p class="card-text"><strong>VALIDATION</strong> <%= "#{'edit_1_valid'} #{@form.edit_1_valid} #{'edit_2_valid'} #{@form.edit_2_valid} #{'edit_3_valid'} #{@form.edit_3_valid}" %></p>
 
         <p class="card-text"><strong>Weight:</strong> <%= @form.mental_video.class %></p>
         <p class="card-text"><strong>Weight:</strong> <%= @form.physical_video %></p>
         <p class="card-text"><strong>Weight:</strong> <%= @form.environment_video %></p>
-
-        <p class="card-text"><strong>M.U</strong> <%= @form.mental_uploaded %></p>
-        <p class="card-text"><strong>P.U</strong> <%= @form.physical_uploaded %></p>
-        <p class="card-text"><strong>E.U</strong> <%= @form.environment_uploaded %></p>
 
         <% if @form.discharge_summary.attached? %>
           <div class="mt-3">
@@ -164,7 +166,7 @@
 
       <%= link_to "Back", edit_5_form_path(@form), class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
       <%= form_tag(update_submission_status_form_path(@form), method: :patch) do %>
-        <% if Form.submittable(@form.edit_1_valid, @form.edit_2_valid, @form.edit_3_valid, @form.physical_uploaded, @form.mental_uploaded, @form.environment_uploaded) %>
+        <% if @form.submittable %>
           <% if @form.submitted? %>
             <%= submit_tag 'Update', class: "btn btn-lg rounded-pill btn-green me-2", style: 'float: left; margin-right: 5px;'%>
           <% else %>
@@ -179,7 +181,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <% if @form.status == 'Meeting Date Pending' && current_user.admin?%>
+      <% if @form.application_status == 'Meeting Date Pending' && current_user.admin?%>
         <%= link_to 'Update Meeting Date', patients_dashboard_path, class: 'btn btn-lg rounded-pill btn-green me-2', style: 'float: right; margin-right: 5px;' %>
       <% end %>
       <% if current_user.admin? %>
@@ -191,5 +193,8 @@
   </div>
   
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@hotwired/stimulus/dist/stimulus.umd.js"></script>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+
 </body>
 </html>

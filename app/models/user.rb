@@ -11,4 +11,5 @@ class User < ApplicationRecord
   end
   
   validates :user_first_name, :user_last_name, :user_address, :user_contact_number, presence: true, unless: :admin?
+  validates :email, presence: true, uniqueness: true
 end

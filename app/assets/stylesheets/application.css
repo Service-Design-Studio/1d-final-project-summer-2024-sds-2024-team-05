@@ -18,6 +18,16 @@ h1 {
     padding: 0;
 }
 
+.nav-btn {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: end;
+    margin-right: 2em;
+}
+
 .btn-green {
     color: white;
     border: 1px solid green;
@@ -58,6 +68,16 @@ h1 {
     margin-top: 0.5em;
 }
 
+
+.btn-blue1 {
+    color: white;
+    border: 1px solid #253255;
+    background-color: #253255;
+    width: auto;
+    margin-top: 0.5em;
+}
+
+
 .btn-red {
     color: white;
     border: 1px solid #a80000;
@@ -82,7 +102,16 @@ h1 {
     margin-top: 0.5em;
 }
 
-.btn-outline-red:hover {
+
+.btn-outline-blue1 {
+    color: #253255;
+    border: 1px solid #253255;
+    background-color: white;
+    width: auto;
+    margin-top: 0.5em;
+}
+
+.btn-outline-red {
     color: #a80000;
     border: 1px solid #a80000;
     background-color: white;
@@ -98,7 +127,17 @@ h1 {
     margin-top: 0.5em;
 }
 
-.btn-outline-red {
+
+.btn-outline-blue1:hover {
+    color: white;
+    border: 1px solid #253255;
+    background-color: #253255;
+    width: auto;
+    margin-top: 0.5em;
+}
+
+.btn-outline-red:hover {
+
     color: white;
     border: 1px solid #a80000;
     background-color: #a80000;

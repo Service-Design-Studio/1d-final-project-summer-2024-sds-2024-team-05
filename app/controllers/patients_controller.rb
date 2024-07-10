@@ -1,5 +1,6 @@
 class PatientsController < ApplicationController
 
+
    before_action :set_form, only: [:show, :edit_1, :update_1, :edit_2, :update_2, :edit_3, :update_3, :edit_4, :update_4, :edit_5, :update_5]
    before_action :check_valid_params, only: [:show]
    before_action :authenticate_user!
@@ -15,6 +16,7 @@ class PatientsController < ApplicationController
     session[:form_origin] = 'index'
   end
 
+
 def dashboard
    @user = current_user
    @submittedforms = Form.where(submitted: true)
@@ -22,11 +24,11 @@ def dashboard
 
    # Handle sorting for submitted forms based on first name, last name, or address
    if params[:sort] == "alphabetical"
-     @submittedforms = @submittedforms.order("LOWER(first_name) ASC, LOWER(last_name) ASC")
-     @incompleteforms = @incompleteforms.order("LOWER(first_name) ASC, LOWER(last_name) ASC")
-   elsif params[:sort_last_name] == "alphabetical"
-     @submittedforms = @submittedforms.order("LOWER(last_name) ASC")
-     @incompleteforms = @incompleteforms.order("LOWER(last_name) ASC")
+    @submittedforms = @submittedforms.order(Arel.sql("LOWER(first_name || ' ' || last_name) ASC"))
+    @incompleteforms = @incompleteforms.order(Arel.sql("LOWER(first_name || ' ' || last_name) ASC"))
+   elsif params[:sort_nok_name] == "alphabetical"
+     @submittedforms = @submittedforms.order(Arel.sql("LOWER(nok_first_name || ' ' || nok_last_name) ASC"))
+     @incompleteforms = @incompleteforms.order(Arel.sql("LOWER(nok_first_name || ' ' || nok_last_name) ASC"))
    elsif params[:sort_address] == "alphabetical"
      @submittedforms = @submittedforms.order("LOWER(address) ASC")
      @incompleteforms = @incompleteforms.order("LOWER(address) ASC")
@@ -58,22 +60,23 @@ def dashboard
 
 
 
-
   # Step 1 of form creation
   def new
     @form = current_user.forms.build
     session[:form_origin] = 'new'
-    @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue"
 
+    @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class, @valid_button_summ_class = ["btn btn-primary circular-button btn-blue"]*6
   end
   def search
     @query = params[:query]
-    @forms = Form.where("first_name LIKE ? OR last_name LIKE ?", "%#{@query}%", "%#{@query}%")
+    @forms = Form.where("first_name LIKE :query OR last_name LIKE :query OR CONCAT(first_name, ' ', last_name) LIKE :query OR 
+                        nok_first_name LIKE :query OR nok_last_name LIKE :query OR CONCAT(nok_first_name, ' ', nok_last_name) LIKE :query", query: "%#{@query}%")
     @user = current_user
     @submittedforms = @forms.where(submitted: true)
     @incompleteforms = @forms.where(submitted: [false, nil])
     render :dashboard
   end
+
   # Save step 1 form data and move to step 2
   def create
     case params[:commit]
@@ -82,6 +85,13 @@ def dashboard
         @form = current_user.forms.build(form_params_step1)
         if @form.save
           session[:form_origin] = 'new'
+          if current_user.admin?
+            if @form.transfer_to_new_user(:nok_email)
+              puts 'WOWW'
+            else
+              puts ':(('
+            end
+          end
           redirect_to edit_1_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
         end
       end
@@ -89,6 +99,13 @@ def dashboard
       if params[:form].present? && params[:form].values.any?(&:present?)
         @form = current_user.forms.build(form_params_step1)
         if @form.save
+          if current_user.admin?
+            if @form.transfer_to_new_user(:nok_email)
+              puts 'WOWW'
+            else
+              puts ':(('
+            end
+          end
           redirect_to edit_2_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
         end
       else
@@ -250,28 +267,34 @@ def dashboard
 
     case params[:commit]
     when 'Upload Physical Video'
-      if @form.update(form_params_step4)
-        if params[:form].present? && params[:form][:physical_video].present?
-          @form.physical_video.attach(params[:form][:physical_video])
+      if params[:form].present? && params[:form][:physical_video].present?
+        @form.physical_video.attach(params[:form][:physical_video])
+        if @form.update(form_params_step4)
+        # Redirect or render to update view to show the uploaded file
+          redirect_to edit_4_form_path(@form), notice: 'Physical video uploaded successfully.'
+        else
+          redirect_to edit_4_form_path(@form), notice: 'Video upload unsuccessful.'
         end
-      # Redirect or render to update view to show the uploaded file
-        redirect_to edit_4_form_path(@form), notice: 'Physical video uploaded successfully.'
       end
     when 'Upload Mental Video'
-      if @form.update(form_params_step4)
-        if params[:form].present? && params[:form][:mental_video].present?
-          @form.mental_video.attach(params[:form][:mental_video])
+      if params[:form].present? && params[:form][:mental_video].present?
+        @form.mental_video.attach(params[:form][:mental_video])
+        if @form.update(form_params_step4)
+          # Redirect or render to update view to show the uploaded file
+          redirect_to edit_4_form_path(@form), notice: 'Mental video uploaded successfully.'
+        else
+          redirect_to edit_4_form_path(@form), notice: 'Video upload unsuccessful.'
         end
-        # Redirect or render to update view to show the uploaded file
-        redirect_to edit_4_form_path(@form), notice: 'Mental video uploaded successfully.'
       end
     when 'Save'
-      if @form.update(form_params_step4)
-        if params[:form].present?
-          @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
-          @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+      if params[:form].present?
+        @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
+        @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+        if @form.update(form_params_step4)
+          redirect_to edit_4_form_path(@form), notice: 'Videos uploaded successfully.'
+        else
+          redirect_to edit_4_form_path(@form), notice: 'Video upload unsuccessful.'
         end
-        redirect_to edit_4_form_path(@form)
       end
     when 'Next'
       if params[:form].present?
@@ -344,25 +367,24 @@ def dashboard
     Rails.logger.debug "params[:form]: #{params[:form]}"
 
     case params[:commit]
-    when 'Upload Environment Video'
-      if @form.update(form_params_step5)
-        if params[:form].present? && params[:form][:environment_video].present?
-          @form.environment_video.attach(params[:form][:environment_video])
+    when 'Upload Environment Video', 'Save'
+      if params[:form].present? && params[:form][:environment_video].present?
+        @form.environment_video.attach(params[:form][:environment_video])
+        if @form.update(form_params_step5)
           redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
+        else
+          redirect_to edit_5_form_path(@form), notice: 'Video upload unsuccessful.'
         end
       end
-    when 'Save'
-      if @form.update(form_params_step5)
-        if params[:form].present? && params[:form][:environment_video].present?
-          @form.environment_video.attach(params[:form][:environment_video])
-          redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
-        end
-
-#       if params[:form].present? && params[:form][:environment_video].present? #mine
-#         @form.environment_video.attach(params[:form][:environment_video])
-#         redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
-      end
-
+    # when 'Save'
+    #   if params[:form].present? && params[:form][:environment_video].present?
+    #     @form.environment_video.attach(params[:form][:environment_video])
+    #     if @form.update(form_params_step5)
+    #       redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
+    #     else
+    #       redirect_to edit_5_form_path(@form), notice: 'Video upload unsuccessful.'
+    #     end
+    #   end
     when 'Next' #hubert
         if params[:form].present?
           @form.environment_video.attach(params[:form][:environment_video]) if params[:form][:environment_video].present?
@@ -371,13 +393,6 @@ def dashboard
           end
         end
       redirect_to @form
-
-#     when 'Next' mine
-#       if params[:form].present?
-#         @form.environment_video.attach(params[:form][:environment_video]) if params[:form][:environment_video].present?
-#       end
-#       redirect_to @form
-
     else
       # Handle unexpected values for params[:commit]
       redirect_to edit_5_form_path(@form), alert: 'Invalid action.'
@@ -419,7 +434,7 @@ def dashboard
   def update_submission_status
     @form = Form.find(params[:id]) # Find your form
 
-    if @form.update(submitted: true, status: 'Pending Assessment')
+    if @form.update(submitted: true)
       if current_user.admin?
         redirect_to patients_dashboard_path, notice: 'Form submitted successfully.'
       else
@@ -506,35 +521,38 @@ def dashboard
     @form = Form.find(params[:id])
     @form.destroy
     flash[:notice] = "Form for '#{@form.first_name}' deleted."
+
     if current_user.admin?
       redirect_to patients_dashboard_path
     else
       redirect_to forms_path
     end
+
   end
 
   private
 
   def set_form
     @form = if params[:id].present?
-      # Form.find(params[:id])
       form = Form.find(params[:id])
-      Rails.logger.debug "params[:edit]: #{form.edit_2_valid}"
-      @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class = "btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue","btn btn-primary circular-button btn-blue"
-      if form.edit_1_valid == false
+      @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class, @valid_button_summ_class =  ["btn btn-primary circular-button btn-blue"]*6   
+      if form.pg1_valid == false
         @valid_button_1_class = "btn btn-primary circular-button btn-outline-red"
       end
-      if form.edit_2_valid == false
+      if form.pg2_valid == false
         @valid_button_2_class = "btn btn-primary circular-button btn-outline-red"
       end
-      if form.edit_3_valid == false
+      if form.pg3_valid == false
         @valid_button_3_class = "btn btn-primary circular-button btn-outline-red"
       end
-      if form.mental_uploaded == false || form.physical_uploaded == false
+      if form.pg4_valid == false
         @valid_button_4_class = "btn btn-primary circular-button btn-outline-red"
       end
-      if form.environment_uploaded == false
+      if form.pg5_valid == false
         @valid_button_5_class = "btn btn-primary circular-button btn-outline-red"
+      end
+      if form.submittable == false
+        @valid_button_summ_class = "btn btn-primary circular-button btn-outline-red"
       end
       form
     else
@@ -544,18 +562,6 @@ def dashboard
 
   def check_valid_params
     if params[:id].present?
-      @form = Form.find(params[:id])
-      permitted_params = params.permit(:edit_1_valid, :edit_2_valid, :edit_3_valid, :mental_uploaded, :physical_uploaded, :environment_uploaded)
-      Form.all_required.each do |required|
-        unless @form.public_send(required.to_s) == true
-          permitted_params[required.to_sym] = false
-        end
-      end
-      if @form.update(permitted_params)
-        flash[notice:] = 'yeah works'
-      else
-        flash[alert:] = 'ohnoes'
-      end
       set_form
       if current_user.admin?
         @form.update_last_viewed
@@ -564,20 +570,24 @@ def dashboard
   end
 
   def form_params_step1
+    
     if current_user.admin?
-      permitted_params = params.require(:form).permit(:nok_address, :nok_contact_no, :nok_email, :nok_first_name, :nok_last_name, :first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :edit_1_valid, :languages_other, languages:[])
+      permitted_params = params.require(:form).permit(:autofill_address, :nok_address, :nok_contact_no, :nok_email, :nok_first_name, :nok_last_name, :first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :languages_other, languages:[])
     else
-      permitted_params = params.require(:form).permit(:first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :edit_1_valid, :languages_other, languages:[])
+      permitted_params = params.require(:form).permit(:autofill_address, :first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :languages_other, languages:[])
+    end
+    puts 'THIS ONE CORRECT', permitted_params[:autofill_address], permitted_params[:nok_address]
+    if permitted_params[:autofill_address]
+      if current_user.admin?
+        permitted_params[:address] = permitted_params[:nok_address]
+      else
+        permitted_params[:address] = current_user.user_address
+      end
     end
 
     # Check if 'Others' is selected for relationship
     if params[:form][:relationship] == "Others"
       permitted_params[:relationship] = params[:form][:others_text]
-    end
-
-    if params[:form].present? && params[:form].values.any?(&:present?)
-      permitted_params[:edit_1_valid] = Form.page1_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
-      Rails.logger.debug "params[:form]: #{params[:form][:edit_1_valid]}"
     end
 
     if params[:form][:languages].present?
@@ -592,33 +602,20 @@ def dashboard
       permitted_params[:nok_last_name] = current_user.user_last_name
     end
 
-    #permitted_params[:edit_1_valid] = Form.page1_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
-    
     permitted_params
   end
 
   def form_params_step2
-    permitted_params = params.require(:form).permit(:height, :weight, :medication, :hospital, :discharge_summary, :conditions_other, :edit_2_valid, conditions:[])
-
-    # permitted_params[:edit_2_valid] = Form.page2_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
-    if params[:form].present? && params[:form].values.any?(&:present?)
-      permitted_params[:edit_2_valid] = Form.page2_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
-    end
+    permitted_params = params.require(:form).permit(:height, :weight, :medication, :hospital, :discharge_summary, :conditions_other, conditions:[])
 
     if params[:form][:conditions].present?
       permitted_params[:conditions] = params[:form][:conditions].to_s.gsub!(/[\[\]\"]/,"")
     end
-
     permitted_params
   end
 
   def form_params_step3
-    permitted_params = params.require(:form).permit(:start_date, :end_date, :services_other, :edit_3_valid, services:[])
-
-    # permitted_params[:edit_3_valid] = Form.page3_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
-    if params[:form].present? && params[:form].values.any?(&:present?)
-      permitted_params[:edit_3_valid] = Form.page3_required.all? { |key| params[:form].key?(key) && permitted_params[key].present? }
-    end
+    permitted_params = params.require(:form).permit(:start_date, :end_date, :services_other, services:[])
 
     if params[:form][:services].present?
       permitted_params[:services] = params[:form][:services].to_s.gsub!(/[\[\]\"]/,"")
@@ -633,63 +630,33 @@ def dashboard
     else
       @form = current_user.forms.build()
     end
-    permitted_params = params.require(:form).permit(:physical_video, :mental_video, :physical_uploaded, :mental_uploaded)
-    if permitted_params[:physical_video].present? || @form.physical_video.attached?
-      permitted_params[:physical_uploaded] = true
-    else
-      permitted_params[:physical_uploaded] = false
-    end
-
-    if permitted_params[:mental_video].present?
-      permitted_params[:mental_uploaded] = true
-    else
-      permitted_params[:mental_uploaded] = false
-    end
-
-    permitted_params
+    permitted_params = params.require(:form).permit(:physical_video, :mental_video)
   end
 
   def form_params_step5
-    permitted_params = params.require(:form).permit(:environment_video, :environment_uploaded,)
-    if permitted_params[:environment_video].present?
-      permitted_params[:environment_uploaded] = true
-    else
-      permitted_params[:environment_uploaded] = false
-    end
-
-    permitted_params
+    permitted_params = params.require(:form).permit(:environment_video)
   end
 
   def physical_assessment_params
-    if params[:id].present?
-      @form = Form.find(params[:id])
-    end
-    permitted_params = params.require(:form).permit(:physical_assessment, :status)
-    if @form.physical_assessment.present? && @form.environment_assessment.present?
-      permitted_params[:status] = 'Meeting Date Pending'
+    permitted_params = params.require(:form).permit(:physical_assessment)
+    if params[:form][:physical_assessment] == "Detailed Assessment Needed"
+      permitted_params[:physical_assessment] = params[:form][:others_text]
     end
     permitted_params
   end
 
   def mental_assessment_params
-    if params[:id].present?
-      @form = Form.find(params[:id])
-    end
-    permitted_params = params.require(:form).permit(:mental_assessment, :status)
-    if @form.physical_assessment.present? && @form.environment_assessment.present?
-      permitted_params[:status] = 'Meeting Date Pending'
+    permitted_params = params.require(:form).permit(:mental_assessment)
+    if params[:form][:mental_assessment] == "Detailed Assessment Needed"
+      permitted_params[:mental_assessment] = params[:form][:others_text]
     end
     permitted_params
   end
 
   def environment_assessment_params
-    if params[:id].present?
-      @form = Form.find(params[:id])
-    end
-    permitted_params = params.require(:form).permit(:environment_assessment, :status)
-
-    if @form.physical_assessment.present? && @form.mental_assessment.present?
-      permitted_params[:status] = 'Meeting Date Pending'
+    permitted_params = params.require(:form).permit(:environment_assessment)
+    if params[:form][:environment_assessment] == "Detailed Assessment Needed"
+      permitted_params[:environment_assessment] = params[:form][:others_text]
     end
     permitted_params
   end

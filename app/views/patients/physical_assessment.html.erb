@@ -20,7 +20,7 @@
     <%= form_with(model: @form, url: @form.persisted? ? edit_physical_assessment_form_path(@form) : edit_physical_assessment_forms_path, method: :patch, local: true, html: { multipart: true }) do |form| %>
       <div class="row">
 
-        <!-- Step 1: Environment Video -->
+        <!-- Step 1: Physical Video -->
         <div class="box-video g-5">
 
           <%# <h2 style="text-align: center">Physical Video</h2> %>
@@ -28,8 +28,44 @@
             <%= video_tag url_for(@form.physical_video), controls: true, class: "img-thumbnail video-preview rounded-video",width:" 100%", height:"10"  %>
  
       <div class="d-flex justify-content-center mt-5 mb-5">
-        <%= form.label :physical_assessment, "Physical Assessment:" %>
-        <%= form.text_field :physical_assessment, class: "form-control", id: "physical_assessment", :required => false %>
+        <div class="col-8">
+          <fieldset>
+            <p>Physical Assessment</p>
+
+            <div class="form-check form-check-inline">
+              <%= form.radio_button :physical_assessment, "Good", class: "form-check-input", id: "good", checked: @form.physical_assessment == "Good", :required => false %>
+              <%= form.label "good", class: "form-check-label", for: "good" do %>
+                Good
+              <% end %>
+            </div>
+
+            <div class="form-check form-check-inline">
+              <%= form.radio_button :physical_assessment, "Fair", class: "form-check-input", id: "fair", checked: @form.physical_assessment == "Fair", :required => false %>
+              <%= form.label "fair", class: "form-check-label", for: "fair" do %>
+                Fair
+              <% end %>
+            </div>
+
+            <div class="form-check form-check-inline">
+              <%= form.radio_button :physical_assessment, "Poor", class: "form-check-input", id: "poor", checked: @form.physical_assessment == "Poor", :required => false %>
+              <%= form.label "Poor", class: "form-check-label", for: "poor" do %>
+                Poor
+              <% end %>
+            </div>
+
+            <div class="form-check form-check-inline">
+              <%= form.radio_button :physical_assessment, "Detailed Assessment Needed", class: "form-check-input", id: "others", checked: !["Good", "Fair", "Poor", ""].include?(@form.physical_assessment) %>
+              <%= form.label "others", class: "form-check-label", for: "others" do %>
+                Detailed Assessment Needed:
+              <% end %>
+            </div>
+            <br></br>
+            <div class="form-check">
+              
+              <%= form.text_field :others_text, class: "form-control", id: "others_text", placeholder: "Detailed Assessment here", style: "font-style: italic; height: 175px; width: 300 px;", value: (!["Good", "Fair", "Poor", ""].include?(@form.physical_assessment)) ? @form.physical_assessment : ''%>
+              </div>
+          </fieldset>
+        </div>
       </div>
 
       <!-- Navigation Buttons -->

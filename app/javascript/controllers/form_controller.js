@@ -1,4 +1,3 @@
-// app/javascript/controllers/form_controller.js
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
@@ -21,18 +20,27 @@ export default class extends Controller {
   showPopup() {
     console.log("Showing popup");
     this.popupTarget.innerHTML = `
-      <div class="modal-backdrop" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999;">
-        <div class="popup" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border: 1px solid red; z-index: 1000; border-radius: 1em;">
-          <p style="text-align: center; color: black;">
-            Please fill up the rest of the form
-          </p>
-          <button class="close-button" style="margin-top: 10px; display: block; margin: 0 auto; padding: 10px 20px; background-color: grey; color: white; border: none; border-radius: 1em; cursor: pointer;">
-            Close
-          </button>
+      <div class="modal" tabindex="-1" role="dialog" style="display: block; background-color: rgba(0, 0, 0, 0.5);">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Incomplete Form</h5>
+            </div>
+            <div class="modal-body">
+              <p>Please fill up the rest of the form.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary close-button" data-dismiss="modal">Close</button>
+            </div>
+          </div>
         </div>
       </div>
     `;
-    this.element.querySelector('.close-button').addEventListener('click', this.closePopup.bind(this));
+
+    const closeButton = this.popupTarget.querySelector('.close-button');
+    closeButton.addEventListener('click', () => {
+      this.closePopup();
+    });
   }
 
   closePopup() {

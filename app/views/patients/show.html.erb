@@ -24,24 +24,25 @@
     <% if @form.submittable %>
       <%# <h1 style="text-align: center; background-color: red; color: white;">!!PLZ FIX ERRORS ON PAGES IN RED!!</h1> %>
     <% end %>
-    <div class="steps">
-      <div data-controller="form">
-        <div class = page>
-          <%= button_to '1', @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: :get, class: @form.persisted? ? @valid_button_1_class : "btn btn-primary circular-button btn-outline-blue" %>
+<div class="steps">
+  <div data-controller="form">
+    <div class="page">
+      <%= button_to '1', @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: :get, class: @form.persisted? ? @valid_button_1_class : "btn btn-primary circular-button btn-outline-blue", data: { action: "click->form#validateForm" } %>
 
-          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: @form.persisted? ? @valid_button_2_class : "btn btn-primary circular-button btn-outline-blue" %>
+      <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: @form.persisted? ? @valid_button_2_class : "btn btn-primary circular-button btn-outline-blue", data: { action: "click->form#validateForm" } %>
 
-          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: @form.persisted? ? @valid_button_3_class : "btn btn-primary circular-button btn-outline-blue" %>
+      <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: @form.persisted? ? @valid_button_3_class : "btn btn-primary circular-button btn-outline-blue", data: { action: "click->form#validateForm" } %>
 
-          <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: @form.persisted? ? @valid_button_4_class : "btn btn-primary circular-button btn-outline-blue" %>
+      <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: @form.persisted? ? @valid_button_4_class : "btn btn-primary circular-button btn-outline-blue", data: { action: "click->form#validateForm" } %>
 
-          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: @form.persisted? ? @valid_button_5_class : "btn btn-primary circular-button btn-outline-blue" %>
-      
-          <button type="button" class="btn btn-primary circular-button btn-blue" id="btn6" data-action="click->form#validateForm">6</button>
-        </div>
-        <div data-form-target="popup"></div>
-      </div>
+      <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: @form.persisted? ? @valid_button_5_class : "btn btn-primary circular-button btn-outline-blue", data: { action: "click->form#validateForm" } %>
+
+      <button type="button" class="btn btn-primary circular-button btn-blue" id="btn6" data-action="click->form#validateForm">6</button>
     </div>
+    <div data-form-target="popup"></div>
+  </div>
+</div>
+
 
     <h1>Form Details</h1>
     <div class="card">

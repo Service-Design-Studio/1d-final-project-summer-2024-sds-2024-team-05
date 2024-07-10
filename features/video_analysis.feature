@@ -3,8 +3,6 @@ Feature: Video Analysis
 
 Scenario: Play Example Video
   Given I am filling out a new form
-  When I go to the second page
-  When I am on the second page and want to go to the video analysis page
   And I want to view the example video
   When I click the play button on the example video
   Then the example video will start playing

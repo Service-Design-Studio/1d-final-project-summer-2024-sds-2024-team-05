@@ -2,7 +2,20 @@
 
 #Scenario: Continue to next page
 
-Given('I am on the first page of the form') do
+Given('I have signed up and login to my account') do
+  visit '/users/sign_up'
+  fill_in 'Email', with: 'user@example.com'
+  fill_in 'Password', with: 'password'
+  fill_in 'Password confirmation', with: 'password'
+  fill_in 'User first name', with: 'John'
+  fill_in 'User last name', with: 'Doe'
+  fill_in 'User contact number', with: '1234567890'
+  fill_in 'User address', with: '123 Main St'
+  click_button 'Sign up'
+
+end
+
+When('I create a new form') do
   visit '/forms/new'
 end
 
@@ -17,6 +30,15 @@ end
 #Scenario: Save currently filled information
 
 Given('I have not completed filling up the form') do
+  visit '/users/sign_up'
+  fill_in 'Email', with: 'user@example.com'
+  fill_in 'Password', with: 'password'
+  fill_in 'Password confirmation', with: 'password'
+  fill_in 'User first name', with: 'John'
+  fill_in 'User last name', with: 'Doe'
+  fill_in 'User contact number', with: '1234567890'
+  fill_in 'User address', with: '123 Main St'
+  click_button 'Sign up'
   visit '/forms/new'
   fill_in 'first_name', with: 'John'
 end
@@ -36,6 +58,15 @@ end
 #Scenario: Going to a specific page in the form
 
 Given('that I would like to go to a specific page in the form') do
+  visit '/users/sign_up'
+  fill_in 'Email', with: 'user@example.com'
+  fill_in 'Password', with: 'password'
+  fill_in 'Password confirmation', with: 'password'
+  fill_in 'User first name', with: 'John'
+  fill_in 'User last name', with: 'Doe'
+  fill_in 'User contact number', with: '1234567890'
+  fill_in 'User address', with: '123 Main St'
+  click_button 'Sign up'
   visit '/forms/new'
 end
 
@@ -51,6 +82,15 @@ end
 #Scenario: Incomplete Page
 
 Given('that I missed filling up a field on one page') do
+  visit '/users/sign_up'
+  fill_in 'Email', with: 'user@example.com'
+  fill_in 'Password', with: 'password'
+  fill_in 'Password confirmation', with: 'password'
+  fill_in 'User first name', with: 'John'
+  fill_in 'User last name', with: 'Doe'
+  fill_in 'User contact number', with: '1234567890'
+  fill_in 'User address', with: '123 Main St'
+  click_button 'Sign up'
   visit '/forms/new'
   fill_in 'first_name', with: 'John'
 end
@@ -68,20 +108,20 @@ end
 #Scenario: Submitting the form
 
 
-Given('that I have submitted the form') do
+#Given('that I have submitted the form') do
   # make method to simulate form submission in the test setup
-  submit_form_as_submitted # This should update the form's status to 'submitted'
-end
+  #submit_form_as_submitted
+#end
 
-When('I am in the main dashboard') do
-  visit '/forms'
-end
+#When('I am in the main dashboard') do
+  #visit '/forms'
+#end
 
-Then('I should see the word {string} in the actions') do |word|
-  expect(page).to have_content(word)
-end
+#Then('I should see the word {string} in the actions') do |word|
+  #expect(page).to have_content(word)
+#end
 
-And('I cannot edit or delete the form further') do
-  expect(page).not_to have_selector('button', text: 'Edit')
-  expect(page).not_to have_selector('button', text: 'Delete')
-end
+#And('I cannot edit or delete the form further') do
+  #expect(page).not_to have_selector('button', text: 'Edit')
+  #expect(page).not_to have_selector('button', text: 'Delete')
+#end

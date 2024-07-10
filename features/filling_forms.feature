@@ -3,7 +3,8 @@
 Feature: User form interactions
 
 Scenario: Continue to next page
-  Given I am on the first page of the form
+  Given I have signed up and login to my account
+  When I create a new form
   When I click the next button
   Then I should be brought to the second page of the form
 

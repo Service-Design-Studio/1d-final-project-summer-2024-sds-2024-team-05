@@ -122,6 +122,8 @@
                   <%= link_to 'Review Assessment', edit_physical_assessment_form_path(@form), class: 'btn btn-lg btn-outline-black rounded-pill', style: 'float: left; margin-right: 5px;' %>
                 <% end %>
               <% end %>
+            <% else %>
+              <p>No physical video attached</p>
             <% end %>
           </div>
         </div>

@@ -1,3 +1,4 @@
+require 'active_storage/engine'
 Rails.application.routes.draw do
   devise_for :users
 

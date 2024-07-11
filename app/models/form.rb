@@ -1,16 +1,18 @@
 class Form < ApplicationRecord
-    attr_accessor :others_text, :autofill_address
+    include Rails.application.routes.url_helpers
 
+    attr_accessor :others_text, :autofill_address, :mental_transcription
+    has_one_attached :mental_video
 
     before_save :update_last_edit
 
     def transfer_to_new_user(email_attribute)
         new_user = User.find_by(email: self[email_attribute])
-      
+
         if new_user
           self.user = new_user  # Update the user association of the form
           save  # Save the form with the updated user association
-      
+
           if user == new_user
             puts'Form transferred to new user successfully.'
             return true
@@ -60,7 +62,7 @@ class Form < ApplicationRecord
             self.last_edit > self.last_viewed
         end
     end
-    
+
     def all_required
         return ['edit_1_valid', 'edit_2_valid', 'edit_3_valid', 'mental_uploaded', 'physical_uploaded', 'environment_uploaded']
     end
@@ -98,7 +100,7 @@ class Form < ApplicationRecord
     end
 
     def submittable
-        pg1_valid && pg2_valid && pg3_valid && pg4_valid && pg5_valid 
+        pg1_valid && pg2_valid && pg3_valid && pg4_valid && pg5_valid
     end
 
     def application_status
@@ -110,6 +112,31 @@ class Form < ApplicationRecord
             'NA'
         end
     end
+
+
+    def transcribe_video(attribute)
+        video_blob = self.send(attribute).attachment.blob
+        audio_path = Rails.root.join('tmp', "#{attribute}_audio.wav")
+
+        begin
+          TranscriptionService.extract_audio(video_blob, audio_path)
+          transcription_result = TranscriptionService.transcribe_local_audio(audio_path)
+          Rails.logger.debug "Transcription result: #{transcription_result}"
+
+          # Ensure the transcription result is assigned to the correct attribute
+          self.mental_transcription = transcription_result
+          if self.save
+            Rails.logger.debug "Successfully updated mental_transcription: #{self.mental_transcription}"
+          else
+            Rails.logger.error "Failed to update mental_transcription: #{self.errors.full_messages.join(', ')}"
+          end
+        rescue => e
+          Rails.logger.error "Failed to transcribe #{attribute}: #{e.message}"
+        ensure
+          File.delete(audio_path) if File.exist?(audio_path)
+        end
+    end
+
     # before_save do
     #     self.languages.gsub!(/[\[\]\"]/,"") if attribute_present?("languages")
     #     self.conditions.gsub!(/[\[\]\"]/,"") if attribute_present?("conditions")
@@ -118,7 +145,6 @@ class Form < ApplicationRecord
 
     has_one_attached :discharge_summary
     has_one_attached :physical_video
-    has_one_attached :mental_video
     has_one_attached :environment_video
     has_one_attached :service_agreement_form
     belongs_to :user

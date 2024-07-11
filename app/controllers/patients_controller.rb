@@ -1,7 +1,7 @@
 class PatientsController < ApplicationController
 
 
-   before_action :set_form, only: [:show, :edit_1, :update_1, :edit_2, :update_2, :edit_3, :update_3, :edit_4, :update_4, :edit_5, :update_5]
+   before_action :set_form, only: [:show, :edit_1, :update_1, :edit_2, :update_2, :edit_3, :update_3, :edit_4, :update_4, :edit_5, :update_5, :mental_assessment, :update_mental_assessment]
    before_action :check_valid_params, only: [:show]
    before_action :authenticate_user!
 
@@ -69,7 +69,7 @@ def dashboard
   end
   def search
     @query = params[:query]
-    @forms = Form.where("first_name LIKE :query OR last_name LIKE :query OR CONCAT(first_name, ' ', last_name) LIKE :query OR 
+    @forms = Form.where("first_name LIKE :query OR last_name LIKE :query OR CONCAT(first_name, ' ', last_name) LIKE :query OR
                         nok_first_name LIKE :query OR nok_last_name LIKE :query OR CONCAT(nok_first_name, ' ', nok_last_name) LIKE :query", query: "%#{@query}%")
     @user = current_user
     @submittedforms = @forms.where(submitted: true)
@@ -136,7 +136,7 @@ def dashboard
       render :edit_1
     end
   end
-  
+
   #collection update 1
   def update_1_collection
     case params[:commit]
@@ -260,54 +260,46 @@ def dashboard
 
   end
 
-# PATCH /forms/1/update_4
+  # PATCH /forms/1/update_4
   def update_4
-    Rails.logger.debug "params[:commit]: #{params[:commit]}"
-    Rails.logger.debug "params[:form]: #{params[:form]}"
-
     case params[:commit]
     when 'Upload Physical Video'
       if params[:form].present? && params[:form][:physical_video].present?
         @form.physical_video.attach(params[:form][:physical_video])
         if @form.update(form_params_step4)
-        # Redirect or render to update view to show the uploaded file
-          redirect_to edit_4_form_path(@form), notice: 'Physical video uploaded successfully.'
-        else
-          redirect_to edit_4_form_path(@form), notice: 'Video upload unsuccessful.'
+          @form.transcribe_video(:physical_video)
         end
+        redirect_to edit_4_form_path(@form)
       end
     when 'Upload Mental Video'
       if params[:form].present? && params[:form][:mental_video].present?
         @form.mental_video.attach(params[:form][:mental_video])
         if @form.update(form_params_step4)
-          # Redirect or render to update view to show the uploaded file
-          redirect_to edit_4_form_path(@form), notice: 'Mental video uploaded successfully.'
-        else
-          redirect_to edit_4_form_path(@form), notice: 'Video upload unsuccessful.'
+          @form.transcribe_video(:mental_video)
         end
+        redirect_to edit_4_form_path(@form)
       end
     when 'Save'
       if params[:form].present?
         @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
         @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
         if @form.update(form_params_step4)
-          redirect_to edit_4_form_path(@form), notice: 'Videos uploaded successfully.'
-        else
-          redirect_to edit_4_form_path(@form), notice: 'Video upload unsuccessful.'
+          @form.transcribe_video(:physical_video) if @form.physical_video.attached?
+          @form.transcribe_video(:mental_video) if @form.mental_video.attached?
         end
+        redirect_to edit_4_form_path(@form)
       end
     when 'Next'
       if params[:form].present?
         @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
         @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
-        if form_params_step4.present?
-          @form.update(form_params_step4)
+        if @form.update(form_params_step4)
+          @form.transcribe_video(:physical_video) if @form.physical_video.attached?
+          @form.transcribe_video(:mental_video) if @form.mental_video.attached?
         end
       end
-
-    redirect_to edit_5_form_path(@form)
+      redirect_to edit_5_form_path(@form)
     else
-      # Handle unexpected values for params[:commit]
       redirect_to edit_4_form_path(@form), alert: 'Invalid action.'
     end
   end
@@ -318,39 +310,46 @@ def dashboard
     when 'Upload Physical Video'
       if params[:form].present? && params[:form][:physical_video].present?
         @form = current_user.forms.build(form_params_step4)
-        @form.save
-        @form.physical_video.attach(params[:form][:physical_video])
-        # Redirect or render to update view to show the uploaded file
-        redirect_to edit_4_form_path(@form), notice: 'Physical video uploaded successfully.'
+        if @form.save
+          @form.physical_video.attach(params[:form][:physical_video])
+          transcribe_video_and_update_form(@form, :physical_video) if @form.physical_video.attached?
+        end
+        redirect_to edit_4_form_path(@form)
       end
     when 'Upload Mental Video'
       if params[:form].present? && params[:form][:mental_video].present?
         @form = current_user.forms.build(form_params_step4)
-        @form.save
-        @form.mental_video.attach(params[:form][:mental_video])
-        # Redirect or render to update view to show the uploaded file
-        redirect_to edit_4_form_path(@form), notice: 'Mental video uploaded successfully.'
+        if @form.save
+          @form.mental_video.attach(params[:form][:mental_video])
+          transcribe_video_and_update_form(@form, :mental_video) if @form.mental_video.attached?
+        end
+        redirect_to edit_4_form_path(@form)
       end
     when 'Save'
       if params[:form].present?
         @form = current_user.forms.build(form_params_step4)
-        @form.save
-        @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
-        @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+        if @form.save
+          @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
+          @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+          transcribe_video_and_update_form(@form, :physical_video) if @form.physical_video.attached?
+          transcribe_video_and_update_form(@form, :mental_video) if @form.mental_video.attached?
+        end
         redirect_to edit_4_form_path(@form)
       end
     when 'Next'
       if params[:form].present?
         @form = current_user.forms.build(form_params_step4)
-        @form.save
-        @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
-        @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+        if @form.save
+          @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
+          @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+          transcribe_video_and_update_form(@form, :physical_video) if @form.physical_video.attached?
+          transcribe_video_and_update_form(@form, :mental_video) if @form.mental_video.attached?
+        end
         redirect_to edit_5_form_path(@form)
       else
         redirect_to edit_5_forms_path
       end
     else
-      # Handle unexpected values for params[:commit]
       render :edit_4
     end
   end
@@ -535,7 +534,7 @@ def dashboard
   def set_form
     @form = if params[:id].present?
       form = Form.find(params[:id])
-      @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class, @valid_button_summ_class =  ["btn btn-primary circular-button btn-blue"]*6   
+      @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class, @valid_button_summ_class =  ["btn btn-primary circular-button btn-blue"]*6
       if form.pg1_valid == false
         @valid_button_1_class = "btn btn-primary circular-button btn-outline-red"
       end
@@ -570,7 +569,7 @@ def dashboard
   end
 
   def form_params_step1
-    
+
     if current_user.admin?
       permitted_params = params.require(:form).permit(:autofill_address, :nok_address, :nok_contact_no, :nok_email, :nok_first_name, :nok_last_name, :first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :languages_other, languages:[])
     else
@@ -624,12 +623,7 @@ def dashboard
   end
 
   def form_params_step4
-    if params[:id].present?
-      @form = Form.find(params[:id])
-    else
-      @form = current_user.forms.build()
-    end
-    permitted_params = params.require(:form).permit(:physical_video, :mental_video)
+    params.require(:form).permit(:physical_video, :mental_video)
   end
 
   def form_params_step5
@@ -662,5 +656,48 @@ def dashboard
 
   def page_valid?(form_parameters, required_values)
     required_values.all? { |key| form_parameters.key?(key) && form_parameters[key].present? }
+  end
+
+  #AI transcription
+  def transcribe_video_and_update_form(form, video_type)
+    video = form.send(video_type)
+    audio_path = Rails.root.join('tmp', "#{video_type}_audio.wav")
+
+    begin
+      Rails.logger.debug "Extracting audio from #{video.path} to #{audio_path}"
+      extract_audio(video.path, audio_path.to_s)
+
+      Rails.logger.debug "Transcribing audio from #{audio_path}"
+      transcription = transcribe_local_audio(audio_path.to_s)
+
+      Rails.logger.debug "Transcription result: #{transcription}"
+      form.update("#{video_type}_transcription": transcription)
+    rescue => e
+      Rails.logger.error "Failed to transcribe #{video_type}: #{e.message}"
+    ensure
+      Rails.logger.debug "Deleting temporary audio file #{audio_path}"
+      File.delete(audio_path) if File.exist?(audio_path)
+    end
+  end
+
+  def extract_audio(video_path, audio_path)
+    ffmpeg_command = "ffmpeg -i \"#{video_path}\" -ac 1 -ar 16000 -f wav \"#{audio_path}\""
+    system(ffmpeg_command)
+  end
+
+  def transcribe_local_audio(file_path)
+    speech = Google::Cloud::Speech.speech
+    audio_file = File.binread(file_path)
+    config = { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US" }
+    audio = { content: audio_file }
+
+    response = speech.recognize(config: config, audio: audio)
+
+    if response.results.empty?
+      Rails.logger.error "No transcription results returned"
+      return ""
+    else
+      response.results.map { |result| result.alternatives.first.transcript }.join(" ")
+    end
   end
 end

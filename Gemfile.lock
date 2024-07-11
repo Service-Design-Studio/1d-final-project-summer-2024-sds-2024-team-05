@@ -166,10 +166,62 @@ GEM
       railties (>= 5.0.0)
     faker (3.4.1)
       i18n (>= 1.8.11, < 2)
+    faraday (2.10.0)
+      faraday-net_http (>= 2.0, < 3.2)
+      logger
+    faraday-net_http (3.1.0)
+      net-http
+    faraday-retry (2.2.1)
+      faraday (~> 2.0)
     ffi (1.17.0-x64-mingw-ucrt)
     ffi (1.17.0-x86_64-linux-gnu)
+    gapic-common (0.21.1)
+      faraday (>= 1.9, < 3.a)
+      faraday-retry (>= 1.0, < 3.a)
+      google-protobuf (~> 3.18)
+      googleapis-common-protos (>= 1.4.0, < 2.a)
+      googleapis-common-protos-types (>= 1.11.0, < 2.a)
+      googleauth (~> 1.9)
+      grpc (~> 1.59)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    google-cloud-core (1.7.0)
+      google-cloud-env (>= 1.0, < 3.a)
+      google-cloud-errors (~> 1.0)
+    google-cloud-env (2.1.1)
+      faraday (>= 1.0, < 3.a)
+    google-cloud-errors (1.4.0)
+    google-cloud-speech (1.7.0)
+      google-cloud-core (~> 1.6)
+      google-cloud-speech-v1 (>= 0.16, < 2.a)
+      google-cloud-speech-v1p1beta1 (>= 0.20, < 2.a)
+    google-cloud-speech-v1 (1.0.0)
+      gapic-common (>= 0.21.1, < 2.a)
+      google-cloud-errors (~> 1.0)
+    google-cloud-speech-v1p1beta1 (0.21.0)
+      gapic-common (>= 0.21.1, < 2.a)
+      google-cloud-errors (~> 1.0)
+    google-protobuf (3.25.3-x64-mingw-ucrt)
+    google-protobuf (3.25.3-x86_64-linux)
+    googleapis-common-protos (1.6.0)
+      google-protobuf (>= 3.18, < 5.a)
+      googleapis-common-protos-types (~> 1.7)
+      grpc (~> 1.41)
+    googleapis-common-protos-types (1.15.0)
+      google-protobuf (>= 3.18, < 5.a)
+    googleauth (1.11.0)
+      faraday (>= 1.0, < 3.a)
+      google-cloud-env (~> 2.1)
+      jwt (>= 1.4, < 3.0)
+      multi_json (~> 1.11)
+      os (>= 0.9, < 2.0)
+      signet (>= 0.16, < 2.a)
+    grpc (1.64.0-x64-mingw-ucrt)
+      google-protobuf (~> 3.25)
+      googleapis-common-protos-types (~> 1.0)
+    grpc (1.64.0-x86_64-linux)
+      google-protobuf (~> 3.25)
+      googleapis-common-protos-types (~> 1.0)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     importmap-rails (2.0.1)
@@ -199,8 +251,11 @@ GEM
     mini_mime (1.1.5)
     minitest (5.24.1)
     msgpack (1.7.2)
+    multi_json (1.15.0)
     multi_test (1.1.0)
     mutex_m (0.2.0)
+    net-http (0.4.1)
+      uri
     net-imap (0.4.14)
       date
       net-protocol
@@ -216,7 +271,9 @@ GEM
     nokogiri (1.16.6-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    os (1.1.4)
     pg (1.5.6)
+    pg (1.5.6-x64-mingw-ucrt)
     psych (5.1.2)
       stringio
     public_suffix (6.0.0)
@@ -299,6 +356,11 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    signet (0.19.0)
+      addressable (~> 2.8)
+      faraday (>= 0.17.5, < 3.a)
+      jwt (>= 1.5, < 3.0)
+      multi_json (~> 1.10)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -330,6 +392,7 @@ GEM
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2024.1)
       tzinfo (>= 1.0.0)
+    uri (0.13.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     warden-jwt_auth (0.9.0)
@@ -366,6 +429,8 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faker
+  google-cloud-speech (~> 1.7.0)
+  grpc (~> 1.64.0)
   importmap-rails
   jbuilder
   jwt
@@ -384,7 +449,7 @@ DEPENDENCIES
   web-console
 
 RUBY VERSION
-   ruby 3.3.2p79
+   ruby 3.2.4p170
 
 BUNDLED WITH
    2.5.9

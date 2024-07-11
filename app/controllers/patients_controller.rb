@@ -47,7 +47,7 @@ def dashboard
    if params[:sort_female]
      @submittedforms = @submittedforms.order(Arel.sql("CASE WHEN gender = 'Female' THEN 0 ELSE 1 END, first_name ASC, last_name ASC"))
      @incompleteforms = @incompleteforms.order(Arel.sql("CASE WHEN gender = 'Female' THEN 0 ELSE 1 END, first_name ASC, last_name ASC"))
-   elsif params[:sort_male]
+   elsif params[:sort_submitted_male]
      @submittedforms = @submittedforms.order(Arel.sql("CASE WHEN gender = 'Male' THEN 0 ELSE 1 END, first_name ASC, last_name ASC"))
      @incompleteforms = @incompleteforms.order(Arel.sql("CASE WHEN gender = 'Male' THEN 0 ELSE 1 END, first_name ASC, last_name ASC"))
    end
@@ -69,7 +69,7 @@ def dashboard
   end
   def search
     @query = params[:query]
-    @forms = Form.where("first_name LIKE :query OR last_name LIKE :query OR CONCAT(first_name, ' ', last_name) LIKE :query OR 
+    @forms = Form.where("first_name LIKE :query OR last_name LIKE :query OR CONCAT(first_name, ' ', last_name) LIKE :query OR
                         nok_first_name LIKE :query OR nok_last_name LIKE :query OR CONCAT(nok_first_name, ' ', nok_last_name) LIKE :query", query: "%#{@query}%")
     @user = current_user
     @submittedforms = @forms.where(submitted: true)
@@ -136,7 +136,7 @@ def dashboard
       render :edit_1
     end
   end
-  
+
   #collection update 1
   def update_1_collection
     case params[:commit]
@@ -535,7 +535,7 @@ def dashboard
   def set_form
     @form = if params[:id].present?
       form = Form.find(params[:id])
-      @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class, @valid_button_summ_class =  ["btn btn-primary circular-button btn-blue"]*6   
+      @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class, @valid_button_summ_class =  ["btn btn-primary circular-button btn-blue"]*6
       if form.pg1_valid == false
         @valid_button_1_class = "btn btn-primary circular-button btn-outline-red"
       end
@@ -570,7 +570,7 @@ def dashboard
   end
 
   def form_params_step1
-    
+
     if current_user.admin?
       permitted_params = params.require(:form).permit(:autofill_address, :nok_address, :nok_contact_no, :nok_email, :nok_first_name, :nok_last_name, :first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :languages_other, languages:[])
     else

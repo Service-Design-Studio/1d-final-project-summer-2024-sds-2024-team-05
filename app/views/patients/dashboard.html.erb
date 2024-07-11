@@ -29,8 +29,8 @@
           <th>
             Patient Name
             <%= form_tag(patients_dashboard_path, method: :get, id: "sort_form", class: "d-inline") do %>
-              <%= check_box_tag :sort, "alphabetical", params[:sort] == "alphabetical", onchange: "this.form.submit();" %>
-              <%= label_tag :sort %>
+              <%= check_box_tag :sort_name, "alphabetical", params[:sort] == "alphabetical", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_name, "Sort" %>
             <% end %>
           </th>
           <th>
@@ -40,8 +40,8 @@
               <%= label_tag :sort_female, "F" %>
             <% end %>
             <%= form_tag(patients_dashboard_path, method: :get, id: "sort_gender_form", class: "d-inline") do %>
-              <%= check_box_tag :sort_male, "male", params[:sort_male] == "male", onchange: "this.form.submit();" %>
-              <%= label_tag :sort_male, "M" %>
+              <%= check_box_tag :sort_submitted_male, "male", params[:sort_male] == "male", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_submitted_male, "M" %>
             <% end %>
 
           </th>
@@ -55,15 +55,15 @@
           <th>
             Address
             <%= form_tag(patients_dashboard_path, method: :get, id: "sort_address_form", class: "d-inline") do %>
-              <%= check_box_tag :sort_address, "alphabetical", params[:sort_address] == "alphabetical", onchange: "this.form.submit();" %>
-              <%= label_tag :sort_address, "Sort" %>
+              <%= check_box_tag :sort_address_submitted, "alphabetical", params[:sort_address] == "alphabetical", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_address_submitted, "Sort" %>
             <% end %>
           </th>
           <th>
             Start
             <%= form_tag(patients_dashboard_path, method: :get, id: "sort_date_form", class: "d-inline") do %>
-              <%= check_box_tag :sort_date, "earliest", params[:sort_date] == "earliest", onchange: "this.form.submit();" %>
-              <%= label_tag :sort_date, "Sort" %>
+              <%= check_box_tag :sort_submitted_date, "earliest", params[:sort_date] == "earliest", onchange: "this.form.submit();" %>
+              <%= label_tag :sort_submitted_date, "Sort" %>
             <% end %>
           </th>
           <th>
@@ -88,10 +88,10 @@
                 <% if form.unseen_changes %>
                   <% if form.last_viewed.nil? %>
                     <br>
-                    <span style="font-size: 12px; color: #155724;"><%= "New Submission!" %></span>
+                    <span style="font-size: 12px; color: #155724;"><%= "New Changes Made!" %></span>
                   <% else %>
                     <br>
-                    <span style="font-size: 12px; color: #3498db;"><%= "New Changes Made!" %></span>
+                    <span style="font-size: 12px; color: #3498db;"><%= "New Submission!" %></span>
                   <% end %>
                 <% end %>
               <% end %>
@@ -105,10 +105,10 @@
             <td><%= form.start_date %></td>
             <td><%= form.end_date %></td>
 
-            <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info' %></td>
+            <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info', id: "view_summary_#{form.id}" %></td>
             <td class="text-center">
           <div class="d-flex justify-content-center align-items-center">
-            <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2' %>
+            <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2',id: "edit_#{form.id}" %>
             <%= form_with(model: form, method: :delete, url: form_path(form), data: { confirm: 'Are you sure?' }) do |f| %>
               <%= f.submit 'Delete', class: 'btn btn-danger' %>
             <% end %>

@@ -51,7 +51,7 @@
               <source src="/videos/environment_test.mp4" type="video/mp4">
             </video>
           </div>
-          <%= form.file_field :environment_video, accept: 'video/*', class: 'form-control mb-3'%>
+          <%= form.file_field :environment_video, accept: 'video/*', class: 'form-control mb-3', id: 'environment_video'%>
           <%= form.submit 'Upload', name: 'commit', value: 'Upload Environment Video', class: 'btn btn-primary' %>
           <div class=" text-center">
             <% if @form.environment_video.attached? %>

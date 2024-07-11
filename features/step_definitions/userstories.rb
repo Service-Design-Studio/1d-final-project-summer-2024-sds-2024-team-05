@@ -11,7 +11,7 @@ Given('I have signed up and login to my account') do
   fill_in 'User last name', with: 'Doe'
   fill_in 'User contact number', with: '1234567890'
   fill_in 'User address', with: '123 Main St'
-  click_button 'Sign up'
+  click_button 'Sign Up'
 
 end
 
@@ -38,7 +38,7 @@ Given('I have not completed filling up the form') do
   fill_in 'User last name', with: 'Doe'
   fill_in 'User contact number', with: '1234567890'
   fill_in 'User address', with: '123 Main St'
-  click_button 'Sign up'
+  click_button 'Sign Up'
   visit '/forms/new'
   fill_in 'first_name', with: 'John'
 end
@@ -66,7 +66,7 @@ Given('that I would like to go to a specific page in the form') do
   fill_in 'User last name', with: 'Doe'
   fill_in 'User contact number', with: '1234567890'
   fill_in 'User address', with: '123 Main St'
-  click_button 'Sign up'
+  click_button 'Sign Up'
   visit '/forms/new'
 end
 
@@ -90,7 +90,7 @@ Given('that I missed filling up a field on one page') do
   fill_in 'User last name', with: 'Doe'
   fill_in 'User contact number', with: '1234567890'
   fill_in 'User address', with: '123 Main St'
-  click_button 'Sign up'
+  click_button 'Sign Up'
   visit '/forms/new'
   fill_in 'first_name', with: 'John'
 end

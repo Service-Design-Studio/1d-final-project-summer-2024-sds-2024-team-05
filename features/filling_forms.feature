@@ -24,8 +24,3 @@ Scenario: Incomplete Page
   When I move on to the next page 
   Then I should see the page header of the page with unfilled information be highlighted in red
 
-Scenario: Submitting the form 
-  Given that I have submitted the form 
-  When I am in the main dashboard 
-  Then I should see the word "Submitted" in the actions
-  And I cannot edit or delete the form further

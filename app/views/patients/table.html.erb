@@ -15,7 +15,7 @@
         <td><%= form.first_name %></td>
         <td><%= form.last_name %></td>
         <td><%= form.start_date %></td>
-        <td><%= link_to 'Edit', edit_form_path(form) %></td>
+        <td><%= link_to 'Edit', edit_form_path(form), id: "edit_#{form.id}" %></td>
       </tr>
     <% end %>
   </tbody>

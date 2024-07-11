@@ -44,7 +44,7 @@
           </div>
           <td class="text-center">
         <div class="d-flex justify-content-center align-items-center">
-          <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2' %>
+          <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2',id: "edit_#{form.id}" %>
           <% unless form.submitted %>
             <%= form_with(model: form, method: :delete, url: form_path(form), data: { confirm: 'Are you sure?' }) do |f| %>
               <%= f.submit 'Delete', class: 'btn btn-danger' %>

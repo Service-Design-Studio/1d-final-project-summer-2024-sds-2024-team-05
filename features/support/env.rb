@@ -7,7 +7,36 @@
 
 require 'cucumber/rails'
 require 'capybara/cucumber'
-require 'rspec/expectations'
+require 'selenium-webdriver'
+
+require 'cucumber/rails'
+require 'capybara/cucumber'
+require 'selenium-webdriver'
+
+require 'selenium-webdriver'
+
+Capybara.register_driver :selenium_chrome do |app|
+  options = Selenium::WebDriver::Chrome::Options.new
+  # Set the path to the ChromeDriver
+  Selenium::WebDriver::Chrome::Service.driver_path = "C:/Users/charm/Downloads/chromedriver-win64/chromedriver-win64/chromedriver.exe"
+
+  options.add_argument('headless') if ENV['HEADLESS']
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+end
+
+Capybara.configure do |config|
+  config.default_driver = :rack_test
+  config.javascript_driver = :selenium_chrome
+  config.app_host = 'http://127.0.0.1:3000'
+end
+
+Before('@use_selenium') do
+  Capybara.current_driver = :selenium_chrome
+end
+
+After('@use_selenium') do
+  Capybara.use_default_driver
+end
 
 # By default, any exception happening in your Rails application will bubble up
 # to Cucumber so that your scenario will fail. This is a different from how
@@ -53,7 +82,3 @@ end
 # The :transaction strategy is faster, but might give you threading problems.
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :truncation
-
-
-
-World(RSpec::Matchers)

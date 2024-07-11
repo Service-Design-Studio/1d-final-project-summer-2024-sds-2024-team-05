@@ -143,6 +143,7 @@ GEM
       devise (~> 4.0)
       warden-jwt_auth (~> 0.8)
     diff-lcs (1.5.1)
+
     docile (1.4.0)
     dotenv (3.1.2)
     dotenv-rails (3.1.2)
@@ -185,7 +186,6 @@ GEM
       activesupport (>= 5.0.0)
     jwt (2.8.2)
       base64
-    logger (1.6.0)
     loofah (2.22.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -293,9 +293,7 @@ GEM
       rspec-support (~> 3.13)
     rspec-support (3.13.1)
     rubyzip (2.3.2)
-    selenium-webdriver (4.22.0)
-      base64 (~> 0.2)
-      logger (~> 1.4)
+    selenium-webdriver (4.8.6)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
@@ -342,8 +340,12 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
+    webdrivers (5.1.0)
+      nokogiri (~> 1.6)
+      rubyzip (>= 1.3.0)
+      selenium-webdriver (~> 4.0)
     webrick (1.8.1)
-    websocket (1.2.10)
+    websocket (1.2.11)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -374,14 +376,14 @@ DEPENDENCIES
   rails (~> 7.1.3, >= 7.1.3.4)
   ransack
   rspec-rails
-  selenium-webdriver
-  simplecov
+  selenium-webdriver (~> 4.8.0)
   sprockets-rails
   sqlite3 (~> 1.4)
   stimulus-rails
   turbo-rails
   tzinfo-data
   web-console
+  webdrivers (~> 5.1.0)
 
 RUBY VERSION
    ruby 3.3.2p79

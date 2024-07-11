@@ -78,12 +78,32 @@ group :development do
   # gem "spring"
 end
 
+
+group :test do
+  gem 'cucumber-rails', require: false
+  gem 'database_cleaner-active_record'
+end
+
+
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
-  gem "selenium-webdriver"
-  gem 'rspec-rails'
-  gem 'cucumber-rails'
+end
+
+group :test do
+  gem 'cucumber-rails', require: false
   gem 'database_cleaner-active_record'
+  gem 'selenium-webdriver', '~> 4.8.0'
+  gem 'webdrivers', '~> 5.1.0'
+end
+
+group :test do
+  gem 'cucumber-rails', require: false
+  gem 'rspec-rails'
+  gem 'capybara'
+end
+
+group :development, :test do
+  gem 'rspec-rails'
   gem 'simplecov'
 end

@@ -81,7 +81,7 @@ def dashboard
   def create
     case params[:commit]
     when 'Save'
-      if params[:form].present? && params[:form].values.any?(&:present?)
+      if params[:form].present? && params[:form].except(:autofill_address).values.any?(&:present?)
         @form = current_user.forms.build(form_params_step1)
         if @form.save
           session[:form_origin] = 'new'
@@ -96,7 +96,7 @@ def dashboard
         end
       end
     when 'Next'
-      if params[:form].present? && params[:form].values.any?(&:present?)
+      if params[:form].present? && params[:form].except(:autofill_address).values.any?(&:present?)
         @form = current_user.forms.build(form_params_step1)
         if @form.save
           if current_user.admin?
@@ -576,7 +576,16 @@ def dashboard
     else
       permitted_params = params.require(:form).permit(:autofill_address, :first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :languages_other, languages:[])
     end
-    if permitted_params[:autofill_address]
+
+    if !current_user.admin?
+      permitted_params[:nok_address] = current_user.user_address
+      permitted_params[:nok_contact_no] = current_user.user_contact_number
+      permitted_params[:nok_email] = current_user.email
+      permitted_params[:nok_first_name] = current_user.user_first_name
+      permitted_params[:nok_last_name] = current_user.user_last_name
+    end
+
+    if permitted_params[:autofill_address] == "1"
       if current_user.admin?
         permitted_params[:address] = permitted_params[:nok_address]
       else
@@ -591,14 +600,6 @@ def dashboard
 
     if params[:form][:languages].present?
       permitted_params[:languages] = params[:form][:languages].to_s.gsub!(/[\[\]\"]/,"")
-    end
-
-    if !current_user.admin?
-      permitted_params[:nok_address] = current_user.user_address
-      permitted_params[:nok_contact_no] = current_user.user_contact_number
-      permitted_params[:nok_email] = current_user.email
-      permitted_params[:nok_first_name] = current_user.user_first_name
-      permitted_params[:nok_last_name] = current_user.user_last_name
     end
 
     permitted_params

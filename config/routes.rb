@@ -1,16 +1,18 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  authenticated :user do
-    root 'patients#index', as: :user_root
-  end
+  devise_scope :user do
+    authenticated :user do
+      root to: redirect { |_, request| request.env['warden'].user.admin? ? '/patients/dashboard' : '/patients/index' }, as: :authenticated_root
+    end
 
-  authenticated :admin do
-    root 'patients#dashboard', as: :admin_root
+    unauthenticated do
+      root to: 'devise/sessions#new'
+    end
   end
 
   get 'patients/dashboard', to: 'patients#dashboard', as: :patients_dashboard
-
+  get 'patients/index'
   get '/search', to: "patients#search"
 
   # get 'patients/new'
@@ -94,6 +96,6 @@ Rails.application.routes.draw do
       get 'show_error', to: 'patients#show_error'
     end
   end
-  root 'patients#index'
+  
   get 'back_to_previous', to: 'patients#back_to_previous', as: 'back_to_previous'
 end

@@ -78,7 +78,7 @@ class Form < ApplicationRecord
     end
 
     def pg2_valid
-        page2_required.all? { |key| self.send(key).present? }
+        page2_required.all? { |key| !self.send(key).nil? && !self.send(key).to_s.empty?}
     end
 
     def page3_required

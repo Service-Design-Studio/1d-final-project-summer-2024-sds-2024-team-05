@@ -1,7 +1,7 @@
 class Form < ApplicationRecord
     include Rails.application.routes.url_helpers
 
-    attr_accessor :others_text, :autofill_address, :mental_transcription
+    attr_accessor :others_text, :autofill_address
     has_one_attached :mental_video
 
     before_save :update_last_edit
@@ -114,28 +114,33 @@ class Form < ApplicationRecord
     end
 
 
-    def transcribe_video(attribute)
-        video_blob = self.send(attribute).attachment.blob
-        audio_path = Rails.root.join('tmp', "#{attribute}_audio.wav")
+    def transcribe_video_and_update_form
+        video = self.mental_video
+        audio_path = Rails.root.join('tmp', "mental_audio.wav")
 
         begin
-          TranscriptionService.extract_audio(video_blob, audio_path)
-          transcription_result = TranscriptionService.transcribe_local_audio(audio_path)
-          Rails.logger.debug "Transcription result: #{transcription_result}"
+          Rails.logger.debug "Extracting audio from #{video.filename} to #{audio_path}"
+          video_path = TranscriptionService.download_video(video.blob) # Download the video to a local path
+          TranscriptionService.extract_audio(video_path, audio_path.to_s)
 
-          # Ensure the transcription result is assigned to the correct attribute
-          self.mental_transcription = transcription_result
-          if self.save
-            Rails.logger.debug "Successfully updated mental_transcription: #{self.mental_transcription}"
-          else
-            Rails.logger.error "Failed to update mental_transcription: #{self.errors.full_messages.join(', ')}"
-          end
+          Rails.logger.debug "Transcribing audio from #{audio_path}"
+          transcription = TranscriptionService.transcribe_local_audio(audio_path.to_s)
+
+          Rails.logger.debug "Transcription result: #{transcription}"
+          self.update(mental_transcription: transcription)
+          Rails.logger.debug "Updated mental_transcription: #{self.mental_transcription}"
         rescue => e
-          Rails.logger.error "Failed to transcribe #{attribute}: #{e.message}"
+          Rails.logger.error "Failed to transcribe mental video: #{e.message}"
         ensure
+          Rails.logger.debug "Deleting temporary audio file #{audio_path}"
           File.delete(audio_path) if File.exist?(audio_path)
         end
     end
+
+
+
+
+
 
     # before_save do
     #     self.languages.gsub!(/[\[\]\"]/,"") if attribute_present?("languages")

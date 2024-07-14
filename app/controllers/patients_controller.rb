@@ -262,20 +262,22 @@ def dashboard
 
   # PATCH /forms/1/update_4
   def update_4
+    @form = Form.find(params[:id])
+    Rails.logger.debug "Update 4 action triggered for form ##{@form.id}"
     case params[:commit]
     when 'Upload Physical Video'
       if params[:form].present? && params[:form][:physical_video].present?
         @form.physical_video.attach(params[:form][:physical_video])
-        if @form.update(form_params_step4)
-          @form.transcribe_video(:physical_video)
-        end
+        Rails.logger.debug "Physical video attached: #{@form.physical_video.attached?}"
         redirect_to edit_4_form_path(@form)
       end
     when 'Upload Mental Video'
       if params[:form].present? && params[:form][:mental_video].present?
         @form.mental_video.attach(params[:form][:mental_video])
-        if @form.update(form_params_step4)
-          @form.transcribe_video(:mental_video)
+        if @form.save
+          Rails.logger.debug "Mental video attached: #{@form.mental_video.attached?}"
+          Rails.logger.debug "Calling transcribe_video_and_update_form method"
+          @form.transcribe_video_and_update_form
         end
         redirect_to edit_4_form_path(@form)
       end
@@ -283,9 +285,10 @@ def dashboard
       if params[:form].present?
         @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
         @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
-        if @form.update(form_params_step4)
-          @form.transcribe_video(:physical_video) if @form.physical_video.attached?
-          @form.transcribe_video(:mental_video) if @form.mental_video.attached?
+        if @form.update(form_params_step4) # Use update with strong params
+          Rails.logger.debug "Form saved: #{@form.persisted?}"
+          Rails.logger.debug "Checking if mental_video is attached: #{@form.mental_video.attached?}"
+          @form.transcribe_video_and_update_form if @form.mental_video.attached?
         end
         redirect_to edit_4_form_path(@form)
       end
@@ -293,16 +296,19 @@ def dashboard
       if params[:form].present?
         @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
         @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
-        if @form.update(form_params_step4)
-          @form.transcribe_video(:physical_video) if @form.physical_video.attached?
-          @form.transcribe_video(:mental_video) if @form.mental_video.attached?
+        if @form.update(form_params_step4) # Use update with strong params
+          Rails.logger.debug "Form saved: #{@form.persisted?}"
+          Rails.logger.debug "Checking if mental_video is attached: #{@form.mental_video.attached?}"
+          @form.transcribe_video_and_update_form if @form.mental_video.attached?
         end
+        redirect_to edit_5_form_path(@form)
       end
-      redirect_to edit_5_form_path(@form)
     else
       redirect_to edit_4_form_path(@form), alert: 'Invalid action.'
     end
   end
+
+
 
   #collection update 1
   def update_4_collection
@@ -312,7 +318,6 @@ def dashboard
         @form = current_user.forms.build(form_params_step4)
         if @form.save
           @form.physical_video.attach(params[:form][:physical_video])
-          transcribe_video_and_update_form(@form, :physical_video) if @form.physical_video.attached?
         end
         redirect_to edit_4_form_path(@form)
       end
@@ -331,7 +336,6 @@ def dashboard
         if @form.save
           @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
           @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
-          transcribe_video_and_update_form(@form, :physical_video) if @form.physical_video.attached?
           transcribe_video_and_update_form(@form, :mental_video) if @form.mental_video.attached?
         end
         redirect_to edit_4_form_path(@form)
@@ -342,7 +346,6 @@ def dashboard
         if @form.save
           @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
           @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
-          transcribe_video_and_update_form(@form, :physical_video) if @form.physical_video.attached?
           transcribe_video_and_update_form(@form, :mental_video) if @form.mental_video.attached?
         end
         redirect_to edit_5_form_path(@form)
@@ -623,7 +626,7 @@ def dashboard
   end
 
   def form_params_step4
-    params.require(:form).permit(:physical_video, :mental_video)
+    params.require(:form).permit(:physical_video, :mental_video, :mental_transcription)
   end
 
   def form_params_step5
@@ -656,48 +659,5 @@ def dashboard
 
   def page_valid?(form_parameters, required_values)
     required_values.all? { |key| form_parameters.key?(key) && form_parameters[key].present? }
-  end
-
-  #AI transcription
-  def transcribe_video_and_update_form(form, video_type)
-    video = form.send(video_type)
-    audio_path = Rails.root.join('tmp', "#{video_type}_audio.wav")
-
-    begin
-      Rails.logger.debug "Extracting audio from #{video.path} to #{audio_path}"
-      extract_audio(video.path, audio_path.to_s)
-
-      Rails.logger.debug "Transcribing audio from #{audio_path}"
-      transcription = transcribe_local_audio(audio_path.to_s)
-
-      Rails.logger.debug "Transcription result: #{transcription}"
-      form.update("#{video_type}_transcription": transcription)
-    rescue => e
-      Rails.logger.error "Failed to transcribe #{video_type}: #{e.message}"
-    ensure
-      Rails.logger.debug "Deleting temporary audio file #{audio_path}"
-      File.delete(audio_path) if File.exist?(audio_path)
-    end
-  end
-
-  def extract_audio(video_path, audio_path)
-    ffmpeg_command = "ffmpeg -i \"#{video_path}\" -ac 1 -ar 16000 -f wav \"#{audio_path}\""
-    system(ffmpeg_command)
-  end
-
-  def transcribe_local_audio(file_path)
-    speech = Google::Cloud::Speech.speech
-    audio_file = File.binread(file_path)
-    config = { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US" }
-    audio = { content: audio_file }
-
-    response = speech.recognize(config: config, audio: audio)
-
-    if response.results.empty?
-      Rails.logger.error "No transcription results returned"
-      return ""
-    else
-      response.results.map { |result| result.alternatives.first.transcript }.join(" ")
-    end
   end
 end

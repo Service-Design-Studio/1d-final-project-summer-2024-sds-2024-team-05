@@ -1,38 +1,33 @@
 => 
-[[32m#<ActiveSupport::Logger:0x000002591f2c15f8[0m
-  @default_formatter[32m=[0m[32m#<Logger::Formatter:0x000002591f2e8090[0m @datetime_format[32m=[0m[36m[1mnil[0m[32m>[0m,
-  @formatter[32m=[0m
-   [32m#<ActiveSupport::Logger::SimpleFormatter:0x000002591f2e5610[0m
-    @datetime_format[32m=[0m[36m[1mnil[0m,
-    @thread_key[32m=[0m[31m[1m"[0m[31mactivesupport_tagged_logging_tags:14560[0m[31m[1m"[0m[32m>[0m,
+[[32m#<ActiveSupport::Logger:0x0000022c566aa610[0m
+  @default_formatter[32m=[0m[32m#<Logger::Formatter:0x0000022c5b948840[0m @datetime_format[32m=[0m[36m[1mnil[0m[32m>[0m,
+  @formatter[32m=[0m[32m#<ActiveSupport::Logger::SimpleFormatter:0x0000022c5b945dc0[0m @datetime_format[32m=[0m[36m[1mnil[0m, @thread_key[32m=[0m[31m[1m"[0m[31mactivesupport_tagged_logging_tags:14560[0m[31m[1m"[0m[32m>[0m,
   @level[32m=[0m[34m[1m0[0m,
   @level_override[32m=[0m{},
   @local_level_key[32m=[0m[33m:[0m[33mlogger_thread_safe_level_14540[0m,
   @logdev[32m=[0m
-   [32m#<Logger::LogDevice:0x000002591f2c2188[0m
+   [32m#<Logger::LogDevice:0x0000022c566aead0[0m
     @binmode[32m=[0m[36m[1mfalse[0m,
-    @dev[32m=[0m
-     [32m#<File:C:/Users/vinui/OneDrive/macbook/Downloads/sutd 2022/term 5/60.004/1d-final-project-summer-2024-sds-2024-team-05/log/development.log>[0m,
-    @filename[32m=[0m
-     [31m[1m"[0m[31mC:/Users/vinui/OneDrive/macbook/Downloads/sutd 2022/term 5/60.004/1d-final-project-summer-2024-sds-2024-team-05/log/development.log[0m[31m[1m"[0m,
-    @mon_data[32m=[0m[32m#<Monitor:0x000002591f2e7ed8[0m[32m>[0m,
+    @dev[32m=[0m[32m#<File:C:/Users/vinui/OneDrive/macbook/Downloads/sutd 2022/term 5/60.004/1d-final-project-summer-2024-sds-2024-team-05/log/development.log>[0m,
+    @filename[32m=[0m[31m[1m"[0m[31mC:/Users/vinui/OneDrive/macbook/Downloads/sutd 2022/term 5/60.004/1d-final-project-summer-2024-sds-2024-team-05/log/development.log[0m[31m[1m"[0m,
+    @mon_data[32m=[0m[32m#<Monitor:0x0000022c5b948688[0m[32m>[0m,
     @mon_data_owner_object_id[32m=[0m[34m[1m5680[0m,
     @shift_age[32m=[0m[34m[1m1[0m,
     @shift_period_suffix[32m=[0m[31m[1m"[0m[31m%Y%m%d[0m[31m[1m"[0m,
     @shift_size[32m=[0m[34m[1m104857600[0m[32m>[0m,
   @progname[32m=[0m[36m[1mnil[0m[32m>[0m,
- [32m#<ActiveSupport::Logger:0x000002591fa3ad70[0m
-  @default_formatter[32m=[0m[32m#<Logger::Formatter:0x000002591d973dd0[0m @datetime_format[32m=[0m[36m[1mnil[0m[32m>[0m,
-  @formatter[32m=[0m[32m#<ActiveSupport::Logger::SimpleFormatter:0x000002591d973ab0[0m @datetime_format[32m=[0m[36m[1mnil[0m[32m>[0m,
+ [32m#<ActiveSupport::Logger:0x0000022c576432c0[0m
+  @default_formatter[32m=[0m[32m#<Logger::Formatter:0x0000022c5d3683d8[0m @datetime_format[32m=[0m[36m[1mnil[0m[32m>[0m,
+  @formatter[32m=[0m[32m#<ActiveSupport::Logger::SimpleFormatter:0x0000022c5d3681a8[0m @datetime_format[32m=[0m[36m[1mnil[0m[32m>[0m,
   @level[32m=[0m[34m[1m0[0m,
   @level_override[32m=[0m{},
-  @local_level_key[32m=[0m[33m:[0m[33mlogger_thread_safe_level_19740[0m,
+  @local_level_key[32m=[0m[33m:[0m[33mlogger_thread_safe_level_41280[0m,
   @logdev[32m=[0m
-   [32m#<Logger::LogDevice:0x000002591fa3ad20[0m
+   [32m#<Logger::LogDevice:0x0000022c57643130[0m
     @binmode[32m=[0m[36m[1mfalse[0m,
     @dev[32m=[0m[32m#<IO:<STDERR>>[0m,
     @filename[32m=[0m[36m[1mnil[0m,
-    @mon_data[32m=[0m[32m#<Monitor:0x000002591d973c40[0m[32m>[0m,
+    @mon_data[32m=[0m[32m#<Monitor:0x0000022c5d3682c0[0m[32m>[0m,
     @mon_data_owner_object_id[32m=[0m[34m[1m16780[0m,
     @shift_age[32m=[0m[36m[1mnil[0m,
     @shift_period_suffix[32m=[0m[36m[1mnil[0m,

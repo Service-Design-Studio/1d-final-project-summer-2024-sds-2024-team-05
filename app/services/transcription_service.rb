@@ -1,10 +1,3 @@
-require 'net/http'
-require 'uri'
-require 'json'
-require 'base64'
-require 'open-uri'
-include Rails.application.routes.url_helpers
-
 class TranscriptionService
   GOOGLE_SPEECH_API_URL = "https://speech.googleapis.com/v1/speech:recognize?key=AIzaSyBl27-QCygSSfy2izoe-coi9pqgDs89piI"
 
@@ -47,13 +40,12 @@ class TranscriptionService
   def self.download_video(blob)
     local_video_path = Rails.root.join('tmp', "#{blob.filename}")
     File.open(local_video_path, 'wb') do |file|
-      file.write(URI.open(url_for(blob)).read)  # Correctly using URI.open
+      file.write(blob.download)
     end
     local_video_path
   end
 
-  def self.extract_audio(video_blob, audio_path)
-    video_path = download_video(video_blob)
+  def self.extract_audio(video_path, audio_path)
     ffmpeg_command = "ffmpeg -y -i \"#{video_path}\" -ac 1 -ar 16000 -f wav \"#{audio_path}\""
     system(ffmpeg_command)
     Rails.logger.debug "FFmpeg Command: #{ffmpeg_command}"

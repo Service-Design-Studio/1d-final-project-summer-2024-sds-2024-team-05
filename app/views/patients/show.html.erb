@@ -114,7 +114,7 @@
           <div class="video-container text-center">
             <p>Physical Video:</p>
             <% if @form.physical_video.attached? %>
-              <%= video_tag url_for(@form.physical_video), controls: true, class: "img-thumbnail" %>
+              <%= video_tag rails_blob_path(@form.physical_video, disposition: "attachment"), controls: true, class: "img-thumbnail video-preview rounded-video" %>
               <% if @form.submitted %>
                 <p class="card-text"><strong>Primary Physical Assessment:</strong><%= @form.physical_primary_assessment %></p>
                 <p class="card-text"><strong>Final Physical Assessment:</strong><%= @form.physical_assessment %></p>
@@ -131,7 +131,7 @@
           <div class="video-container text-center">
             <p>Mental Video:</p>
             <% if @form.mental_video.attached? %>
-              <%= video_tag url_for(@form.mental_video), controls: true, class: "img-thumbnail" %>
+              <%= video_tag rails_blob_path(@form.mental_video, disposition: "attachment"), controls: true, class: "img-thumbnail" %>
               <% if @form.submitted %>
                 <p class="card-text"><strong>Primary Mental Assessment:</strong><%= @form.mental_primary_assessment %></p>
                 <p class="card-text"><strong>Final Mental Assessment:</strong><%= @form.mental_assessment %></p>
@@ -150,7 +150,7 @@
           <div class="video-container text-center">
             <p>Environment Video:</p>
             <% if @form.environment_video.attached? %>
-              <%= video_tag url_for(@form.environment_video), controls: true, class: "img-thumbnail" %>
+              <%= video_tag rails_blob_path(@form.environment_video, disposition: "attachment"), controls: true, class: "img-thumbnail" %>
               <% if @form.submitted %>
                 <p class="card-text"><strong>Primary Environment Assessment:</strong><%= @form.environment_primary_assessment %></p>
                 <p class="card-text"><strong>Final Environment Assessment:</strong><%= @form.environment_assessment %></p>

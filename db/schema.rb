@@ -77,7 +77,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_163307) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"
-    t.text "mental_transcription"
+    t.string "mental_transcription"
     t.index ["user_id"], name: "index_forms_on_user_id"
   end
 

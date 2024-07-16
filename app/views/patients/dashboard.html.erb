@@ -10,10 +10,10 @@
 <body>
   <div class="container">
 
-    <h1 class="card-text" style ="padding-bottom: 30px"><%= "#{'Welcome'} #{@user.user_first_name} #{'!'}" %></h1>
-    <form class = "d-flex" method = "GET" action= "/search" >
-      <input class="form-control me-2" type = "search" name = "query" placeholder="Enter Client's/NOK's Name">
-      <button class = "btn btn-primary me-2" type ="submit">Search</button>
+    <h1 class="card-text" style="padding-bottom: 30px"><%= "#{'Welcome'} #{@user.user_first_name} #{'!'}" %></h1>
+    <form class="d-flex" method="GET" action="/search">
+      <input class="form-control me-2" type="search" name="query" placeholder="Enter Client's/NOK's Name">
+      <button class="btn btn-primary me-2" type="submit">Search</button>
       <button class="btn btn-secondary" type="submit" name="submit_empty_search">Clear</button>
     </form>
 
@@ -25,7 +25,6 @@
     <table class="table">
       <thead>
         <tr>
-
           <th>
             Patient Name
             <%= form_tag(patients_dashboard_path, method: :get, id: "sort_form", class: "d-inline") do %>
@@ -43,7 +42,6 @@
               <%= check_box_tag :sort_male, "male", params[:sort_male] == "male", onchange: "this.form.submit();" %>
               <%= label_tag :sort_male, "M" %>
             <% end %>
-
           </th>
           <th>Media</th>
           <th>
@@ -79,11 +77,13 @@
         </tr>
       </thead>
 
-      <tbody> 
+      <tbody>
         <% @submittedforms&.each do |form| %>
           <tr>
             <td>
-              <%= "#{form.first_name} #{form.last_name}" %>
+              <a href="#" style="text-decoration: none; color: black" data-bs-toggle="modal" data-bs-target="#patientModal" onclick="loadPatientDetails('<%= form.id %>')">
+                <%= "#{form.first_name} #{form.last_name}" %>
+              </a>
               <% if !form.last_edit.nil? %>
                 <% if form.unseen_changes %>
                   <% if form.last_viewed.nil? %>
@@ -107,24 +107,21 @@
 
             <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info' %></td>
             <td class="text-center">
-          <div class="d-flex justify-content-center align-items-center">
-            <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2' %>
-            <%= form_with(model: form, method: :delete, url: form_path(form), data: { confirm: 'Are you sure?' }) do |f| %>
-              <%= f.submit 'Delete', class: 'btn btn-danger' %>
-            <% end %>
-          </div>
+              <div class="d-flex justify-content-center align-items-center">
+                <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2' %>
+                <%= form_with(model: form, method: :delete, url: form_path(form), data: { confirm: 'Are you sure?' }) do |f| %>
+                  <%= f.submit 'Delete', class: 'btn btn-danger' %>
+                <% end %>
+              </div>
             </td>
-
           </tr>
         <% end %>
       </tbody>
     </table>
-    
+
     <br></br>
 
-
     <h2>Ongoing Forms</h2>
-
 
     <!-- Table of Ongoing forms -->
     <table class="table">
@@ -192,15 +189,13 @@
 
             <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info' %></td>
             <td class="text-center">
-          <div class="d-flex justify-content-center align-items-center">
-            <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2' %>
-            <%= form_with(model: form, method: :delete, url: form_path(form), data: { confirm: 'Are you sure?' }) do |f| %>
-              <%= f.submit 'Delete', class: 'btn btn-danger' %>
-
-            <% end %>
-          </div>
+              <div class="d-flex justify-content-center align-items-center">
+                <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2' %>
+                <%= form_with(model: form, method: :delete, url: form_path(form), data: { confirm: 'Are you sure?' }) do |f| %>
+                  <%= f.submit 'Delete', class: 'btn btn-danger' %>
+                <% end %>
+              </div>
             </td>
-
           </tr>
         <% end %>
       </tbody>
@@ -210,6 +205,139 @@
     <%= link_to 'Create New Form', new_form_path, class: 'btn btn-primary' %>
   </div>
 
+  <!-- Modal -->
+  <div class="modal fade" id="patientModal" tabindex="-1" aria-labelledby="patientModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="patientModalLabel">Patient Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Patient data will be loaded here dynamically -->
+          <ul class="nav nav-tabs" id="patientTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="patient-tab" data-bs-toggle="tab" data-bs-target="#patient" type="button" role="tab" aria-controls="patient" aria-selected="true">Patient Info</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="action-tab" data-bs-toggle="tab" data-bs-target="#action" type="button" role="tab" aria-controls="action" aria-selected="false">Action Required</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="nok-tab" data-bs-toggle="tab" data-bs-target="#nok" type="button" role="tab" aria-controls="nok" aria-selected="false">NOK Details</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="discharge-tab" data-bs-toggle="tab" data-bs-target="#discharge" type="button" role="tab" aria-controls="discharge" aria-selected="false">Discharge Summary</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="assessment-tab" data-bs-toggle="tab" data-bs-target="#assessment" type="button" role="tab" aria-controls="assessment" aria-selected="false">Patient Assessment</button>
+            </li>
+          </ul>
+          <div class="tab-content" id="patientTabsContent">
+            <div class="tab-pane fade show active" id="patient" role="tabpanel" aria-labelledby="patient-tab">
+              <div id="patientDetails"></div>
+            </div>
+            <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
+              <div id="actionRequired"></div>
+            </div>
+            <div class="tab-pane fade" id="nok" role="tabpanel" aria-labelledby="nok-tab">
+              <div id="nokDetails"></div>
+            </div>
+            <div class="tab-pane fade" id="discharge" role="tabpanel" aria-labelledby="discharge-tab">
+              <div id="dischargeDetails"></div>
+            </div>
+            <div class="tab-pane fade" id="assessment" role="tabpanel" aria-labelledby="assessment-tab">
+              <div id="assessmentDetails"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script>
+    function loadPatientDetails(patientId) {
+      fetch(`/forms/${patientId}.json`)
+        .then(response => response.json())
+        .then(data => {
+          const patientDetails = `
+            <p style="font-size:3em"><strong>Patient's Information</strong></p>
+            <p style="font-size:2em"><strong>Name:</strong> ${data.first_name} ${data.last_name}</p>
+            <p><strong>NRIC:</strong> SXXX123A</p>
+            <p><strong>Gender:</strong> ${data.gender}</p>
+            <p><strong>Birthday:</strong> ${data.date_of_birth}</p>
+            <p><strong>Address:</strong> ${data.address}</p>
+            <hr/>
+            <p style="font-size:2em"><strong>Type of Care:</strong> ${data.services}</p>
+            <p><strong>Start Date Required:</strong> ${data.start_date}</p>
+            <p><strong>Physical Assessment:</strong> ${data.physical_assessment}</p>
+            <p><strong>Mental Assessment:</strong> ${data.mental_assessment}</p>
+            <p><strong>Prelim Assessment:</strong> ${data.prelim_assessment}</p>
+          `;
+          const nokDetails = `
+            <p style="font-size:2em"><strong>NOK Name:</strong> ${data.nok_first_name} ${data.nok_last_name}</p>
+            <p><strong>Relationship:</strong> ${data.relationship}</p>
+            <p><strong>Contact:</strong> ${data.nok_contact_no}</p>
+            <p><strong>Email:</strong> ${data.nok_email}</p>
+          `;
+          const dischargeDetails = `
+            <p style="font-size:2em"><strong>Discharge Summary:</strong></p>
+            <img src="${data.discharge_summary}" alt="Discharge Summary" style="max-width: 100%;">
+          `;
+          const assessmentDetails = `
+            <p style="font-size:2em"><strong>Physical Video:</strong></p>
+            <video controls class="img-thumbnail" style="max-width: 300px;">
+              <source src="${data.physical_video}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <p>Physical Assessment: <strong>${data.physical_assessment}</strong></p>
+            <p>Physical Primary Assessment: <strong>${data.physical_primary_assessment}</strong></p>
+            <p style="font-size:2em"><strong>Mental Video:</strong></p>
+            <video controls class="img-thumbnail" style="max-width: 300px;">
+              <source src="${data.mental_video}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <p>Mental Assessment: <strong>${data.mental_assessment}</strong></p>
+            <p>Mental Primary Assessment: <strong>${data.mental_primary_assessment}</strong></p>
+            <p style="font-size:2em"><strong>Home Environment:</strong></p>
+            <video controls class="img-thumbnail" style="max-width: 50em;">
+              <source src="${data.environment_video}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <p>Environmental Assessment: <strong>${data.environment_assessment}</strong></p>
+            <p>Environmental Primary Assessment: <strong>${data.environment_primary_assessment}</strong></p>
+          `;
+          const actionRequired = `
+            <p style="font-size:2em"><strong>Action Requred:</strong></p>
+            <p>Current Status: <strong>${data.status_colour}</strong></p>
+            <p>Physical Primary Assessment: <strong>${data.physical_primary_assessment}</strong></p>
+            <p style="font-size:2em"><strong>Mental Video:</strong></p>
+            <video controls class="img-thumbnail" style="max-width: 300px;">
+              <source src="${data.mental_video}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <p>Mental Assessment: <strong>${data.mental_assessment}</strong></p>
+            <p>Mental Primary Assessment: <strong>${data.mental_primary_assessment}</strong></p>
+            <p style="font-size:2em"><strong>Home Environment:</strong></p>
+            <video controls class="img-thumbnail" style="max-width: 50em;">
+              <source src="${data.environment_video}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <p>Environmental Assessment: <strong>${data.environment_assessment}</strong></p>
+            <p>Environmental Primary Assessment: <strong>${data.environment_primary_assessment}</strong></p>
+          `;
+          document.getElementById('patientDetails').innerHTML = patientDetails;
+          document.getElementById('nokDetails').innerHTML = nokDetails;
+          document.getElementById('dischargeDetails').innerHTML = dischargeDetails;
+          document.getElementById('assessmentDetails').innerHTML = assessmentDetails;
+          document.getElementById('actionRequired').innerHTML = actionRequired;
+        })
+        .catch(error => console.error('Error fetching patient details:', error));
+    }
+  </script>
+
 </body>
 </html>

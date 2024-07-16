@@ -5,9 +5,14 @@ class PatientsController < ApplicationController
    before_action :check_valid_params, only: [:show]
    before_action :authenticate_user!
 
-  def show
+   def show
     @form = Form.includes(:user).find(params[:id])
+    respond_to do |format|
+      format.html
+      format.json { render json: @form.to_json(include: :user) }
+    end
   end
+  
 
   def index
     @forms = current_user.forms.select(:id, :first_name, :last_name, :start_date, :submitted)

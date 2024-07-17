@@ -258,86 +258,84 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <script>
-    function loadPatientDetails(patientId) {
-      fetch(`/forms/${patientId}.json`)
-        .then(response => response.json())
-        .then(data => {
-          const patientDetails = `
-            <p style="font-size:3em"><strong>Patient's Information</strong></p>
-            <p style="font-size:2em"><strong>Name:</strong> ${data.first_name} ${data.last_name}</p>
-            <p><strong>NRIC:</strong> SXXX123A</p>
-            <p><strong>Gender:</strong> ${data.gender}</p>
-            <p><strong>Birthday:</strong> ${data.date_of_birth}</p>
-            <p><strong>Address:</strong> ${data.address}</p>
-            <hr/>
-            <p style="font-size:2em"><strong>Type of Care:</strong> ${data.services}</p>
-            <p><strong>Start Date Required:</strong> ${data.start_date}</p>
-            <p><strong>Physical Assessment:</strong> ${data.physical_assessment}</p>
-            <p><strong>Mental Assessment:</strong> ${data.mental_assessment}</p>
-            <p><strong>Prelim Assessment:</strong> ${data.prelim_assessment}</p>
-          `;
-          const nokDetails = `
-            <p style="font-size:2em"><strong>NOK Name:</strong> ${data.nok_first_name} ${data.nok_last_name}</p>
-            <p><strong>Relationship:</strong> ${data.relationship}</p>
-            <p><strong>Contact:</strong> ${data.nok_contact_no}</p>
-            <p><strong>Email:</strong> ${data.nok_email}</p>
-          `;
-          const dischargeDetails = `
-            <p style="font-size:2em"><strong>Discharge Summary:</strong></p>
-            <img src="${data.discharge_summary}" alt="Discharge Summary" style="max-width: 100%;">
-          `;
-          const assessmentDetails = `
-            <p style="font-size:2em"><strong>Physical Video:</strong></p>
-            <video controls class="img-thumbnail" style="max-width: 300px;">
-              <source src="${data.physical_video}" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-            <p>Physical Assessment: <strong>${data.physical_assessment}</strong></p>
-            <p>Physical Primary Assessment: <strong>${data.physical_primary_assessment}</strong></p>
-            <p style="font-size:2em"><strong>Mental Video:</strong></p>
-            <video controls class="img-thumbnail" style="max-width: 300px;">
-              <source src="${data.mental_video}" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-            <p>Mental Assessment: <strong>${data.mental_assessment}</strong></p>
-            <p>Mental Primary Assessment: <strong>${data.mental_primary_assessment}</strong></p>
-            <p style="font-size:2em"><strong>Home Environment:</strong></p>
-            <video controls class="img-thumbnail" style="max-width: 50em;">
-              <source src="${data.environment_video}" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-            <p>Environmental Assessment: <strong>${data.environment_assessment}</strong></p>
-            <p>Environmental Primary Assessment: <strong>${data.environment_primary_assessment}</strong></p>
-          `;
-          const actionRequired = `
-            <p style="font-size:2em"><strong>Action Requred:</strong></p>
-            <p>Current Status: <strong>${data.status_colour}</strong></p>
-            <p>Physical Primary Assessment: <strong>${data.physical_primary_assessment}</strong></p>
-            <p style="font-size:2em"><strong>Mental Video:</strong></p>
-            <video controls class="img-thumbnail" style="max-width: 300px;">
-              <source src="${data.mental_video}" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-            <p>Mental Assessment: <strong>${data.mental_assessment}</strong></p>
-            <p>Mental Primary Assessment: <strong>${data.mental_primary_assessment}</strong></p>
-            <p style="font-size:2em"><strong>Home Environment:</strong></p>
-            <video controls class="img-thumbnail" style="max-width: 50em;">
-              <source src="${data.environment_video}" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-            <p>Environmental Assessment: <strong>${data.environment_assessment}</strong></p>
-            <p>Environmental Primary Assessment: <strong>${data.environment_primary_assessment}</strong></p>
-          `;
-          document.getElementById('patientDetails').innerHTML = patientDetails;
-          document.getElementById('nokDetails').innerHTML = nokDetails;
-          document.getElementById('dischargeDetails').innerHTML = dischargeDetails;
-          document.getElementById('assessmentDetails').innerHTML = assessmentDetails;
-          document.getElementById('actionRequired').innerHTML = actionRequired;
-        })
-        .catch(error => console.error('Error fetching patient details:', error));
-    }
-  </script>
+<script>
+  function loadPatientDetails(patientId) {
+    fetch(`/forms/${patientId}.json`)
+      .then(response => response.json())
+      .then(data => {
+        const patientDetails = `
+          <p style="font-size:2em"><strong>Patient's Information</strong></p>
+          <p style="font-size:1em"><strong>Name:</strong> ${data.first_name} ${data.last_name}</p>
+          <p><strong>NRIC:</strong> SXXX123A</p>
+          <p><strong>Gender:</strong> ${data.gender}</p>
+          <p><strong>Birthday:</strong> ${data.date_of_birth}</p>
+          <p><strong>Address:</strong> ${data.address}</p>
+          <hr/>
+          <p style="font-size:2em"><strong>Type of Care:</strong> ${data.services}</p>
+          <p><strong>Start Date Required:</strong> ${data.start_date}</p>
+          <p><strong>Physical Assessment:</strong> ${data.physical_assessment}</p>
+          <p><strong>Mental Assessment:</strong> ${data.mental_assessment}</p>
+          <p><strong>Prelim Assessment:</strong> ${data.prelim_assessment}</p>
+        `;
+        const nokDetails = `
+          <p style="font-size:2em"><strong>NOK Name:</strong> ${data.nok_first_name} ${data.nok_last_name}</p>
+          <p><strong>Relationship:</strong> ${data.relationship}</p>
+          <p><strong>Address: </strong> ${data.nok_address}</p>
+          <p><strong>Contact:</strong> ${data.nok_contact_no}</p>
+          <p><strong>Email:</strong> ${data.nok_email}</p>
+        `;
+        const dischargeDetails = `
+          <p style="font-size:2em"><strong>Discharge Summary:</strong></p>
+          <img src="${data.discharge_summary}" alt="Discharge Summary" style="max-width: 100%;">
+        `;
+        const assessmentDetails = `
+          <p style="font-size:2em"><strong>Physical Video:</strong></p>
+          <video controls class="img-thumbnail" style="max-width: 300px;">
+            <source src="${data.physical_video}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <p>Physical Assessment: <strong>${data.physical_assessment}</strong></p>
+          <p>Physical Primary Assessment: <strong>${data.physical_primary_assessment}</strong></p>
+          <p style="font-size:2em"><strong>Mental Video:</strong></p>
+          <video controls class="img-thumbnail" style="max-width: 300px;">
+            <source src="${data.mental_video}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <p>Mental Assessment: <strong>${data.mental_assessment}</strong></p>
+          <p>Mental Primary Assessment: <strong>${data.mental_primary_assessment}</strong></p>
+          <p style="font-size:2em"><strong>Home Environment:</strong></p>
+          <video controls class="img-thumbnail" style="max-width: 50em;">
+            <source src="${data.environment_video}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <p>Environmental Assessment: <strong>${data.environment_assessment}</strong></p>
+          <p>Environmental Primary Assessment: <strong>${data.environment_primary_assessment}</strong></p>
+        `;
+        
+        let actionRequired = `
+          <p style="font-size:2em"><strong>Action Required:</strong></p>
+          <p><strong>Current Status: </strong><span style="color: ${data.status_colour}">${data.application_status}</span></p>
+        `;
+
+        // Add conditionally rendered links based on application status
+        if (data.application_status === 'Pending Assessment') {
+          actionRequired += `<p><a href="/patients/new?form_id=${data.id}" class="btn btn-primary">Complete Assessment</a></p>`;
+        } else if (data.application_status === 'Meeting Date Pending') {
+          actionRequired += `<p><a href="/meetings/new?form_id=${data.id}" class="btn btn-primary">Set Meeting Date</a></p>`;
+        }
+
+        // need the form path to link the buttons
+
+        document.getElementById('patientDetails').innerHTML = patientDetails;
+        document.getElementById('nokDetails').innerHTML = nokDetails;
+        document.getElementById('dischargeDetails').innerHTML = dischargeDetails;
+        document.getElementById('assessmentDetails').innerHTML = assessmentDetails;
+        document.getElementById('actionRequired').innerHTML = actionRequired;
+      })
+      .catch(error => console.error('Error fetching patient details:', error));
+  }
+</script>
+
 
 </body>
 </html>

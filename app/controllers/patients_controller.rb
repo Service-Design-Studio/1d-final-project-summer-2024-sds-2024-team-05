@@ -9,7 +9,7 @@ class PatientsController < ApplicationController
     @form = Form.includes(:user).find(params[:id])
     respond_to do |format|
       format.html
-      format.json { render json: @form.to_json(include: :user) }
+      format.json { render json: @form.to_json(include: :user, methods: [:application_status, :status_colour]) }
     end
   end
   

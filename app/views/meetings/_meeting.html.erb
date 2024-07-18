@@ -1,0 +1,32 @@
+<div id="<%= dom_id meeting %>">
+  <p>
+    <strong>Title:</strong>
+    <%= meeting.title %>
+  </p>
+
+  <p>
+    <strong>Description:</strong>
+    <%= meeting.description %>
+  </p>
+
+  <p>
+    <strong>Belongs to:</strong>
+    <%= meeting.form.first_name %>
+  </p>
+
+  <p>
+    <strong>Location:</strong>
+    <%= meeting.location %>
+  </p>
+
+  <p>
+    <strong>Start time:</strong>
+    <%= meeting.start_time %>
+  </p>
+
+  <p>
+    <strong>End time:</strong>
+    <%= meeting.end_time %>
+  </p>
+
+</div>

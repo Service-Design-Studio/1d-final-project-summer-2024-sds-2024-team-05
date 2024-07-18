@@ -4,6 +4,10 @@ class Form < ApplicationRecord
 
     before_save :update_last_edit
 
+    def full_name
+        "#{self.first_name} #{self.last_name}"
+    end
+
     def transfer_to_new_user(email_attribute)
         new_user = User.find_by(email: self[email_attribute])
       
@@ -78,7 +82,7 @@ class Form < ApplicationRecord
     end
 
     def pg2_valid
-        page2_required.all? { |key| !self.send(key).nil? && !self.send(key).to_s.empty?}
+        page2_required.all? { |key| !self.send(key).to_s.empty?}
     end
 
     def page3_required
@@ -122,4 +126,5 @@ class Form < ApplicationRecord
     has_one_attached :environment_video
     has_one_attached :service_agreement_form
     belongs_to :user
+    has_one :meeting, dependent: :destroy
 end

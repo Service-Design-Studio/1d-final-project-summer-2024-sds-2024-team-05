@@ -4,6 +4,7 @@ class PatientsController < ApplicationController
    before_action :set_form, only: [:show, :edit_1, :update_1, :edit_2, :update_2, :edit_3, :update_3, :edit_4, :update_4, :edit_5, :update_5]
    before_action :check_valid_params, only: [:show]
    before_action :authenticate_user!
+   before_action :set_all_meetings
 
    def show
     @form = Form.includes(:user).find(params[:id])
@@ -26,6 +27,11 @@ def dashboard
    @user = current_user
    @submittedforms = Form.where(submitted: true)
    @incompleteforms = Form.where(submitted: [false, nil])
+
+   respond_to do |format|
+    format.html { render partial: 'meetings/calendar', locals: { meetings: @meetings } if request.xhr? }
+    format.json { render json: @meetings }
+   end
 
    # Handle sorting for submitted forms based on first name, last name, or address
    if params[:sort] == "alphabetical"
@@ -668,5 +674,12 @@ def dashboard
 
   def page_valid?(form_parameters, required_values)
     required_values.all? { |key| form_parameters.key?(key) && form_parameters[key].present? }
+  end
+  
+  def set_all_meetings
+    @meetings = Meeting.where(
+      start_time: Time.now.beginning_of_month.beginning_of_week..Time.now.end_of_month.end_of_week
+    )
+    @meeting = Meeting.new
   end
 end

@@ -87,3 +87,5 @@ group :test do
   gem 'database_cleaner-active_record'
   gem 'simplecov'
 end
+
+gem "simple_calendar", "~> 3.0"

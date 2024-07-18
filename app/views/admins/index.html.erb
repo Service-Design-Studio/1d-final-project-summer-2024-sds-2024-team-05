@@ -28,18 +28,18 @@
 
           <th>
             Patient Name
-            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_form", class: "d-inline") do %>
+            <%= form_tag(admin_root_path, method: :get, id: "sort_form", class: "d-inline") do %>
               <%= check_box_tag :sort, "alphabetical", params[:sort] == "alphabetical", onchange: "this.form.submit();" %>
               <%= label_tag :sort %>
             <% end %>
           </th>
           <th>
             Gender
-            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_gender_form", class: "d-inline") do %>
+            <%= form_tag(admin_root_path, method: :get, id: "sort_gender_form", class: "d-inline") do %>
               <%= check_box_tag :sort_female, "female", params[:sort_female] == "female", onchange: "this.form.submit();" %>
               <%= label_tag :sort_female, "F" %>
             <% end %>
-            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_gender_form", class: "d-inline") do %>
+            <%= form_tag(admin_root_path, method: :get, id: "sort_gender_form", class: "d-inline") do %>
               <%= check_box_tag :sort_male, "male", params[:sort_male] == "male", onchange: "this.form.submit();" %>
               <%= label_tag :sort_male, "M" %>
             <% end %>
@@ -48,27 +48,27 @@
           <th>Media</th>
           <th>
             Action Required
-            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_status_form", class: "d-inline") do %>
+            <%= form_tag(admin_root_path, method: :get, id: "sort_status_form", class: "d-inline") do %>
               <%= check_box_tag :sort_status, "true", params[:sort_status] == "true", onchange: "this.form.submit();" %>
             <% end %>
           </th>
           <th>
             Address
-            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_address_form", class: "d-inline") do %>
+            <%= form_tag(admin_root_path, method: :get, id: "sort_address_form", class: "d-inline") do %>
               <%= check_box_tag :sort_address, "alphabetical", params[:sort_address] == "alphabetical", onchange: "this.form.submit();" %>
               <%= label_tag :sort_address, "Sort" %>
             <% end %>
           </th>
           <th>
             Start
-            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_date_form", class: "d-inline") do %>
+            <%= form_tag(admin_root_path, method: :get, id: "sort_date_form", class: "d-inline") do %>
               <%= check_box_tag :sort_date, "earliest", params[:sort_date] == "earliest", onchange: "this.form.submit();" %>
               <%= label_tag :sort_date, "Sort" %>
             <% end %>
           </th>
           <th>
             End
-            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_date_form", class: "d-inline") do %>
+            <%= form_tag(admin_root_path, method: :get, id: "sort_date_form", class: "d-inline") do %>
               <%= check_box_tag :sort_end_date, "earliest", params[:sort_end_date] == "earliest", onchange: "this.form.submit();" %>
               <%= label_tag :sort_end_date, "Sort" %>
             <% end %>
@@ -132,46 +132,46 @@
         <tr>
           <th>
             Patient Name
-            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_form", class: "d-inline") do %>
+            <%= form_tag(admin_root_path, method: :get, id: "sort_form", class: "d-inline") do %>
               <%= check_box_tag :sort, "alphabetical", params[:sort] == "alphabetical", onchange: "this.form.submit();" %>
               <%= label_tag :sort, "Sort" %>
             <% end %>
           </th>
           <th>
             NOK Name
-            <%= form_tag(patients_dashboard_path, method: :get, class: "d-inline") do %>
+            <%= form_tag(admin_root_path, method: :get, class: "d-inline") do %>
               <%= check_box_tag :sort_nok_name, "alphabetical", params[:sort_nok_name] == "alphabetical", onchange: "this.form.submit();" %>
               <%= label_tag :sort_nok_name, "Sort" %>
             <% end %>
           </th>
           <th>
             Gender
-            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_gender_form", class: "d-inline") do %>
+            <%= form_tag(admin_root_path, method: :get, id: "sort_gender_form", class: "d-inline") do %>
               <%= check_box_tag :sort_female, "female", params[:sort_female] == "female", onchange: "this.form.submit();" %>
               <%= label_tag :sort_female, "F" %>
             <% end %>
-            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_gender_form", class: "d-inline") do %>
+            <%= form_tag(admin_root_path, method: :get, id: "sort_gender_form", class: "d-inline") do %>
               <%= check_box_tag :sort_male, "male", params[:sort_male] == "male", onchange: "this.form.submit();" %>
               <%= label_tag :sort_male, "M" %>
             <% end %>
           </th>
           <th>
             Address
-            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_address_form", class: "d-inline") do %>
+            <%= form_tag(admin_root_path, method: :get, id: "sort_address_form", class: "d-inline") do %>
               <%= check_box_tag :sort_address, "alphabetical", params[:sort_address] == "alphabetical", onchange: "this.form.submit();" %>
               <%= label_tag :sort_address, "Sort" %>
             <% end %>
           </th>
           <th>
             Start Date
-            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_date_form", class: "d-inline") do %>
+            <%= form_tag(admin_root_path, method: :get, id: "sort_date_form", class: "d-inline") do %>
               <%= check_box_tag :sort_date, "earliest", params[:sort_date] == "earliest", onchange: "this.form.submit();" %>
               <%= label_tag :sort_date, "Sort" %>
             <% end %>
           </th>
           <th>
             End Date
-            <%= form_tag(patients_dashboard_path, method: :get, id: "sort_date_form", class: "d-inline") do %>
+            <%= form_tag(admin_root_path, method: :get, id: "sort_date_form", class: "d-inline") do %>
               <%= check_box_tag :sort_end_date, "earliest", params[:sort_end_date] == "earliest", onchange: "this.form.submit();" %>
               <%= label_tag :sort_end_date, "Sort" %>
             <% end %>

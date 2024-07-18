@@ -436,7 +436,7 @@ def dashboard
 
     if @form.update(submitted: true)
       if current_user.admin?
-        redirect_to patients_dashboard_path, notice: 'Form submitted successfully.'
+        redirect_to admin_root_path, notice: 'Form submitted successfully.'
       else
         redirect_to forms_path, notice: 'Form submitted successfully.'
       end
@@ -523,7 +523,7 @@ def dashboard
     flash[:notice] = "Form for '#{@form.first_name}' deleted."
 
     if current_user.admin?
-      redirect_to patients_dashboard_path
+      redirect_to admin_root_path
     else
       redirect_to forms_path
     end

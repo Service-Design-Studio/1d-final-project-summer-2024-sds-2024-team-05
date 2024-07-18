@@ -5,9 +5,10 @@ class ApplicationController < ActionController::Base
 
     def after_sign_in_path_for(resource)
         if resource.is_a?(User) && resource.admin?
-            patients_dashboard_path
+            admin_root_path
         else
-            root_path
+            Rails.logger.debug "Redirecting to user_root_path for #{resource.email}"
+            user_root_path
         end
     end
 

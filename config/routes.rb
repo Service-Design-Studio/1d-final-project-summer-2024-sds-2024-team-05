@@ -3,19 +3,22 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  authenticated :user do
+  authenticated :user, lambda { |u| !u.admin? } do
     root 'patients#index', as: :user_root
   end
 
-  authenticated :admin do
-    root 'patients#dashboard', as: :admin_root
+  authenticated :user, lambda { |u| u.admin? } do
+    root 'admins#index', as: :admin_root
   end
 
-  get 'patients/dashboard', to: 'patients#dashboard', as: :patients_dashboard
+  # For non-authenticated users, redirect them to a specific page, like a login page or a welcome page
+  devise_scope :user do
+    unauthenticated do
+      root 'devise/sessions#new', as: :unauthenticated_root
+    end
+  end
 
-  get '/search', to: "patients#search"
-
-
+  get '/search', to: "admins#search"
 
   resources :forms, controller: 'patients' do
     member do
@@ -37,7 +40,7 @@ Rails.application.routes.draw do
       patch 'edit_environment_assessment', to: 'patients#update_environment_assessment'
       patch 'update_submission_status', to: 'patients#update_submission_status'
     end
-    
+
     collection do
       get 'edit_1', to: 'patients#edit_1'
       patch 'edit_1', to: 'patients#update_1_collection'
@@ -52,6 +55,4 @@ Rails.application.routes.draw do
       get 'show_error', to: 'patients#show_error'
     end
   end
-  root 'patients#index'
-  get 'back_to_previous', to: 'patients#back_to_previous', as: 'back_to_previous'
 end

@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   get 'patients/dashboard', to: 'patients#dashboard', as: :patients_dashboard
   get 'patients/index'
   get '/search', to: "patients#search"
+  get '/client_profile/:id', to: 'patients#client_profile', as: 'client_profile'
+
 
   # get 'patients/new'
   # get 'patients/edit'

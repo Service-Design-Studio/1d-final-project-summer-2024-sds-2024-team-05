@@ -32,9 +32,9 @@ class Form < ApplicationRecord
         if !self.application_status.nil?
             case application_status
             when 'Pending Assessment'
-                '#721c24'
+                '#dc3545'
             when 'Meeting Date Pending'
-                '#ff9800'
+                '#fd7e14'
             when 'Pending Service Agreement Form'
                 '#721c24'
             else

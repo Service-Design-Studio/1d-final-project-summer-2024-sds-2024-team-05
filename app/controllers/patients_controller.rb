@@ -13,6 +13,11 @@ class PatientsController < ApplicationController
       format.json { render json: @form.to_json(include: :user, methods: [:application_status, :status_colour]) }
     end
   end
+
+  def client_profile
+    @form = Form.find(params[:id])
+    @meetings = Meeting.where(form_id: @form.id)
+  end
   
 
   def index

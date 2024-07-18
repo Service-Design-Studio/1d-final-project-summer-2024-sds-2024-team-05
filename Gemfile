@@ -43,7 +43,7 @@ gem 'faker'
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 #able to use .env file or smth
-gem 'dotenv-rails'
+gem 'dotenv-rails', groups: [:development, :test]
 
 gem 'devise', '~> 4.9', '>= 4.9.3'
 gem 'devise-jwt'

@@ -6,6 +6,8 @@
   <title>Forms</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAPS_API_KEY'] %>" async defer></script>
+
 </head>
 <body>
   <div class="container">
@@ -205,66 +207,81 @@
     <%= link_to 'Create New Form', new_form_path, class: 'btn btn-primary' %>
   </div>
 
-  <!-- Modal -->
-  <div class="modal fade" id="patientModal" tabindex="-1" aria-labelledby="patientModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="patientModalLabel">Patient Details</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <!-- Patient data will be loaded here dynamically -->
-          <ul class="nav nav-tabs" id="patientTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="patient-tab" data-bs-toggle="tab" data-bs-target="#patient" type="button" role="tab" aria-controls="patient" aria-selected="true">Patient Info</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="action-tab" data-bs-toggle="tab" data-bs-target="#action" type="button" role="tab" aria-controls="action" aria-selected="false">Action Required</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="nok-tab" data-bs-toggle="tab" data-bs-target="#nok" type="button" role="tab" aria-controls="nok" aria-selected="false">NOK Details</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="discharge-tab" data-bs-toggle="tab" data-bs-target="#discharge" type="button" role="tab" aria-controls="discharge" aria-selected="false">Discharge Summary</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="assessment-tab" data-bs-toggle="tab" data-bs-target="#assessment" type="button" role="tab" aria-controls="assessment" aria-selected="false">Patient Assessment</button>
-            </li>
-            <li class="nav-item" role="presentation">
+  
+    <!-- Modal -->
+    <div class="modal fade" id="patientModal" tabindex="-1" aria-labelledby="patientModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="patientModalLabel">Patient Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Patient data will be loaded here dynamically -->
+            <ul class="nav nav-tabs" id="patientTabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="patient-tab" data-bs-toggle="tab" data-bs-target="#patient" type="button" role="tab" aria-controls="patient" aria-selected="true">Patient Info</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="action-tab" data-bs-toggle="tab" data-bs-target="#action" type="button" role="tab" aria-controls="action" aria-selected="false">Action Required</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="nok-tab" data-bs-toggle="tab" data-bs-target="#nok" type="button" role="tab" aria-controls="nok" aria-selected="false">NOK Details</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="discharge-tab" data-bs-toggle="tab" data-bs-target="#discharge" type="button" role="tab" aria-controls="discharge" aria-selected="false">Discharge Summary</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="assessment-tab" data-bs-toggle="tab" data-bs-target="#assessment" type="button" role="tab" aria-controls="assessment" aria-selected="false">Patient Assessment</button>
+              </li>
+              <li class="nav-item" role="presentation">
               <button class="nav-link" id="meeting-tab" data-bs-toggle="tab" data-bs-target="#meeting" type="button" role="tab" aria-controls="meeting" aria-selected="false">Meeting Details</button>
             </li>
           </ul>
-          <div class="tab-content" id="patientTabsContent">
-            <div class="tab-pane fade show active" id="patient" role="tabpanel" aria-labelledby="patient-tab">
-              <div id="patientDetails"></div>
-            </div>
-            <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
-              <div id="actionRequired"></div>
-            </div>
-            <div class="tab-pane fade" id="nok" role="tabpanel" aria-labelledby="nok-tab">
-              <div id="nokDetails"></div>
-            </div>
-            <div class="tab-pane fade" id="discharge" role="tabpanel" aria-labelledby="discharge-tab">
-              <div id="dischargeDetails"></div>
-            </div>
-            <div class="tab-pane fade" id="assessment" role="tabpanel" aria-labelledby="assessment-tab">
-              <div id="assessmentDetails"></div>
-            </div>
-            <div class="tab-pane fade" id="meeting" role="tabpanel" aria-labelledby="meeting-tab">
+            <div class="tab-content" id="patientTabsContent">
+              <div class="tab-pane fade show active" id="patient" role="tabpanel" aria-labelledby="patient-tab">
+                <div id="patientDetails"></div>
+                  <div id="map" style="height: 400px; width: 100%;"></div>
+              </div>
+              <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
+                <div id="actionRequired"></div>
+              </div>
+              <div class="tab-pane fade" id="nok" role="tabpanel" aria-labelledby="nok-tab">
+                <div id="nokDetails"></div>
+              </div>
+              <div class="tab-pane fade" id="discharge" role="tabpanel" aria-labelledby="discharge-tab">
+                <div id="dischargeDetails"></div>
+                <%= image_tag @form.discharge_summary, class: "img-thumbnail", style: "max-width: 300px;" %>
+              </div>
+              <div class="tab-pane fade" id="assessment" role="tabpanel" aria-labelledby="assessment-tab">
+                <p style="font-size:2em"><strong>Patient Assessment:</strong></p>
+                <p style="font-size:1em"><strong>Primary Physical Assessment: </strong><%= @form.physical_primary_assessment %></p>
+                <p style="font-size:1em"><strong>Physical Assessment: </strong><%= @form.physical_assessment %></p>
+                <%= video_tag url_for(@form.physical_video), controls: true, class: "img-thumbnail" %>
+                <hr/>
+                <p style="font-size:1em"><strong>Primary Mental Assessment: </strong><%= @form.mental_primary_assessment %></p>
+                <p style="font-size:1em"><strong>Mental Assessment: </strong><%= @form.mental_assessment %></p>
+                <%= video_tag url_for(@form.mental_video), controls: true, class: "img-thumbnail" %>
+                <hr/>
+                <p style="font-size:1em"><strong>Primary Environmental Assessment: </strong><%= @form.environment_primary_assessment %></p>
+                <p style="font-size:1em"><strong>Environmental Assessment: </strong><%= @form.environment_assessment %></p>
+                <%= video_tag url_for(@form.environment_video), controls: true, class: "img-thumbnail" %>
+              </div>
+              <div class="tab-pane fade" id="meeting" role="tabpanel" aria-labelledby="meeting-tab">
               <div id="setMeeting"></div>
             </div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <script>
+<script>
     document.addEventListener("DOMContentLoaded", function() {
       const calendarContainer = document.querySelector('.simple-calendar');
 
@@ -303,30 +320,46 @@
         .then(response => response.json())
         .then(data => {
           const patientDetails = `
-            <p style="font-size:3em"><strong>Patient's Information</strong></p>
-            <p style="font-size:2em"><strong>Name:</strong> ${data.first_name} ${data.last_name}</p>
+            <p style="font-size:2em"><strong>Patient's Information</strong></p>
+            <p style="font-size:1.5em"><strong>Action Required: </strong><span id="action-required-text" style="color: ${data.status_colour}; cursor: pointer;" onclick="document.getElementById('action-tab').click();">${data.application_status}</span></p>
+
+            <p style="font-size:1em"><strong>Name:</strong> ${data.first_name} ${data.last_name}</p>
             <p><strong>Form No.:</strong> ${data.id}</p>
             <p><strong>NRIC:</strong> SXXX123A</p>
             <p><strong>Gender:</strong> ${data.gender}</p>
             <p><strong>Birthday:</strong> ${data.date_of_birth}</p>
-            <p><strong>Address:</strong> ${data.address}</p>
             <hr/>
             <p style="font-size:2em"><strong>Type of Care:</strong> ${data.services}</p>
             <p><strong>Start Date Required:</strong> ${data.start_date}</p>
             <p><strong>Physical Assessment:</strong> ${data.physical_assessment}</p>
             <p><strong>Mental Assessment:</strong> ${data.mental_assessment}</p>
             <p><strong>Prelim Assessment:</strong> ${data.prelim_assessment}</p>
+            <hr/>
+            <p style = "font-size:2em"><strong>Address:</strong> ${data.address}</p>
+
           `;
           const nokDetails = `
             <p style="font-size:2em"><strong>NOK Name:</strong> ${data.nok_first_name} ${data.nok_last_name}</p>
             <p><strong>Relationship:</strong> ${data.relationship}</p>
+            <p><strong>Address: </strong> ${data.nok_address}</p>
             <p><strong>Contact:</strong> ${data.nok_contact_no}</p>
             <p><strong>Email:</strong> ${data.nok_email}</p>
           `;
           const dischargeDetails = `
             <p style="font-size:2em"><strong>Discharge Summary:</strong></p>
-            <img src="${data.discharge_summary}" alt="Discharge Summary" style="max-width: 100%;">
           `;
+          let actionRequired = `
+            <p style="font-size:2em"><strong>Action Required:</strong></p>
+            <p><strong>Current Status: </strong><span style="color: ${data.status_colour}">${data.application_status}</span></p>
+          `;
+
+          // Add conditionally rendered links based on application status
+          if (data.application_status === 'Pending Assessment') {
+            actionRequired += `<p><a href="/patients/new?form_id=${data.id}" class="btn btn-primary">Complete Assessment</a></p>`;
+          } else if (data.application_status === 'Meeting Date Pending') {
+            actionRequired += `<p><a href="/meetings/new?form_id=${data.id}" class="btn btn-primary">Set Meeting Date</a></p>`;
+          }
+
           const assessmentDetails = `
             <p style="font-size:2em"><strong>Physical Video:</strong></p>
             <video controls class="img-thumbnail" style="max-width: 300px;">
@@ -433,13 +466,33 @@
           document.getElementById('patientDetails').innerHTML = patientDetails;
           document.getElementById('nokDetails').innerHTML = nokDetails;
           document.getElementById('dischargeDetails').innerHTML = dischargeDetails;
-          document.getElementById('assessmentDetails').innerHTML = assessmentDetails;
+          // document.getElementById('assessmentDetails').innerHTML = assessmentDetails;
           document.getElementById('actionRequired').innerHTML = actionRequired;
           document.getElementById('setMeeting').innerHTML = setMeeting;
+
+          // Initialize Google Map
+          initMap(data.address);
         })
         .catch(error => console.error('Error fetching patient details:', error));
     }
-  </script>
 
+    function initMap(address) {
+      const geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ 'address': address }, function(results, status) {
+        if (status === 'OK') {
+          const map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: results[0].geometry.location
+          });
+          const marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location
+          });
+        } else {
+          console.error('Geocode was not successful for the following reason: ' + status);
+        }
+      });
+    }
+</script>
 </body>
 </html>

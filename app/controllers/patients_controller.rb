@@ -39,33 +39,33 @@ def dashboard
    end
 
     sort_field = params[:sort]
+    sort_direction = params[:direction] || 'asc'
+
     if sort_field.present?
       case sort_field
       when 'name'
-        @submittedforms = @submittedforms.order(:first_name, :last_name)
-        @incompleteforms = @incompleteforms.order(:first_name, :last_name)
+        @submittedforms = @submittedforms.order("first_name #{sort_direction}, last_name #{sort_direction}")
+        @incompleteforms = @incompleteforms.order("first_name #{sort_direction}, last_name #{sort_direction}")
       when 'gender'
-        @submittedforms = @submittedforms.order(:gender)
-        @incompleteforms = @incompleteforms.order(:gender)
-      when 'application_status'
-        @submittedforms = @submittedforms.order(:application_status)
-        @incompleteforms = @incompleteforms.order(:application_status)
+        @submittedforms = @submittedforms.order("gender #{sort_direction}")
+        @incompleteforms = @incompleteforms.order("gender #{sort_direction}")
+      when 'action_required'
+        @submittedforms = @submittedforms.order("application_status #{sort_direction}")
+        @incompleteforms = @incompleteforms.order("application_status #{sort_direction}")
       when 'address'
-        @submittedforms = @submittedforms.order(:address)
-        @incompleteforms = @incompleteforms.order(:address)
+        @submittedforms = @submittedforms.order("address #{sort_direction}")
+        @incompleteforms = @incompleteforms.order("address #{sort_direction}")
       when 'start_date'
-        @submittedforms = @submittedforms.order(:start_date)
-        @incompleteforms = @incompleteforms.order(:start_date)
+        @submittedforms = @submittedforms.order("start_date #{sort_direction}")
+        @incompleteforms = @incompleteforms.order("start_date #{sort_direction}")
       when 'end_date'
-        @submittedforms = @submittedforms.order(:end_date)
-        @incompleteforms = @incompleteforms.order(:end_date)
+        @submittedforms = @submittedforms.order("end_date #{sort_direction}")
+        @incompleteforms = @incompleteforms.order("end_date #{sort_direction}")
       when 'nok_name'
-        @incompleteforms = @incompleteforms.order(:nok_first_name, :nok_last_name)
+        @incompleteforms = @incompleteforms.order("nok_first_name #{sort_direction}, nok_last_name #{sort_direction}")
       end
     end
   end
-
-
 
   # Step 1 of form creation
   def new
@@ -82,22 +82,24 @@ def dashboard
         @user = current_user
     
         sort_field = params[:sort]
+        sort_direction = params[:direction] || 'asc'
+    
         if sort_field.present?
           case sort_field
           when 'name'
-            @forms = @forms.order(:first_name, :last_name)
+            @forms = @forms.order("first_name #{sort_direction}, last_name #{sort_direction}")
           when 'gender'
-            @forms = @forms.order(:gender)
-          when 'status'
-            @forms = @forms.order(:application_status)
+            @forms = @forms.order("gender #{sort_direction}")
+          when 'application_status'
+            @forms = @forms.order("application_status #{sort_direction}")
           when 'address'
-            @forms = @forms.order(:address)
+            @forms = @forms.order("address #{sort_direction}")
           when 'start_date'
-            @forms = @forms.order(:start_date)
+            @forms = @forms.order("start_date #{sort_direction}")
           when 'end_date'
-            @forms = @forms.order(:end_date)
+            @forms = @forms.order("end_date #{sort_direction}")
           when 'nok_name'
-            @forms = @forms.order(:nok_first_name, :nok_last_name)
+            @forms = @forms.order("nok_first_name #{sort_direction}, nok_last_name #{sort_direction}")
           end
         end
     

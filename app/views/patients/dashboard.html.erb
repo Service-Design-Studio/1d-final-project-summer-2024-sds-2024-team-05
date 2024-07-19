@@ -37,13 +37,13 @@
     <table class="table">
       <thead>
         <tr>
-          <th onclick="sortTable('name')">Patient Name</th>
-          <th onclick="sortTable('gender')">Gender</th>
+          <th onclick="sortTable('name')">Patient Name <span id="sort-icon-name"></span></th>
+          <th onclick="sortTable('gender')">Gender <span id="sort-icon-gender"></span></th>
           <th>Media</th>
-          <th onclick="sortTable('application_status')">Action Required</th>
-          <th onclick="sortTable('address')">Address</th>
-          <th onclick="sortTable('start_date')">Start</th>
-          <th onclick="sortTable('end_date')">End</th>
+          <th onclick="sortTable('application_status')">Action Required <span id="sort-icon-application_status"></span></th>
+          <th onclick="sortTable('address')">Address <span id="sort-icon-address"></span></th>
+          <th onclick="sortTable('start_date')">Start <span id="sort-icon-start_date"></span></th>
+          <th onclick="sortTable('end_date')">End <span id="sort-icon-end_date"></span></th>
           <th class="text-center">Summary</th>
           <th class="text-center">Actions</th>
         </tr>
@@ -99,12 +99,12 @@
     <table class="table">
       <thead>
         <tr>
-          <th onclick="sortTable('patient_name')">Patient Name</th>
-          <th onclick="sortTable('nok_name')">NOK Name</th>
-          <th onclick="sortTable('gender')">Gender</th>
-          <th onclick="sortTable('address')">Address</th>
-          <th onclick="sortTable('start_date')">Start Date</th>
-          <th onclick="sortTable('end_date')">End Date</th>
+          <th onclick="sortTable('patient_name')">Patient Name <span id="sort-icon-patient_name"></span></th>
+          <th onclick="sortTable('nok_name')">NOK Name <span id="sort-icon-nok_name"></span></th>
+          <th onclick="sortTable('gender')">Gender <span id="sort-icon-gender"></span></th>
+          <th onclick="sortTable('address')">Address <span id="sort-icon-address"></span></th>
+          <th onclick="sortTable('start_date')">Start Date <span id="sort-icon-start_date"></span></th>
+          <th onclick="sortTable('end_date')">End Date <span id="sort-icon-end_date"></span></th>
           <th class="text-center">Summary</th>
           <th class="text-center">Actions</th>
         </tr>
@@ -144,12 +144,28 @@
         document.getElementById("search-input").value = '';
         document.getElementById("search-form").submit();
       });
+
+      updateSortIcons();
     });
 
     function sortTable(sortField) {
       const url = new URL(window.location.href);
+      const currentDirection = url.searchParams.get('direction');
+      const newDirection = currentDirection === 'asc' ? 'desc' : 'asc';
       url.searchParams.set('sort', sortField);
+      url.searchParams.set('direction', newDirection);
       window.location.href = url.toString();
+    }
+
+    function updateSortIcons() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const sortField = urlParams.get('sort');
+      const direction = urlParams.get('direction');
+
+      if (sortField) {
+        const icon = direction === 'asc' ? '▲' : '▼';
+        document.getElementById(`sort-icon-${sortField}`).textContent = icon;
+      }
     }
   </script>
 </body>

@@ -38,41 +38,32 @@ def dashboard
     format.json { render json: @meetings }
    end
 
-   # Handle sorting for submitted forms based on first name, last name, or address
-   if params[:sort] == "alphabetical"
-    @submittedforms = @submittedforms.order(Arel.sql("LOWER(first_name || ' ' || last_name) ASC"))
-    @incompleteforms = @incompleteforms.order(Arel.sql("LOWER(first_name || ' ' || last_name) ASC"))
-   elsif params[:sort_nok_name] == "alphabetical"
-     @submittedforms = @submittedforms.order(Arel.sql("LOWER(nok_first_name || ' ' || nok_last_name) ASC"))
-     @incompleteforms = @incompleteforms.order(Arel.sql("LOWER(nok_first_name || ' ' || nok_last_name) ASC"))
-   elsif params[:sort_address] == "alphabetical"
-     @submittedforms = @submittedforms.order("LOWER(address) ASC")
-     @incompleteforms = @incompleteforms.order("LOWER(address) ASC")
-   end
-
-   # Handle sorting by dates
-   if params[:sort_date] == "earliest"
-     @submittedforms = @submittedforms.order('start_date ASC')
-     @incompleteforms = @incompleteforms.order('start_date ASC')
-   elsif params[:sort_end_date] == "earliest"
-     @submittedforms = @submittedforms.order('end_date ASC')
-     @incompleteforms = @incompleteforms.order('end_date ASC')
-   end
-
-   # Handle gender-based sorting independently
-   if params[:sort_female]
-     @submittedforms = @submittedforms.order(Arel.sql("CASE WHEN gender = 'Female' THEN 0 ELSE 1 END, first_name ASC, last_name ASC"))
-     @incompleteforms = @incompleteforms.order(Arel.sql("CASE WHEN gender = 'Female' THEN 0 ELSE 1 END, first_name ASC, last_name ASC"))
-   elsif params[:sort_male]
-     @submittedforms = @submittedforms.order(Arel.sql("CASE WHEN gender = 'Male' THEN 0 ELSE 1 END, first_name ASC, last_name ASC"))
-     @incompleteforms = @incompleteforms.order(Arel.sql("CASE WHEN gender = 'Male' THEN 0 ELSE 1 END, first_name ASC, last_name ASC"))
-   end
-
-   if params[:sort_status]
-     @submittedforms = @submittedforms.order(Arel.sql("CASE WHEN status = 'Pending Assessment' THEN 0 ELSE 1 END"))
-     @incompleteforms = @incompleteforms.order(Arel.sql("CASE WHEN status = 'Pending Assessment' THEN 0 ELSE 1 END"))
-   end
- end
+    sort_field = params[:sort]
+    if sort_field.present?
+      case sort_field
+      when 'name'
+        @submittedforms = @submittedforms.order(:first_name, :last_name)
+        @incompleteforms = @incompleteforms.order(:first_name, :last_name)
+      when 'gender'
+        @submittedforms = @submittedforms.order(:gender)
+        @incompleteforms = @incompleteforms.order(:gender)
+      when 'application_status'
+        @submittedforms = @submittedforms.order(:application_status)
+        @incompleteforms = @incompleteforms.order(:application_status)
+      when 'address'
+        @submittedforms = @submittedforms.order(:address)
+        @incompleteforms = @incompleteforms.order(:address)
+      when 'start_date'
+        @submittedforms = @submittedforms.order(:start_date)
+        @incompleteforms = @incompleteforms.order(:start_date)
+      when 'end_date'
+        @submittedforms = @submittedforms.order(:end_date)
+        @incompleteforms = @incompleteforms.order(:end_date)
+      when 'nok_name'
+        @incompleteforms = @incompleteforms.order(:nok_first_name, :nok_last_name)
+      end
+    end
+  end
 
 
 
@@ -83,15 +74,40 @@ def dashboard
 
     @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class, @valid_button_summ_class = ["btn btn-primary circular-button btn-blue"]*6
   end
+
   def search
-    @query = params[:query]
-    @forms = Form.where("first_name LIKE :query OR last_name LIKE :query OR CONCAT(first_name, ' ', last_name) LIKE :query OR 
-                        nok_first_name LIKE :query OR nok_last_name LIKE :query OR CONCAT(nok_first_name, ' ', nok_last_name) LIKE :query", query: "%#{@query}%")
-    @user = current_user
-    @submittedforms = @forms.where(submitted: true)
-    @incompleteforms = @forms.where(submitted: [false, nil])
-    render :dashboard
-  end
+        @query = params[:query]
+        @forms = Form.where("first_name LIKE :query OR last_name LIKE :query OR CONCAT(first_name, ' ', last_name) LIKE :query OR 
+                            nok_first_name LIKE :query OR nok_last_name LIKE :query OR CONCAT(nok_first_name, ' ', nok_last_name) LIKE :query", query: "%#{@query}%")
+        @user = current_user
+    
+        sort_field = params[:sort]
+        if sort_field.present?
+          case sort_field
+          when 'name'
+            @forms = @forms.order(:first_name, :last_name)
+          when 'gender'
+            @forms = @forms.order(:gender)
+          when 'status'
+            @forms = @forms.order(:application_status)
+          when 'address'
+            @forms = @forms.order(:address)
+          when 'start_date'
+            @forms = @forms.order(:start_date)
+          when 'end_date'
+            @forms = @forms.order(:end_date)
+          when 'nok_name'
+            @forms = @forms.order(:nok_first_name, :nok_last_name)
+          end
+        end
+    
+        @submittedforms = @forms.where(submitted: true)
+        @incompleteforms = @forms.where(submitted: [false, nil])
+        @no_results = @forms.empty?
+    
+        render :dashboard
+      end
+  
 
   # Save step 1 form data and move to step 2
   def create

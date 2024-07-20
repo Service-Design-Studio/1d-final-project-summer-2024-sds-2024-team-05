@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   get 'patients/dashboard', to: 'patients#dashboard', as: :patients_dashboard
   get 'patients/index'
   get '/search', to: "patients#search"
-  get '/client_profile/:id', to: 'patients#client_profile', as: 'client_profile'
+
 
 
   # get 'patients/new'
@@ -72,6 +72,8 @@ Rails.application.routes.draw do
       patch 'edit_mental_assessment', to: 'patients#update_mental_assessment'
       get 'edit_environment_assessment', to: 'patients#environment_assessment'
       patch 'edit_environment_assessment', to: 'patients#update_environment_assessment'
+      get 'client_profile', to: 'patients#client_profile'
+
       patch 'update_submission_status', to: 'patients#update_submission_status'
 
 #       patch :update_status

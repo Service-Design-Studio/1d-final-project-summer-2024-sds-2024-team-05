@@ -106,7 +106,11 @@ class Form < ApplicationRecord
     end
 
     def application_status
-        if physical_assessment.present? && environment_assessment.present?
+        if !meeting.nil? && meeting.past_date
+            "Upload Service Agreement Form"
+        elsif !meeting.nil?
+            "Meeting on #{meeting.readable_start}"
+        elsif physical_assessment.present? && environment_assessment.present?
             'Meeting Date Pending'
         elsif submitted
             'Pending Assessment'
@@ -126,5 +130,5 @@ class Form < ApplicationRecord
     has_one_attached :environment_video
     has_one_attached :service_agreement_form
     belongs_to :user
-    has_one :meeting, dependent: :destroy
+    has_one :meeting
 end

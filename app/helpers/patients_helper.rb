@@ -23,16 +23,12 @@ module PatientsHelper
           form.application_status == 'Pending Assessment'
         end
       
-        def meeting_date_pending_and_no_start_time?(form, meeting)
-          form.application_status == 'Meeting Date Pending' && (meeting.nil? || meeting.start_time.blank?)
+        def meeting_date_pending?(form)
+          form.application_status == 'Meeting Date Pending'
         end
       
-        def meeting_tab_class(form, meeting)
-          if meeting_date_pending_and_no_start_time?(form, meeting)
-            'text-orange'
-          else
-            ''
-          end
+        def meeting_tab_class(form)
+          meeting_date_pending?(form) ? 'text-orange' : ''
         end
       
         def assessment_tab_class(form)

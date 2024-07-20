@@ -184,6 +184,8 @@
       <% if @form.application_status == 'Meeting Date Pending' && current_user.admin?%>
         <%= link_to 'Update Meeting Date', patients_dashboard_path, class: 'btn btn-lg rounded-pill btn-green me-2', style: 'float: right; margin-right: 5px;' %>
       <% end %>
+      <%= link_to "Pending Assessment", client_profile_form_path(status: 'Pending Assessment') %>
+      <%= link_to "Meeting Date Pending", client_profile_form_path(status: 'Meeting Date Pending') %>
       <% if current_user.admin? %>
         <%= link_to 'Back to List', patients_dashboard_path, class: 'btn btn-lg btn-outline-black rounded-pill', style: 'float: left; margin-left: 5px;' %>
       <% else %>

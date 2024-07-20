@@ -16,7 +16,7 @@ class PatientsController < ApplicationController
 
   def client_profile
     @form = Form.find(params[:id])
-    @meetings = Meeting.where(form_id: @form.id)
+    @meetings = Meeting.all
   end
   
 
@@ -486,7 +486,7 @@ def dashboard
     case params[:commit]
     when 'Save'
       if @form.update(physical_assessment_params)
-        redirect_to edit_physical_assessment_form_path, notice: 'Physical Assessment Updated'
+        redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Physical Assessment Updated'
       end
     when 'Back'
       redirect_to @form, notice: 'Physical Assessment Updated'
@@ -506,7 +506,8 @@ def dashboard
     case params[:commit]
     when 'Save'
       if @form.update(mental_assessment_params)
-        redirect_to edit_mental_assessment_form_path, notice: 'Mental Assessment Updated'
+        redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Mental Assessment Updated'
+
       end
     when 'Back'
       redirect_to @form, notice: 'Mental Assessment Updated'
@@ -515,7 +516,7 @@ def dashboard
     end
   end
 
-  def environment_assessment
+  def _environment_assessment
     @form = Form.find(params[:id])
     @form_origin_text = determine_form_origin_text
   end
@@ -526,7 +527,7 @@ def dashboard
     case params[:commit]
     when 'Save'
       if @form.update(environment_assessment_params)
-        redirect_to edit_environment_assessment_form_path, notice: 'Environmental Assessment Updated'
+        redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Environmental Assessment Updated'
       end
     when 'Back'
       redirect_to @form, notice: 'Environmental Assessment Updated'

@@ -7,19 +7,12 @@
     <%= date.day %>
   </div>
   <% meetings.each do |meeting| %>
-    <div>
-      <%= link_to "#{meeting.title} #{meeting.condensed_time}", meeting_path(meeting), class: 'btn btn-green rounded-pill'%>
-    </div>
+    <%= link_to "#{meeting.title} #{meeting.condensed_time}", meeting_path(meeting), class: 'btn btn-green rounded-pill'%>
   <% end %>
 <% end %>
 
 <div id="meetings">
   <% @meetings.each do |meeting| %>
     <%= render meeting %>
-    <p>
-      <%= link_to "Show this meeting", meeting %>
-    </p>
   <% end %>
 </div>
-
-<%= link_to "New meeting", new_meeting_path %>

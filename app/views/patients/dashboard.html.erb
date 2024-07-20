@@ -53,7 +53,7 @@
         <% @submittedforms&.each do |form| %>
           <tr>
             <td>
-              <a href="<%= client_profile_path(form.id) %>" style="text-decoration: none; color: black">
+              <a href="<%= client_profile_form_path(form) %>" style="text-decoration: none; color: black">
                 <%= "#{form.first_name} #{form.last_name}" %>
               </a>
               <% if !form.last_edit.nil? %>
@@ -70,8 +70,12 @@
             </td>
             <td><%= form.gender %></td>
             <td><%= "#{form.pg3_valid.inspect} #{form.pg4_valid.inspect} #{form.pg5_valid.inspect}" %></td>
-            <td style="color: <%= form.status_colour %>">
-              <%= form.application_status %>
+            <td>
+              <a href="<%= client_profile_form_path(form, status: form.application_status) %>" style="text-decoration: none">
+                <p style="color: <%= form.status_colour %>">
+                  <%= form.application_status %>
+                </p>
+              </a>
             </td>
             <td><%= form.address %></td>
             <td><%= form.start_date %></td>

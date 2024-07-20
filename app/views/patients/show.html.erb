@@ -49,14 +49,14 @@
         <h5 class="card-title">Personal Information</h5>
           <p><%= @form.user.email %></p>
 
-          <p class="card-text"><strong>STATUS</strong> <%= @form.application_status %></p>
+          <p class="card-text"><strong>STATUS</strong> <%= application_status(@form) %></p>
           <p class="card-text"><strong>STATUS</strong> <%= @form.pg1_valid.inspect %></p>
           <p class="card-text"><strong>STATUS</strong> <%= @form.pg2_valid.inspect %></p>
           <p class="card-text"><strong>STATUS</strong> <%= @form.pg3_valid.inspect %></p>
           <p class="card-text"><strong>STATUS</strong> <%= @form.pg4_valid.inspect %></p>
           <p class="card-text"><strong>STATUS</strong> <%= @form.pg5_valid.inspect %></p>
           <p class="card-text"><strong>STATUS</strong> <%= @form.submittable %></p>
-          <p class="card-text"><strong>STATUS!!</strong> <%= @form.application_status %></p>
+          <p class="card-text"><strong>STATUS!!</strong> <%= application_status(@form) %></p>
 
           <p class="card-text"><strong>Last Edit</strong> <%= @form.last_edit %></p>
           <p class="card-text"><strong>Last Viewed</strong> <%= @form.last_viewed %></p>
@@ -181,7 +181,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <% if @form.application_status == 'Meeting Date Pending' && current_user.admin?%>
+      <% if application_status(@form) == 'Meeting Date Pending' && current_user.admin?%>
         <%= link_to 'Update Meeting Date', patients_dashboard_path, class: 'btn btn-lg rounded-pill btn-green me-2', style: 'float: right; margin-right: 5px;' %>
       <% end %>
       <% if current_user.admin? %>

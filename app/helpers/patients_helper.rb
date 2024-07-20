@@ -10,4 +10,5 @@ module PatientsHelper
     def checked_languages(area)
         @form.languages.nil? ? false : @form.languages.match(area)
     end
+
 end

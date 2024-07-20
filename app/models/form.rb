@@ -23,22 +23,7 @@ class Form < ApplicationRecord
           return false
         end
       end
-
-    def status_colour
-        if !self.application_status.nil?
-            case application_status
-            when 'Pending Assessment'
-                '#721c24'
-            when 'Meeting Date Pending'
-                '#ff9800'
-            when 'Pending Service Agreement Form'
-                '#721c24'
-            else
-                '#155724'
-            end
-        end
-    end
-
+      
     def update_last_edit
         unless changed_attributes.except('last_edit', 'last_viewed').empty?
             puts "Changed attributes: #{changed_attributes.keys}"
@@ -101,15 +86,7 @@ class Form < ApplicationRecord
         pg1_valid && pg2_valid && pg3_valid && pg4_valid && pg5_valid 
     end
 
-    def application_status
-        if physical_assessment.present? && environment_assessment.present?
-            'Meeting Date Pending'
-        elsif submitted
-            'Pending Assessment'
-        else
-            'NA'
-        end
-    end
+
     # before_save do
     #     self.languages.gsub!(/[\[\]\"]/,"") if attribute_present?("languages")
     #     self.conditions.gsub!(/[\[\]\"]/,"") if attribute_present?("conditions")

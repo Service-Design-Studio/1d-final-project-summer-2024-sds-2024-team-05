@@ -98,8 +98,8 @@
             </td>
             <td><%= form.gender %></td>
             <td><%= "#{form.pg3_valid.inspect} #{form.pg4_valid.inspect} #{form.pg5_valid.inspect}" %></td>
-            <td style="color: <%= form.status_colour %>">
-              <%= form.application_status %>
+            <td style="<%= status_colour(form) %>">
+              <%= application_status(form) %>
             </td>
             <td><%= form.address %></td>
             <td><%= form.start_date %></td>

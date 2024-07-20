@@ -1,4 +1,5 @@
 class AdminsController < ApplicationController
+  include AdminsHelper
   before_action :authenticate_user!
 
   def index

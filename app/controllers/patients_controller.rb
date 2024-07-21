@@ -1,5 +1,5 @@
 class PatientsController < ApplicationController
-
+   include PatientsHelper
 
    before_action :set_form, only: [:show, :edit_1, :update_1, :edit_2, :update_2, :edit_3, :update_3, :edit_4, :update_4, :edit_5, :update_5]
    before_action :check_valid_params, only: [:show]
@@ -26,7 +26,6 @@ class PatientsController < ApplicationController
     @form = current_user.forms.build
     session[:form_origin] = 'new'
 
-    @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class, @valid_button_summ_class = ["btn btn-primary circular-button btn-blue"]*6
   end
 
   # Save step 1 form data and move to step 2
@@ -427,25 +426,7 @@ class PatientsController < ApplicationController
   def set_form
     @form = if params[:id].present?
       form = Form.find(params[:id])
-      @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class, @valid_button_summ_class =  ["btn btn-primary circular-button btn-blue"]*6   
-      if form.pg1_valid == false
-        @valid_button_1_class = "btn btn-primary circular-button btn-outline-red"
-      end
-      if form.pg2_valid == false
-        @valid_button_2_class = "btn btn-primary circular-button btn-outline-red"
-      end
-      if form.pg3_valid == false
-        @valid_button_3_class = "btn btn-primary circular-button btn-outline-red"
-      end
-      if form.pg4_valid == false
-        @valid_button_4_class = "btn btn-primary circular-button btn-outline-red"
-      end
-      if form.pg5_valid == false
-        @valid_button_5_class = "btn btn-primary circular-button btn-outline-red"
-      end
-      if form.submittable == false
-        @valid_button_summ_class = "btn btn-primary circular-button btn-outline-red"
-      end
+      @valid_button_classes = button_classes(form) #method found in helper to set button colour 
       form
     else
       current_user.forms.build

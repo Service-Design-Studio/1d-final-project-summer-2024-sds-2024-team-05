@@ -5,8 +5,8 @@ class AdminsController < ApplicationController
 
   def index
    @user = current_user
-   @newforms = Form.where(last_viewed: nil)
-   @changedforms = Form.where.not(last_viewed: nil).where('last_edit > last_viewed')
+   @newforms = Form.where(submitted: true).where(last_viewed: nil)
+   @changedforms = Form.where(submitted: true).where.not(last_viewed: nil).where('last_edit > last_viewed')
    # Get IDs of new and changed forms
    excluded_forms_ids = @newforms.or(@changedforms).pluck(:id)
    @submittedforms = Form.where(submitted: true).where.not(id: excluded_forms_ids)

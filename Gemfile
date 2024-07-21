@@ -83,6 +83,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem 'rspec-rails'
+  gem 'rails-controller-testing'
   gem 'cucumber-rails'
   gem 'database_cleaner-active_record'
   gem 'simplecov'

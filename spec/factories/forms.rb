@@ -27,11 +27,11 @@ FactoryBot.define do
       physical_assessment { "Good health" }
       environment_assessment { "Good environment" }
       meet_date { DateTime.now }
-      nok_address { "25 Upper Changi Road" }
-      nok_contact_no { "123-456-7890" }
-      nok_first_name { "Jane" }
-      nok_last_name { "Doe" }
-      nok_email { "jane.doe@example.com" }
+      # nok_address { "25 Upper Changi Road" }
+      # nok_contact_no { "123-456-7890" }
+      # nok_first_name { "Jane" }
+      # nok_last_name { "Doe" }
+      # nok_email { "jane.doe@example.com" }
       submitted { false }
       last_edit { DateTime.now }
       last_viewed { DateTime.now }

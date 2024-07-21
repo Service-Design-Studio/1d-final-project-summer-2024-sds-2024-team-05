@@ -337,12 +337,12 @@ class PatientsController < ApplicationController
     #     end
     #   end
     when 'Next' #hubert
-        if params[:form].present?
-          @form.environment_video.attach(params[:form][:environment_video]) if params[:form][:environment_video].present?
-          if form_params_step5.present?
-            @form.update(form_params_step5)
-          end
+      if params[:form].present?
+        @form.environment_video.attach(params[:form][:environment_video]) if params[:form][:environment_video].present?
+        if form_params_step5.present?
+          @form.update(form_params_step5)
         end
+      end
       redirect_to @form
     else
       # Handle unexpected values for params[:commit]
@@ -510,8 +510,8 @@ class PatientsController < ApplicationController
     permitted_params = params.require(:form).permit(:environment_video)
   end
 
-  def page_valid?(form_parameters, required_values)
-    required_values.all? { |key| form_parameters.key?(key) && form_parameters[key].present? }
-  end
+  # def page_valid?(form_parameters, required_values)
+  #   required_values.all? { |key| form_parameters.key?(key) && form_parameters[key].present? }
+  # end
 
 end

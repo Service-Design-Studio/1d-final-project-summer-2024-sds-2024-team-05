@@ -11,9 +11,9 @@ class Form < ApplicationRecord
 
     before_save :update_last_edit
 
-    def full_name
-        "#{self.first_name} #{self.last_name}"
-    end
+    # def full_name
+    #     "#{self.first_name} #{self.last_name}"
+    # end
 
     def transfer_to_new_user(email_attribute)
         new_user = User.find_by(email: self[email_attribute])

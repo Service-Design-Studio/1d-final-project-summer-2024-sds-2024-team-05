@@ -5,8 +5,13 @@ class AdminsController < ApplicationController
 
   def index
    @user = current_user
-   @submittedforms = Form.where(submitted: true)
+   @newforms = Form.where(last_viewed: nil)
+   @changedforms = Form.where.not(last_viewed: nil).where('last_edit > last_viewed')
+   # Get IDs of new and changed forms
+   excluded_forms_ids = @newforms.or(@changedforms).pluck(:id)
+   @submittedforms = Form.where(submitted: true).where.not(id: excluded_forms_ids)
    @incompleteforms = Form.where(submitted: [false, nil])
+   @all_submitted_forms = @newforms + @changedforms + @submittedforms
 
    respond_to do |format|
     format.html { render partial: 'meetings/calendar', locals: { meetings: @meetings } if request.xhr? }
@@ -17,24 +22,25 @@ class AdminsController < ApplicationController
     sort_direction = params[:direction] || 'asc'
 
     if sort_field.present?
+      @all_submitted_forms = Form.where(submitted: true)
       case sort_field
       when 'name'
-        @submittedforms = @submittedforms.order("first_name #{sort_direction}, last_name #{sort_direction}")
+        @all_submitted_forms = @all_submitted_forms.order("first_name #{sort_direction}, last_name #{sort_direction}")
         @incompleteforms = @incompleteforms.order("first_name #{sort_direction}, last_name #{sort_direction}")
       when 'gender'
-        @submittedforms = @submittedforms.order("gender #{sort_direction}")
+        @all_submitted_forms = @all_submitted_forms.order("gender #{sort_direction}")
         @incompleteforms = @incompleteforms.order("gender #{sort_direction}")
       when 'action_required'
-        @submittedforms = @submittedforms.order("application_status #{sort_direction}")
+        @all_submitted_forms = @all_submitted_forms.order("application_status #{sort_direction}")
         @incompleteforms = @incompleteforms.order("application_status #{sort_direction}")
       when 'address'
-        @submittedforms = @submittedforms.order("address #{sort_direction}")
+        @all_submitted_forms = @all_submitted_forms.order("address #{sort_direction}")
         @incompleteforms = @incompleteforms.order("address #{sort_direction}")
       when 'start_date'
-        @submittedforms = @submittedforms.order("start_date #{sort_direction}")
+        @all_submitted_forms = @all_submitted_forms.order("start_date #{sort_direction}")
         @incompleteforms = @incompleteforms.order("start_date #{sort_direction}")
       when 'end_date'
-        @submittedforms = @submittedforms.order("end_date #{sort_direction}")
+        @all_submitted_forms = @all_submitted_forms.order("end_date #{sort_direction}")
         @incompleteforms = @incompleteforms.order("end_date #{sort_direction}")
       when 'nok_name'
         @incompleteforms = @incompleteforms.order("nok_first_name #{sort_direction}, nok_last_name #{sort_direction}")

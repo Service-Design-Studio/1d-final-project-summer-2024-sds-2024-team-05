@@ -50,7 +50,7 @@
       </thead>
 
       <tbody>
-        <% @submittedforms&.each do |form| %>
+        <% @all_submitted_forms&.each do |form| %>
           <tr>
             <td>
               <a href="<%= client_profile_form_path(form) %>" style="text-decoration: none; color: black">

@@ -1,5 +1,11 @@
 class Form < ApplicationRecord
     attr_accessor :others_text, :autofill_address
+    has_one_attached :discharge_summary
+    has_one_attached :physical_video
+    has_one_attached :mental_video
+    has_one_attached :environment_video
+    has_one_attached :service_agreement_form
+    belongs_to :user
 
 
     before_save :update_last_edit
@@ -26,10 +32,10 @@ class Form < ApplicationRecord
       
     def update_last_edit
         unless changed_attributes.except('last_edit', 'last_viewed').empty?
-            puts "Changed attributes: #{changed_attributes.keys}"
+            # puts "Changed attributes: #{changed_attributes.keys}"
             self.last_edit = DateTime.now
         else
-            puts "No attributes (excluding 'last_edit' and 'last_viewed') have been changed."
+            # puts "No attributes (excluding 'last_edit' and 'last_viewed') have been changed."
         end
     end
 
@@ -92,11 +98,4 @@ class Form < ApplicationRecord
     #     self.conditions.gsub!(/[\[\]\"]/,"") if attribute_present?("conditions")
     #     self.services.gsub!(/[\[\]\"]/,"") if attribute_present?("services")
     # end
-
-    has_one_attached :discharge_summary
-    has_one_attached :physical_video
-    has_one_attached :mental_video
-    has_one_attached :environment_video
-    has_one_attached :service_agreement_form
-    belongs_to :user
 end

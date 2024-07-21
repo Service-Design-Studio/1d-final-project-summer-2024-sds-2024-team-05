@@ -37,3 +37,6 @@
 # Ignore sensitive information
 /dbpassword
 /config/secret.yml
+
+/coverage/*
+coverage/

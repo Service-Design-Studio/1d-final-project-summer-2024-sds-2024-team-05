@@ -4,10 +4,21 @@ class PatientsController < ApplicationController
    before_action :set_form, only: [:show, :edit_1, :update_1, :edit_2, :update_2, :edit_3, :update_3, :edit_4, :update_4, :edit_5, :update_5]
    before_action :check_valid_params, only: [:show]
    before_action :authenticate_user!
+   before_action :set_all_meetings
 
-  def show
+   def show
     @form = Form.includes(:user).find(params[:id])
+    respond_to do |format|
+      format.html
+      format.json { render json: @form.to_json(include: :user, methods: [:application_status, :status_colour]) }
+    end
   end
+
+  def client_profile
+    @form = Form.find(params[:id])
+    @meetings = Meeting.all
+  end
+  
 
   def index
     @forms = current_user.forms.select(:id, :first_name, :last_name, :start_date, :submitted)
@@ -23,12 +34,12 @@ class PatientsController < ApplicationController
 
     @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class, @valid_button_summ_class = ["btn btn-primary circular-button btn-blue"]*6
   end
-  
+
   # Save step 1 form data and move to step 2
   def create
     case params[:commit]
     when 'Save'
-      if params[:form].present? && params[:form].values.any?(&:present?)
+      if params[:form].present? && params[:form].except(:autofill_address).values.any?(&:present?)
         @form = current_user.forms.build(form_params_step1)
         if @form.save
           session[:form_origin] = 'new'
@@ -43,7 +54,7 @@ class PatientsController < ApplicationController
         end
       end
     when 'Next'
-      if params[:form].present? && params[:form].values.any?(&:present?)
+      if params[:form].present? && params[:form].except(:autofill_address).values.any?(&:present?)
         @form = current_user.forms.build(form_params_step1)
         if @form.save
           if current_user.admin?
@@ -390,7 +401,7 @@ class PatientsController < ApplicationController
     end
   end
 
-  def physical_assessment
+  def _physical_assessment
     @form = Form.find(params[:id])
     @form_origin_text = determine_form_origin_text
   end
@@ -401,7 +412,7 @@ class PatientsController < ApplicationController
     case params[:commit]
     when 'Save'
       if @form.update(physical_assessment_params)
-        redirect_to edit_physical_assessment_form_path, notice: 'Physical Assessment Updated'
+        redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Physical Assessment Updated'
       end
     when 'Back'
       redirect_to @form, notice: 'Physical Assessment Updated'
@@ -410,7 +421,7 @@ class PatientsController < ApplicationController
     end
   end
 
-  def mental_assessment
+  def _mental_assessment
     @form = Form.find(params[:id])
     @form_origin_text = determine_form_origin_text
   end
@@ -421,7 +432,8 @@ class PatientsController < ApplicationController
     case params[:commit]
     when 'Save'
       if @form.update(mental_assessment_params)
-        redirect_to edit_mental_assessment_form_path, notice: 'Mental Assessment Updated'
+        redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Mental Assessment Updated'
+
       end
     when 'Back'
       redirect_to @form, notice: 'Mental Assessment Updated'
@@ -430,7 +442,7 @@ class PatientsController < ApplicationController
     end
   end
 
-  def environment_assessment
+  def _environment_assessment
     @form = Form.find(params[:id])
     @form_origin_text = determine_form_origin_text
   end
@@ -441,7 +453,7 @@ class PatientsController < ApplicationController
     case params[:commit]
     when 'Save'
       if @form.update(environment_assessment_params)
-        redirect_to edit_environment_assessment_form_path, notice: 'Environmental Assessment Updated'
+        redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Environmental Assessment Updated'
       end
     when 'Back'
       redirect_to @form, notice: 'Environmental Assessment Updated'
@@ -523,7 +535,16 @@ class PatientsController < ApplicationController
     else
       permitted_params = params.require(:form).permit(:autofill_address, :first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :languages_other, languages:[])
     end
-    if permitted_params[:autofill_address]
+
+    if !current_user.admin?
+      permitted_params[:nok_address] = current_user.user_address
+      permitted_params[:nok_contact_no] = current_user.user_contact_number
+      permitted_params[:nok_email] = current_user.email
+      permitted_params[:nok_first_name] = current_user.user_first_name
+      permitted_params[:nok_last_name] = current_user.user_last_name
+    end
+
+    if permitted_params[:autofill_address] == "1"
       if current_user.admin?
         permitted_params[:address] = permitted_params[:nok_address]
       else
@@ -538,14 +559,6 @@ class PatientsController < ApplicationController
 
     if params[:form][:languages].present?
       permitted_params[:languages] = params[:form][:languages].to_s.gsub!(/[\[\]\"]/,"")
-    end
-
-    if !current_user.admin?
-      permitted_params[:nok_address] = current_user.user_address
-      permitted_params[:nok_contact_no] = current_user.user_contact_number
-      permitted_params[:nok_email] = current_user.email
-      permitted_params[:nok_first_name] = current_user.user_first_name
-      permitted_params[:nok_last_name] = current_user.user_last_name
     end
 
     permitted_params
@@ -609,5 +622,12 @@ class PatientsController < ApplicationController
 
   def page_valid?(form_parameters, required_values)
     required_values.all? { |key| form_parameters.key?(key) && form_parameters[key].present? }
+  end
+  
+  def set_all_meetings
+    @meetings = Meeting.where(
+      start_time: Time.now.beginning_of_month.beginning_of_week..Time.now.end_of_month.end_of_week
+    )
+    @meeting = Meeting.new
   end
 end

@@ -1,6 +1,7 @@
 # # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
 Rails.application.routes.draw do
+  resources :meetings
   devise_for :users
 
   authenticated :user, lambda { |u| !u.admin? } do
@@ -38,6 +39,8 @@ Rails.application.routes.draw do
       patch 'edit_mental_assessment', to: 'patients#update_mental_assessment'
       get 'edit_environment_assessment', to: 'patients#environment_assessment'
       patch 'edit_environment_assessment', to: 'patients#update_environment_assessment'
+      get 'client_profile', to: 'patients#client_profile'
+
       patch 'update_submission_status', to: 'patients#update_submission_status'
     end
 

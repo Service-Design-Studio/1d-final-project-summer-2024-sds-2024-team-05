@@ -6,9 +6,14 @@ class Form < ApplicationRecord
     has_one_attached :environment_video
     has_one_attached :service_agreement_form
     belongs_to :user
+    has_one :meeting
 
 
     before_save :update_last_edit
+
+    def full_name
+        "#{self.first_name} #{self.last_name}"
+    end
 
     def transfer_to_new_user(email_attribute)
         new_user = User.find_by(email: self[email_attribute])
@@ -29,7 +34,7 @@ class Form < ApplicationRecord
           return false
         end
       end
-      
+
     def update_last_edit
         unless changed_attributes.except('last_edit', 'last_viewed').empty?
             # puts "Changed attributes: #{changed_attributes.keys}"
@@ -69,7 +74,7 @@ class Form < ApplicationRecord
     end
 
     def pg2_valid
-        page2_required.all? { |key| self.send(key).present? }
+        page2_required.all? { |key| !self.send(key).to_s.empty?}
     end
 
     def page3_required
@@ -91,7 +96,6 @@ class Form < ApplicationRecord
     def submittable
         pg1_valid && pg2_valid && pg3_valid && pg4_valid && pg5_valid 
     end
-
 
     # before_save do
     #     self.languages.gsub!(/[\[\]\"]/,"") if attribute_present?("languages")

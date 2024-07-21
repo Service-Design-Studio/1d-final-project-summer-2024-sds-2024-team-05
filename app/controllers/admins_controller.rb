@@ -1,6 +1,7 @@
 class AdminsController < ApplicationController
   include AdminsHelper
   before_action :authenticate_user!
+  before_action :set_all_meetings
 
   def index
     @user = current_user
@@ -69,7 +70,104 @@ class AdminsController < ApplicationController
     @incompleteforms = @forms.where(submitted: [false, nil])
     @no_results = @forms.empty?
 
-    render :dashboard
+    render :index
+  end
+
+  def client_profile
+    @form = Form.find(params[:id])
+    @meetings = Meeting.all
+  end
+
+  def _physical_assessment
+    @form = Form.find(params[:id])
+    @form_origin_text = determine_form_origin_text
+  end
+
+  def update_physical_assessment
+    @form = Form.find(params[:id])
+
+    case params[:commit]
+    when 'Save'
+      if @form.update(physical_assessment_params)
+        redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Physical Assessment Updated'
+      end
+    when 'Back'
+      redirect_to @form, notice: 'Physical Assessment Updated'
+    else
+      redirect_to physical_assessment_path, alert: 'Invalid action.'
+    end
+  end
+
+  def _mental_assessment
+    @form = Form.find(params[:id])
+    @form_origin_text = determine_form_origin_text
+  end
+
+  def update_mental_assessment
+    @form = Form.find(params[:id])
+
+    case params[:commit]
+    when 'Save'
+      if @form.update(mental_assessment_params)
+        redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Mental Assessment Updated'
+
+      end
+    when 'Back'
+      redirect_to @form, notice: 'Mental Assessment Updated'
+    else
+      redirect_to mental_assessment_path, alert: 'Invalid action.'
+    end
+  end
+
+  def _environment_assessment
+    @form = Form.find(params[:id])
+    @form_origin_text = determine_form_origin_text
+  end
+
+  def update_environment_assessment
+    @form = Form.find(params[:id])
+
+    case params[:commit]
+    when 'Save'
+      if @form.update(environment_assessment_params)
+        redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Environmental Assessment Updated'
+      end
+    when 'Back'
+      redirect_to @form, notice: 'Environmental Assessment Updated'
+    else
+      redirect_to environment_assessment_path, alert: 'Invalid action.'
+    end
+  end
+
+  def physical_assessment_params
+    permitted_params = params.require(:form).permit(:physical_assessment)
+    if params[:form][:physical_assessment] == "Detailed Assessment Needed"
+      permitted_params[:physical_assessment] = params[:form][:others_text]
+    end
+    permitted_params
+  end
+
+  def mental_assessment_params
+    permitted_params = params.require(:form).permit(:mental_assessment)
+    if params[:form][:mental_assessment] == "Detailed Assessment Needed"
+      permitted_params[:mental_assessment] = params[:form][:others_text]
+    end
+    permitted_params
+  end
+
+  def environment_assessment_params
+    permitted_params = params.require(:form).permit(:environment_assessment)
+    if params[:form][:environment_assessment] == "Detailed Assessment Needed"
+      permitted_params[:environment_assessment] = params[:form][:others_text]
+    end
+    permitted_params
+  end
+
+  def set_all_meetings
+    @meetings = Meeting.where(
+      start_time: Time.now.beginning_of_month.beginning_of_week..Time.now.end_of_month.end_of_week
+    )
+    @meeting = Meeting.new
   end
 
 end

@@ -4,7 +4,6 @@ class PatientsController < ApplicationController
    before_action :set_form, only: [:show, :edit_1, :update_1, :edit_2, :update_2, :edit_3, :update_3, :edit_4, :update_4, :edit_5, :update_5]
    before_action :check_valid_params, only: [:show]
    before_action :authenticate_user!
-   before_action :set_all_meetings
 
    def show
     @form = Form.includes(:user).find(params[:id])
@@ -12,11 +11,6 @@ class PatientsController < ApplicationController
       format.html
       format.json { render json: @form.to_json(include: :user, methods: [:application_status, :status_colour]) }
     end
-  end
-
-  def client_profile
-    @form = Form.find(params[:id])
-    @meetings = Meeting.all
   end
   
 
@@ -401,67 +395,6 @@ class PatientsController < ApplicationController
     end
   end
 
-  def _physical_assessment
-    @form = Form.find(params[:id])
-    @form_origin_text = determine_form_origin_text
-  end
-
-  def update_physical_assessment
-    @form = Form.find(params[:id])
-
-    case params[:commit]
-    when 'Save'
-      if @form.update(physical_assessment_params)
-        redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Physical Assessment Updated'
-      end
-    when 'Back'
-      redirect_to @form, notice: 'Physical Assessment Updated'
-    else
-      redirect_to physical_assessment_path, alert: 'Invalid action.'
-    end
-  end
-
-  def _mental_assessment
-    @form = Form.find(params[:id])
-    @form_origin_text = determine_form_origin_text
-  end
-
-  def update_mental_assessment
-    @form = Form.find(params[:id])
-
-    case params[:commit]
-    when 'Save'
-      if @form.update(mental_assessment_params)
-        redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Mental Assessment Updated'
-
-      end
-    when 'Back'
-      redirect_to @form, notice: 'Mental Assessment Updated'
-    else
-      redirect_to mental_assessment_path, alert: 'Invalid action.'
-    end
-  end
-
-  def _environment_assessment
-    @form = Form.find(params[:id])
-    @form_origin_text = determine_form_origin_text
-  end
-
-  def update_environment_assessment
-    @form = Form.find(params[:id])
-
-    case params[:commit]
-    when 'Save'
-      if @form.update(environment_assessment_params)
-        redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Environmental Assessment Updated'
-      end
-    when 'Back'
-      redirect_to @form, notice: 'Environmental Assessment Updated'
-    else
-      redirect_to environment_assessment_path, alert: 'Invalid action.'
-    end
-  end
-
   def show_error
     render 'show_error'
   end
@@ -596,38 +529,8 @@ class PatientsController < ApplicationController
     permitted_params = params.require(:form).permit(:environment_video)
   end
 
-  def physical_assessment_params
-    permitted_params = params.require(:form).permit(:physical_assessment)
-    if params[:form][:physical_assessment] == "Detailed Assessment Needed"
-      permitted_params[:physical_assessment] = params[:form][:others_text]
-    end
-    permitted_params
-  end
-
-  def mental_assessment_params
-    permitted_params = params.require(:form).permit(:mental_assessment)
-    if params[:form][:mental_assessment] == "Detailed Assessment Needed"
-      permitted_params[:mental_assessment] = params[:form][:others_text]
-    end
-    permitted_params
-  end
-
-  def environment_assessment_params
-    permitted_params = params.require(:form).permit(:environment_assessment)
-    if params[:form][:environment_assessment] == "Detailed Assessment Needed"
-      permitted_params[:environment_assessment] = params[:form][:others_text]
-    end
-    permitted_params
-  end
-
   def page_valid?(form_parameters, required_values)
     required_values.all? { |key| form_parameters.key?(key) && form_parameters[key].present? }
   end
-  
-  def set_all_meetings
-    @meetings = Meeting.where(
-      start_time: Time.now.beginning_of_month.beginning_of_week..Time.now.end_of_month.end_of_week
-    )
-    @meeting = Meeting.new
-  end
+
 end

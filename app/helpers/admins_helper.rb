@@ -22,6 +22,18 @@ module AdminsHelper
     else
       'NA'
     end
+
+    # if !form.meeting.nil? && form.meeting.past_date
+    #     "Upload Service Agreement Form"
+    # elsif !form.meeting.nil?
+    #     "Meeting on #{meeting.readable_start}"
+    # elsif physical_assessment.present? && environment_assessment.present?
+    #     'Meeting Date Pending'
+    # elsif submitted
+    #     'Pending Assessment'
+    # else
+    #     'NA'
+    # end
   end
 
   def pending_assessment?(form)

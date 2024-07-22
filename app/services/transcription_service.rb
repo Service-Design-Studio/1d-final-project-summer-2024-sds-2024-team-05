@@ -6,7 +6,7 @@ class TranscriptionService
 
     uri = URI.parse(GOOGLE_SPEECH_API_URL)
     audio_content = File.binread(file_path)
-    base64_audio = Base64.urlsafe_encode64(audio_content)
+    base64_audio = Base64.strict_encode64(audio_content)
 
     request_body = {
       config: {
@@ -17,10 +17,7 @@ class TranscriptionService
           enableSpeakerDiarization: true,
           minSpeakerCount: 2,
           maxSpeakerCount: 2
-        },
-        use_enhanced: true,
-        model:"medical",
-        enable_automatic_punctuation: true,
+        }
       },
       audio: {
         content: base64_audio
@@ -61,7 +58,7 @@ class TranscriptionService
 
         if current_speaker != speaker_tag
           # Finish the current sentence if changing speaker
-          formatted_transcript += "#{current_sentence.strip}\n" unless current_sentence.strip.empty?
+          formatted_transcript += "#{current_sentence.strip}<br>" unless current_sentence.strip.empty?
           current_sentence = "#{role}: #{word}"
           current_speaker = speaker_tag
         else
@@ -70,14 +67,14 @@ class TranscriptionService
 
         # End the sentence if punctuation is encountered
         if word.match?(/[.!?]/)
-          formatted_transcript += "#{current_sentence.strip}\n"
+          formatted_transcript += "#{current_sentence.strip}<br>"
           current_sentence = ""
           current_speaker = nil
         end
       end
 
       # Append any remaining sentence
-      formatted_transcript += "#{current_sentence.strip}\n" unless current_sentence.strip.empty?
+      formatted_transcript += "#{current_sentence.strip}<br>" unless current_sentence.strip.empty?
 
       # Remove any leading/trailing whitespace and return the formatted transcript
       formatted_transcript.strip

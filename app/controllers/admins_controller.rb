@@ -75,8 +75,12 @@ class AdminsController < ApplicationController
         @forms = @forms.order("nok_first_name #{sort_direction}, nok_last_name #{sort_direction}")
       end
     end
-
-    @submittedforms = @forms.where(submitted: true)
+    @newforms = @forms.where(submitted: true).where(last_viewed: nil)
+    @changedforms = @forms.where(submitted: true).where.not(last_viewed: nil).where('last_edit > last_viewed')
+    # Get IDs of new and changed forms
+    excluded_forms_ids = @newforms.or(@changedforms).pluck(:id)
+    @submittedforms = @forms.where(submitted: true).where.not(id: excluded_forms_ids)
+    @all_submitted_forms = @newforms + @changedforms + @submittedforms
     @incompleteforms = @forms.where(submitted: [false, nil])
     @no_results = @forms.empty?
 
@@ -90,7 +94,7 @@ class AdminsController < ApplicationController
 
   def _physical_assessment
     @form = Form.find(params[:id])
-    @form_origin_text = determine_form_origin_text
+    # @form_origin_text = determine_form_origin_text
   end
 
   def update_physical_assessment
@@ -110,7 +114,7 @@ class AdminsController < ApplicationController
 
   def _mental_assessment
     @form = Form.find(params[:id])
-    @form_origin_text = determine_form_origin_text
+    # @form_origin_text = determine_form_origin_text
   end
 
   def update_mental_assessment
@@ -131,7 +135,7 @@ class AdminsController < ApplicationController
 
   def _environment_assessment
     @form = Form.find(params[:id])
-    @form_origin_text = determine_form_origin_text
+    # @form_origin_text = determine_form_origin_text
   end
 
   def update_environment_assessment

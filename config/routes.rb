@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     end
   end
 
+
   get '/search', to: "admins#search"
 
   resources :forms, controller: 'patients' do

@@ -12,7 +12,7 @@ class PatientsController < ApplicationController
       format.json { render json: @form.to_json(include: :user, methods: [:application_status, :status_colour]) }
     end
   end
-  
+
 
   def index
     @forms = current_user.forms.select(:id, :first_name, :last_name, :start_date, :submitted)
@@ -87,7 +87,7 @@ class PatientsController < ApplicationController
       render :edit_1
     end
   end
-  
+
   #collection update 1
   def update_1_collection
     case params[:commit]
@@ -211,57 +211,55 @@ class PatientsController < ApplicationController
 
   end
 
-# PATCH /forms/1/update_4
+  # PATCH /forms/1/update_4
   def update_4
-    Rails.logger.debug "params[:commit]: #{params[:commit]}"
-    Rails.logger.debug "params[:form]: #{params[:form]}"
-
+    @form = Form.find(params[:id])
+    Rails.logger.debug "Update 4 action triggered for form ##{@form.id}"
     case params[:commit]
     when 'Upload Physical Video'
       if params[:form].present? && params[:form][:physical_video].present?
         @form.physical_video.attach(params[:form][:physical_video])
-        if @form.update(form_params_step4)
-        # Redirect or render to update view to show the uploaded file
-          redirect_to edit_4_form_path(@form), notice: 'Physical video uploaded successfully.'
-        else
-          redirect_to edit_4_form_path(@form), notice: 'Video upload unsuccessful.'
-        end
+        Rails.logger.debug "Physical video attached: #{@form.physical_video.attached?}"
+        redirect_to edit_4_form_path(@form)
       end
     when 'Upload Mental Video'
       if params[:form].present? && params[:form][:mental_video].present?
         @form.mental_video.attach(params[:form][:mental_video])
-        if @form.update(form_params_step4)
-          # Redirect or render to update view to show the uploaded file
-          redirect_to edit_4_form_path(@form), notice: 'Mental video uploaded successfully.'
-        else
-          redirect_to edit_4_form_path(@form), notice: 'Video upload unsuccessful.'
+        if @form.save
+          Rails.logger.debug "Mental video attached: #{@form.mental_video.attached?}"
+          Rails.logger.debug "Calling transcribe_video_and_update_form method"
+          @form.transcribe_video_and_update_form
         end
+        redirect_to edit_4_form_path(@form)
       end
     when 'Save'
       if params[:form].present?
         @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
         @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
-        if @form.update(form_params_step4)
-          redirect_to edit_4_form_path(@form), notice: 'Videos uploaded successfully.'
-        else
-          redirect_to edit_4_form_path(@form), notice: 'Video upload unsuccessful.'
+        if @form.update(form_params_step4) # Use update with strong params
+          Rails.logger.debug "Form saved: #{@form.persisted?}"
+          Rails.logger.debug "Checking if mental_video is attached: #{@form.mental_video.attached?}"
+          @form.transcribe_video_and_update_form if @form.mental_video.attached?
         end
+        redirect_to edit_4_form_path(@form)
       end
     when 'Next'
       if params[:form].present?
         @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
         @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
-        if form_params_step4.present?
-          @form.update(form_params_step4)
+        if @form.update(form_params_step4) # Use update with strong params
+          Rails.logger.debug "Form saved: #{@form.persisted?}"
+          Rails.logger.debug "Checking if mental_video is attached: #{@form.mental_video.attached?}"
+          @form.transcribe_video_and_update_form if @form.mental_video.attached?
         end
+        redirect_to edit_5_form_path(@form)
       end
-
-    redirect_to edit_5_form_path(@form)
     else
-      # Handle unexpected values for params[:commit]
       redirect_to edit_4_form_path(@form), alert: 'Invalid action.'
     end
   end
+
+
 
   #collection update 1
   def update_4_collection
@@ -269,39 +267,43 @@ class PatientsController < ApplicationController
     when 'Upload Physical Video'
       if params[:form].present? && params[:form][:physical_video].present?
         @form = current_user.forms.build(form_params_step4)
-        @form.save
-        @form.physical_video.attach(params[:form][:physical_video])
-        # Redirect or render to update view to show the uploaded file
-        redirect_to edit_4_form_path(@form), notice: 'Physical video uploaded successfully.'
+        if @form.save
+          @form.physical_video.attach(params[:form][:physical_video])
+        end
+        redirect_to edit_4_form_path(@form)
       end
     when 'Upload Mental Video'
       if params[:form].present? && params[:form][:mental_video].present?
         @form = current_user.forms.build(form_params_step4)
-        @form.save
-        @form.mental_video.attach(params[:form][:mental_video])
-        # Redirect or render to update view to show the uploaded file
-        redirect_to edit_4_form_path(@form), notice: 'Mental video uploaded successfully.'
+        if @form.save
+          @form.mental_video.attach(params[:form][:mental_video])
+          transcribe_video_and_update_form(@form, :mental_video) if @form.mental_video.attached?
+        end
+        redirect_to edit_4_form_path(@form)
       end
     when 'Save'
       if params[:form].present?
         @form = current_user.forms.build(form_params_step4)
-        @form.save
-        @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
-        @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+        if @form.save
+          @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
+          @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+          transcribe_video_and_update_form(@form, :mental_video) if @form.mental_video.attached?
+        end
         redirect_to edit_4_form_path(@form)
       end
     when 'Next'
       if params[:form].present?
         @form = current_user.forms.build(form_params_step4)
-        @form.save
-        @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
-        @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+        if @form.save
+          @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
+          @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
+          transcribe_video_and_update_form(@form, :mental_video) if @form.mental_video.attached?
+        end
         redirect_to edit_5_form_path(@form)
       else
         redirect_to edit_5_forms_path
       end
     else
-      # Handle unexpected values for params[:commit]
       render :edit_4
     end
   end
@@ -426,7 +428,7 @@ class PatientsController < ApplicationController
   def set_form
     @form = if params[:id].present?
       form = Form.find(params[:id])
-      @valid_button_classes = button_classes(form) #method found in helper to set button colour 
+      @valid_button_classes = button_classes(form) #method found in helper to set button colour
       form
     else
       current_user.forms.build
@@ -443,7 +445,7 @@ class PatientsController < ApplicationController
   end
 
   def form_params_step1
-    
+
     if current_user.admin?
       permitted_params = params.require(:form).permit(:autofill_address, :nok_address, :nok_contact_no, :nok_email, :nok_first_name, :nok_last_name, :first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :languages_other, languages:[])
     else
@@ -498,12 +500,7 @@ class PatientsController < ApplicationController
   end
 
   def form_params_step4
-    if params[:id].present?
-      @form = Form.find(params[:id])
-    else
-      @form = current_user.forms.build()
-    end
-    permitted_params = params.require(:form).permit(:physical_video, :mental_video)
+    params.require(:form).permit(:physical_video, :mental_video, :mental_transcription)
   end
 
   def form_params_step5

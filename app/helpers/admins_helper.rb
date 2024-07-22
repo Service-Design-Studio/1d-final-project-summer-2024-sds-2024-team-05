@@ -36,20 +36,32 @@ module AdminsHelper
     application_status(form) == 'Pending Assessment'
   end
 
-  def meeting_date_pending?(form)
+  def pending_meeting_date?(form)
     application_status(form) == 'Meeting Date Pending'
   end
 
+  def pending_service_agreement?(form)
+    application_status(form) == 'Upload Service Agreement' || application_status(form).starts_with?('Meeting on')
+  end
+
   def meeting_tab_class(form)
-    meeting_date_pending?(form) ? 'text-danger' : ''
+    pending_meeting_date?(form) ? 'text-danger' : ''
   end
 
   def assessment_tab_class(form)
     pending_assessment?(form) ? 'text-danger' : ''
   end
 
+  def agreement_tab_class(form)
+    pending_service_agreement?(form) ? 'text-danger' : ''
+  end
+
   def meeting_tab_disabled?(form)
     pending_assessment?(form) ? 'disabled' : ''
+  end
+
+  def agreement_tab_disabled?(form)
+    pending_service_agreement?(form) ? '' : 'disabled'
   end
   
 end

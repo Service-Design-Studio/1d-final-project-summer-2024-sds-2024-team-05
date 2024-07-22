@@ -55,7 +55,7 @@
         <button class="nav-link" id="nok-tab" data-bs-toggle="tab" data-bs-target="#nok" type="button" role="tab" aria-controls="nok" aria-selected="false">NOK Details</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="agreement-tab" data-bs-toggle="tab" data-bs-target="#agreement" type="button" role="tab" aria-controls="agreement" aria-selected="false">Service Agreement</button>
+        <button class="nav-link <%= agreement_tab_class(@form) %> <%= agreement_tab_disabled?(@form) %>" id="agreement-tab" data-bs-toggle="tab" data-bs-target="#agreement" type="button" role="tab" aria-controls="agreement" aria-selected="false">Service Agreement</button>
       </li>
     </ul>
 

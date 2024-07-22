@@ -31,6 +31,14 @@
         <div class="col-8">
           <fieldset>
             <p>Mental Assessment</p>
+              <div class='row'>
+                <h3>Conversation: </h3>
+                 <p><%= @form.mental_transcription %></p>
+              </div>
+            <div class='row'>
+              <h3>Preliminary Assessment: </h3>
+              
+            </div>
 
             <div class="form-check form-check-inline">
               <%= form.radio_button :mental_assessment, "Good", class: "form-check-input", id: "good", checked: @form.mental_assessment == "Good", :required => false %>
@@ -59,7 +67,7 @@
                 Detailed Assessment Needed:
               <% end %>
             </div>
-            <br></br>
+            <br>
             <div class="form-check">
               
               <%= form.text_field :others_text, class: "form-control", id: "others_text", placeholder: "Detailed Assessment here", style: "font-style: italic; height: 175px; width: 300 px;", value: (!["Good", "Fair", "Poor", ""].include?(@form.mental_assessment)) ? @form.mental_assessment : ''%>

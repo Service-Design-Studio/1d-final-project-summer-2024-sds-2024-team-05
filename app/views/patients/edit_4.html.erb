@@ -38,7 +38,6 @@
           <button type="button" class="btn btn-primary circular-button btn-blue">4</button>
 
           <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: @form.persisted? ? @valid_button_5_class : "btn btn-primary circular-button btn-outline-blue" %>
-          
           <%= button_to '6', @form.persisted? ? @form : show_error_forms_path, method: :get, class: @form.persisted? ? @valid_button_summ_class : "btn btn-primary circular-button btn-outline-blue" %>
       </div>
     </div>
@@ -71,7 +70,7 @@
 
             <div class="video-container text-center mt-3">
                   <p>Physical Video Uploaded:</p>
-                  <%= video_tag url_for(@form.physical_video), controls: true, class: "img-thumbnail video-preview rounded-video" %>
+                  <%= video_tag rails_blob_path(@form.physical_video, disposition: "attachment"), controls: true, class: "img-thumbnail video-preview rounded-video" %>
             </div>
             <% end %>
           </div>
@@ -98,7 +97,7 @@
 
               <div class="video-container text-center mt-3">
                 <p>Video Uploaded:</p>
-                  <%= video_tag url_for(@form.mental_video), controls: true, class: "img-thumbnail video-preview rounded-video",width:" 100%", height:"10" %>
+                  <%= video_tag rails_blob_path(@form.mental_video, disposition: "attachment"), controls: true, class: "img-thumbnail video-preview rounded-video" %>
               </div>
             <% end %>
         </div>

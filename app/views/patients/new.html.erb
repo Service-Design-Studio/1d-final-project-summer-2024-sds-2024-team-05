@@ -25,39 +25,46 @@
       </div>
     </div>
     <h1>New Form - Step 1</h1>
-    
+
     <%= form_with(model: @form, local: true) do |form| %>
       <% if current_user.admin? %>
         <div class="row mb-3">
           <div class="col-4">
             <%= form.label :first_name, "NOK's First Name" %>
-            <%= form.text_field :nok_first_name, class: "form-control", id: "first_name" %>
+            <%= form.text_field :nok_first_name, class: "form-control", id: "nok_first_name" %>
           </div>
 
           <div class="col-4">
             <%= form.label :last_name, "NOK's Last Name" %>
-            <%= form.text_field :nok_last_name, class: "form-control", id: "last_name" %>
+            <%= form.text_field :nok_last_name, class: "form-control", id: "nok_last_name" %>
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-8">
             <%= form.label :address, "NOK's Address" %>
-            <%= form.text_field :nok_address, class: "form-control", id: "address" %>
+            <%= form.text_field :nok_address, class: "form-control", id: "nok_address" %>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-8">
+            <%= form.label :postal, "NOK's Postal Code" %>
+            <%= form.text_field :nok_postal, class: "form-control", id: "nok_postal" %>
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-8">
             <%= form.label :address, "NOK's Contact No." %>
-            <%= form.text_field :nok_contact_no, class: "form-control", id: "address" %>
+            <%= form.text_field :nok_contact_no, class: "form-control", id: "nok_contact_no" %>
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-8">
             <%= form.label :address, "NOK's Email" %>
-            <%= form.text_field :nok_email, class: "form-control", id: "address" %>
+            <%= form.text_field :nok_email, class: "form-control", id: "nok_email" %>
           </div>
         </div>
         
@@ -144,9 +151,15 @@
           <%= form.label :address, "Address" %>
           <%= form.text_field :address, class: "form-control", id: "address" %>
         </div>
+
+        <div class="col-8">
+          <%= form.label :postal, "Postal Code" %>
+          <%= form.text_field :postal, class: "form-control", id: "postal" %>
+        </div>
+
         <label>
-          <%= form.check_box :autofill_address, checked: @form.autofill_address %>
-          <%= form.label :virtual_attribute, 'Same as Next-of-Kin' %>
+          <%= form.check_box :autofill_address, checked: @form.autofill_address, id: "autofill_address" %>
+          <%= form.label :autofill_address, 'Same as Next-of-Kin' %>
         </label>
       </div>
 
@@ -195,8 +208,9 @@
           <%= form.text_area :hobbies, class: "form-control", id: "hobbies", style: "width: 50%; height: 100px; text-align: left;" %>
         </div>
       </div>
+      
         <% if current_user.admin? %>
-          <%= link_to "Back", admin_root_path, class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
+          <%= link_to "Back", admin_root_path, class: "btn btn-lg btn-outline-black rounded-pill mb-5", style: 'float: left; margin-right: 5px;' %>
         <% else %>
           <%= link_to "Back", user_root_path, class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
         <% end %>
@@ -206,5 +220,26 @@
   </div>
 
   <%= javascript_include_tag "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js", integrity: "sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz", crossorigin: "anonymous" %>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const autofillCheckbox = document.getElementById('autofill_address');
+    const nokAddress = document.getElementById('nok_address');
+    const nokPostal = document.getElementById('nok_postal');
+    const patientAddress = document.getElementById('address');
+    const patientPostal = document.getElementById('postal');
+    
+    autofillCheckbox.addEventListener('change', function() {
+      if (this.checked) {
+        patientAddress.value = nokAddress.value;
+        patientPostal.value = nokPostal.value;
+        alert("The address will be taken from Next-of-Kin's details.");
+      } else {
+        patientAddress.value = '';
+        patientPostal.value = '';
+      }
+    });
+  });
+  </script>
 </body>
 </html>

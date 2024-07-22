@@ -3,13 +3,13 @@ module AdminsHelper
     if !application_status(form).nil?
         case application_status(form)
         when 'Pending Assessment'
-            "color: #dc3545"
+            "#dc3545"
         when 'Meeting Date Pending'
-            "color: #fd7e14"
+            "#fd7e14"
         when 'Pending Service Agreement Form'
-            "color: #721c24"
+            "#721c24"
         else
-            "color: #155724"
+            "#155724"
         end
     end
   end

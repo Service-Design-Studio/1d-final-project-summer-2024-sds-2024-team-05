@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Client Profile</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAPS_API_KEY'] %>" async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=APIKEY" async defer></script>
   <style>
     video {
       width: 100%;
@@ -27,6 +27,10 @@
       pointer-events: none;
       opacity: 0.6;
     }
+
+    .orange-tab {
+      color: #fd7e14 !important;
+    }
   </style>
 </head>
 <body>
@@ -37,7 +41,14 @@
       </svg>
       <span style="font-size: 1.3em" class="mx-2">Back to Dashboard</span>
     </span>
-    <h1 style="margin-top: 1em;"><%= @form.first_name %> <%= @form.last_name %></h1>
+    <div class="row d-flex align-items-center" style="margin-top: 1em;">
+      <div class="col">
+        <h1><%= @form.first_name %> <%= @form.last_name %></h1>
+      </div>
+      <div class="col-auto">
+        <%= link_to 'Edit', edit_1_form_path(@form), class: 'btn btn-primary', style: "width: 10em" %>
+      </div>
+    </div>
     <ul class="nav nav-tabs" id="clientTabs" role="tablist">
       <li class="nav-item" role="presentation">
         <button class="nav-link active" id="client-tab" data-bs-toggle="tab" data-bs-target="#client" type="button" role="tab" aria-controls="client" aria-selected="true">Client Info</button>
@@ -45,11 +56,9 @@
       <li class="nav-item" role="presentation">
         <button class="nav-link <%= assessment_tab_class(@form) %>" id="assessment-tab" data-bs-toggle="tab" data-bs-target="#assessment" type="button" role="tab" aria-controls="assessment" aria-selected="false">Patient Assessment</button>
       </li>
-
       <li class="nav-item" role="presentation">
         <button class="nav-link <%= meeting_tab_class(@form) %> <%= meeting_tab_disabled?(@form) %>" id="meeting-tab" data-bs-toggle="tab" data-bs-target="#meeting" type="button" role="tab" aria-controls="meeting" aria-selected="false">Meeting Details</button>
       </li>
-
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="nok-tab" data-bs-toggle="tab" data-bs-target="#nok" type="button" role="tab" aria-controls="nok" aria-selected="false">NOK Details</button>
       </li>
@@ -65,9 +74,8 @@
             <strong>Action Required: </strong>
             <span 
               id="actionRequiredText" 
-              style="color: <%= status_colour(@form) %>; cursor: pointer;" > <!-- status_colour is called in helper-->
-              onclick="handleActionRequiredClick('<%= application_status(@form) %>')"
-            >
+              style="color: <%= status_colour(@form) %>; cursor: pointer;"
+              onclick="handleActionRequiredClick('<%= application_status(@form) %>')">
               <%= application_status(@form) %> <!-- application_status is called in helper-->
             </span>
           </p>
@@ -80,6 +88,7 @@
           <p><strong>Mental Assessment:</strong> <%= @form.mental_assessment.presence || "Pending Assessment" %></p>
           <hr/>
           <p style="font-size:2em"><strong>Address:</strong> <%= @form.address %></p>
+          <p><strong>Postal Code:</strong> <%=@form.postal%></p>
           <div id="map" style="height: 400px; width: 100%;"></div>
         </div>
       </div>
@@ -133,8 +142,9 @@
       } else if (status === 'Meeting Date Pending') {
         var meetingTab = new bootstrap.Tab(document.getElementById('meeting-tab'));
         meetingTab.show();
+        meetingTab._element.classList.add('orange-tab'); // Add the orange-tab class to change color
       }
-      initMap('<%= @form.address %>');
+      initMap('<%= @form.postal %>');
     });
 
     function initMap(address) {
@@ -162,6 +172,7 @@
       } else if (status === 'Meeting Date Pending') {
         var meetingTab = new bootstrap.Tab(document.getElementById('meeting-tab'));
         meetingTab.show();
+        document.getElementById('meeting-tab').classList.add('orange-tab'); // Add the orange-tab class to change color
       }
     }
   </script>

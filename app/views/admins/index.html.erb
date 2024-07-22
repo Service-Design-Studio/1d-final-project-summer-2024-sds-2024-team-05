@@ -70,8 +70,12 @@
             </td>
             <td><%= form.gender %></td>
             <td><%= "#{form.pg3_valid.inspect} #{form.pg4_valid.inspect} #{form.pg5_valid.inspect}" %></td>
-            <td style="<%= status_colour(form) %>">
-              <%= application_status(form) %>
+            <td>
+              <a href="<%= client_profile_form_path(form, status: application_status(form)) %>" style="text-decoration: none">
+                <p style="<%= status_colour(form) %>">
+                  <%= application_status(form) %>
+                </p>
+              </a>
             </td>
             <td><%= form.address %></td>
             <td><%= form.start_date %></td>

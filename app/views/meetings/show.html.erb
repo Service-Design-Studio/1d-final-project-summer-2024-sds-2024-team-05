@@ -1,0 +1,11 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @meeting %>
+
+<div>
+  <%= link_to "Edit this meeting", edit_meeting_path(@meeting) %> |
+  <%= link_to "Back to All Meetings", meetings_path %> |
+  <%= link_to "Show Client", client_profile_form_path(@meeting.form) %>
+
+  <%= button_to "Destroy this meeting", @meeting, method: :delete %>
+</div>

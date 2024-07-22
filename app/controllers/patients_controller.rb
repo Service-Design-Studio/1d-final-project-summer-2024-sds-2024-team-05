@@ -1,13 +1,18 @@
 class PatientsController < ApplicationController
+   include PatientsHelper
 
-
-   before_action :set_form, only: [:show, :edit_1, :update_1, :edit_2, :update_2, :edit_3, :update_3, :edit_4, :update_4, :edit_5, :update_5, :mental_assessment, :update_mental_assessment]
+   before_action :set_form, only: [:show, :edit_1, :update_1, :edit_2, :update_2, :edit_3, :update_3, :edit_4, :update_4, :edit_5, :update_5]
    before_action :check_valid_params, only: [:show]
    before_action :authenticate_user!
 
-  def show
+   def show
     @form = Form.includes(:user).find(params[:id])
+    respond_to do |format|
+      format.html
+      format.json { render json: @form.to_json(include: :user, methods: [:application_status, :status_colour]) }
+    end
   end
+
 
   def index
     @forms = current_user.forms.select(:id, :first_name, :last_name, :start_date, :submitted)
@@ -16,72 +21,18 @@ class PatientsController < ApplicationController
     session[:form_origin] = 'index'
   end
 
-
-def dashboard
-   @user = current_user
-   @submittedforms = Form.where(submitted: true)
-   @incompleteforms = Form.where(submitted: [false, nil])
-
-   # Handle sorting for submitted forms based on first name, last name, or address
-   if params[:sort] == "alphabetical"
-    @submittedforms = @submittedforms.order(Arel.sql("LOWER(first_name || ' ' || last_name) ASC"))
-    @incompleteforms = @incompleteforms.order(Arel.sql("LOWER(first_name || ' ' || last_name) ASC"))
-   elsif params[:sort_nok_name] == "alphabetical"
-     @submittedforms = @submittedforms.order(Arel.sql("LOWER(nok_first_name || ' ' || nok_last_name) ASC"))
-     @incompleteforms = @incompleteforms.order(Arel.sql("LOWER(nok_first_name || ' ' || nok_last_name) ASC"))
-   elsif params[:sort_address] == "alphabetical"
-     @submittedforms = @submittedforms.order("LOWER(address) ASC")
-     @incompleteforms = @incompleteforms.order("LOWER(address) ASC")
-   end
-
-   # Handle sorting by dates
-   if params[:sort_date] == "earliest"
-     @submittedforms = @submittedforms.order('start_date ASC')
-     @incompleteforms = @incompleteforms.order('start_date ASC')
-   elsif params[:sort_end_date] == "earliest"
-     @submittedforms = @submittedforms.order('end_date ASC')
-     @incompleteforms = @incompleteforms.order('end_date ASC')
-   end
-
-   # Handle gender-based sorting independently
-   if params[:sort_female]
-     @submittedforms = @submittedforms.order(Arel.sql("CASE WHEN gender = 'Female' THEN 0 ELSE 1 END, first_name ASC, last_name ASC"))
-     @incompleteforms = @incompleteforms.order(Arel.sql("CASE WHEN gender = 'Female' THEN 0 ELSE 1 END, first_name ASC, last_name ASC"))
-   elsif params[:sort_male]
-     @submittedforms = @submittedforms.order(Arel.sql("CASE WHEN gender = 'Male' THEN 0 ELSE 1 END, first_name ASC, last_name ASC"))
-     @incompleteforms = @incompleteforms.order(Arel.sql("CASE WHEN gender = 'Male' THEN 0 ELSE 1 END, first_name ASC, last_name ASC"))
-   end
-
-   if params[:sort_status]
-     @submittedforms = @submittedforms.order(Arel.sql("CASE WHEN status = 'Pending Assessment' THEN 0 ELSE 1 END"))
-     @incompleteforms = @incompleteforms.order(Arel.sql("CASE WHEN status = 'Pending Assessment' THEN 0 ELSE 1 END"))
-   end
- end
-
-
-
   # Step 1 of form creation
   def new
     @form = current_user.forms.build
     session[:form_origin] = 'new'
 
-    @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class, @valid_button_summ_class = ["btn btn-primary circular-button btn-blue"]*6
-  end
-  def search
-    @query = params[:query]
-    @forms = Form.where("first_name LIKE :query OR last_name LIKE :query OR CONCAT(first_name, ' ', last_name) LIKE :query OR
-                        nok_first_name LIKE :query OR nok_last_name LIKE :query OR CONCAT(nok_first_name, ' ', nok_last_name) LIKE :query", query: "%#{@query}%")
-    @user = current_user
-    @submittedforms = @forms.where(submitted: true)
-    @incompleteforms = @forms.where(submitted: [false, nil])
-    render :dashboard
   end
 
   # Save step 1 form data and move to step 2
   def create
     case params[:commit]
     when 'Save'
-      if params[:form].present? && params[:form].values.any?(&:present?)
+      if params[:form].present? && params[:form].except(:autofill_address).values.any?(&:present?)
         @form = current_user.forms.build(form_params_step1)
         if @form.save
           session[:form_origin] = 'new'
@@ -96,7 +47,7 @@ def dashboard
         end
       end
     when 'Next'
-      if params[:form].present? && params[:form].values.any?(&:present?)
+      if params[:form].present? && params[:form].except(:autofill_address).values.any?(&:present?)
         @form = current_user.forms.build(form_params_step1)
         if @form.save
           if current_user.admin?
@@ -388,12 +339,12 @@ def dashboard
     #     end
     #   end
     when 'Next' #hubert
-        if params[:form].present?
-          @form.environment_video.attach(params[:form][:environment_video]) if params[:form][:environment_video].present?
-          if form_params_step5.present?
-            @form.update(form_params_step5)
-          end
+      if params[:form].present?
+        @form.environment_video.attach(params[:form][:environment_video]) if params[:form][:environment_video].present?
+        if form_params_step5.present?
+          @form.update(form_params_step5)
         end
+      end
       redirect_to @form
     else
       # Handle unexpected values for params[:commit]
@@ -438,70 +389,10 @@ def dashboard
 
     if @form.update(submitted: true)
       if current_user.admin?
-        redirect_to patients_dashboard_path, notice: 'Form submitted successfully.'
+        redirect_to admin_root_path, notice: 'Form submitted successfully.'
       else
         redirect_to forms_path, notice: 'Form submitted successfully.'
       end
-    end
-  end
-
-  def physical_assessment
-    @form = Form.find(params[:id])
-    @form_origin_text = determine_form_origin_text
-  end
-
-  def update_physical_assessment
-    @form = Form.find(params[:id])
-
-    case params[:commit]
-    when 'Save'
-      if @form.update(physical_assessment_params)
-        redirect_to edit_physical_assessment_form_path, notice: 'Physical Assessment Updated'
-      end
-    when 'Back'
-      redirect_to @form, notice: 'Physical Assessment Updated'
-    else
-      redirect_to physical_assessment_path, alert: 'Invalid action.'
-    end
-  end
-
-  def mental_assessment
-    @form = Form.find(params[:id])
-    @form_origin_text = determine_form_origin_text
-  end
-
-  def update_mental_assessment
-    @form = Form.find(params[:id])
-
-    case params[:commit]
-    when 'Save'
-      if @form.update(mental_assessment_params)
-        redirect_to edit_mental_assessment_form_path, notice: 'Mental Assessment Updated'
-      end
-    when 'Back'
-      redirect_to @form, notice: 'Mental Assessment Updated'
-    else
-      redirect_to mental_assessment_path, alert: 'Invalid action.'
-    end
-  end
-
-  def environment_assessment
-    @form = Form.find(params[:id])
-    @form_origin_text = determine_form_origin_text
-  end
-
-  def update_environment_assessment
-    @form = Form.find(params[:id])
-
-    case params[:commit]
-    when 'Save'
-      if @form.update(environment_assessment_params)
-        redirect_to edit_environment_assessment_form_path, notice: 'Environmental Assessment Updated'
-      end
-    when 'Back'
-      redirect_to @form, notice: 'Environmental Assessment Updated'
-    else
-      redirect_to environment_assessment_path, alert: 'Invalid action.'
     end
   end
 
@@ -525,7 +416,7 @@ def dashboard
     flash[:notice] = "Form for '#{@form.first_name}' deleted."
 
     if current_user.admin?
-      redirect_to patients_dashboard_path
+      redirect_to admin_root_path
     else
       redirect_to forms_path
     end
@@ -537,25 +428,7 @@ def dashboard
   def set_form
     @form = if params[:id].present?
       form = Form.find(params[:id])
-      @valid_button_1_class, @valid_button_2_class, @valid_button_3_class, @valid_button_4_class, @valid_button_5_class, @valid_button_summ_class =  ["btn btn-primary circular-button btn-blue"]*6
-      if form.pg1_valid == false
-        @valid_button_1_class = "btn btn-primary circular-button btn-outline-red"
-      end
-      if form.pg2_valid == false
-        @valid_button_2_class = "btn btn-primary circular-button btn-outline-red"
-      end
-      if form.pg3_valid == false
-        @valid_button_3_class = "btn btn-primary circular-button btn-outline-red"
-      end
-      if form.pg4_valid == false
-        @valid_button_4_class = "btn btn-primary circular-button btn-outline-red"
-      end
-      if form.pg5_valid == false
-        @valid_button_5_class = "btn btn-primary circular-button btn-outline-red"
-      end
-      if form.submittable == false
-        @valid_button_summ_class = "btn btn-primary circular-button btn-outline-red"
-      end
+      @valid_button_classes = button_classes(form) #method found in helper to set button colour
       form
     else
       current_user.forms.build
@@ -578,7 +451,16 @@ def dashboard
     else
       permitted_params = params.require(:form).permit(:autofill_address, :first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :languages_other, languages:[])
     end
-    if permitted_params[:autofill_address]
+
+    if !current_user.admin?
+      permitted_params[:nok_address] = current_user.user_address
+      permitted_params[:nok_contact_no] = current_user.user_contact_number
+      permitted_params[:nok_email] = current_user.email
+      permitted_params[:nok_first_name] = current_user.user_first_name
+      permitted_params[:nok_last_name] = current_user.user_last_name
+    end
+
+    if permitted_params[:autofill_address] == "1"
       if current_user.admin?
         permitted_params[:address] = permitted_params[:nok_address]
       else
@@ -593,14 +475,6 @@ def dashboard
 
     if params[:form][:languages].present?
       permitted_params[:languages] = params[:form][:languages].to_s.gsub!(/[\[\]\"]/,"")
-    end
-
-    if !current_user.admin?
-      permitted_params[:nok_address] = current_user.user_address
-      permitted_params[:nok_contact_no] = current_user.user_contact_number
-      permitted_params[:nok_email] = current_user.email
-      permitted_params[:nok_first_name] = current_user.user_first_name
-      permitted_params[:nok_last_name] = current_user.user_last_name
     end
 
     permitted_params
@@ -633,31 +507,8 @@ def dashboard
     permitted_params = params.require(:form).permit(:environment_video)
   end
 
-  def physical_assessment_params
-    permitted_params = params.require(:form).permit(:physical_assessment)
-    if params[:form][:physical_assessment] == "Detailed Assessment Needed"
-      permitted_params[:physical_assessment] = params[:form][:others_text]
-    end
-    permitted_params
-  end
+  # def page_valid?(form_parameters, required_values)
+  #   required_values.all? { |key| form_parameters.key?(key) && form_parameters[key].present? }
+  # end
 
-  def mental_assessment_params
-    permitted_params = params.require(:form).permit(:mental_assessment)
-    if params[:form][:mental_assessment] == "Detailed Assessment Needed"
-      permitted_params[:mental_assessment] = params[:form][:others_text]
-    end
-    permitted_params
-  end
-
-  def environment_assessment_params
-    permitted_params = params.require(:form).permit(:environment_assessment)
-    if params[:form][:environment_assessment] == "Detailed Assessment Needed"
-      permitted_params[:environment_assessment] = params[:form][:others_text]
-    end
-    permitted_params
-  end
-
-  def page_valid?(form_parameters, required_values)
-    required_values.all? { |key| form_parameters.key?(key) && form_parameters[key].present? }
-  end
 end

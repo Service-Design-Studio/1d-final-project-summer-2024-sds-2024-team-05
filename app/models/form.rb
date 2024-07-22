@@ -1,10 +1,19 @@
 class Form < ApplicationRecord
-    include Rails.application.routes.url_helpers
-
+    # include Rails.application.routes.url_helpers
     attr_accessor :others_text, :autofill_address
+    has_one_attached :discharge_summary
+    has_one_attached :physical_video
     has_one_attached :mental_video
+    has_one_attached :environment_video
+    has_one_attached :service_agreement_form
+    belongs_to :user
+    has_one :meeting
 
     before_save :update_last_edit
+
+    # def full_name
+    #     "#{self.first_name} #{self.last_name}"
+    # end
 
     def transfer_to_new_user(email_attribute)
         new_user = User.find_by(email: self[email_attribute])
@@ -26,27 +35,12 @@ class Form < ApplicationRecord
         end
       end
 
-    def status_colour
-        if !self.application_status.nil?
-            case application_status
-            when 'Pending Assessment'
-                '#721c24'
-            when 'Meeting Date Pending'
-                '#ff9800'
-            when 'Pending Service Agreement Form'
-                '#721c24'
-            else
-                '#155724'
-            end
-        end
-    end
-
     def update_last_edit
         unless changed_attributes.except('last_edit', 'last_viewed').empty?
-            puts "Changed attributes: #{changed_attributes.keys}"
+            # puts "Changed attributes: #{changed_attributes.keys}"
             self.last_edit = DateTime.now
         else
-            puts "No attributes (excluding 'last_edit' and 'last_viewed') have been changed."
+            # puts "No attributes (excluding 'last_edit' and 'last_viewed') have been changed."
         end
     end
 
@@ -80,7 +74,7 @@ class Form < ApplicationRecord
     end
 
     def pg2_valid
-        page2_required.all? { |key| self.send(key).present? }
+        page2_required.all? { |key| !self.send(key).to_s.empty?}
     end
 
     def page3_required
@@ -101,16 +95,6 @@ class Form < ApplicationRecord
 
     def submittable
         pg1_valid && pg2_valid && pg3_valid && pg4_valid && pg5_valid
-    end
-
-    def application_status
-        if physical_assessment.present? && environment_assessment.present?
-            'Meeting Date Pending'
-        elsif submitted
-            'Pending Assessment'
-        else
-            'NA'
-        end
     end
 
 
@@ -138,19 +122,10 @@ class Form < ApplicationRecord
     end
 
 
-
-
-
-
     # before_save do
     #     self.languages.gsub!(/[\[\]\"]/,"") if attribute_present?("languages")
     #     self.conditions.gsub!(/[\[\]\"]/,"") if attribute_present?("conditions")
     #     self.services.gsub!(/[\[\]\"]/,"") if attribute_present?("services")
     # end
 
-    has_one_attached :discharge_summary
-    has_one_attached :physical_video
-    has_one_attached :environment_video
-    has_one_attached :service_agreement_form
-    belongs_to :user
 end

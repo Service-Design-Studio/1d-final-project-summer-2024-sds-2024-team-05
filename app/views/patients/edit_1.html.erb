@@ -13,16 +13,16 @@
       <div class="page">
           <button type="button" class="btn btn-primary circular-button btn-blue">1</button>
         
-          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: @form.persisted? ? @valid_button_2_class : "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: @form.persisted? ? @valid_button_classes[1] : "btn btn-primary circular-button btn-outline-blue" %>
          
           
-          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: @form.persisted? ? @valid_button_3_class : "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: @form.persisted? ? @valid_button_classes[2] : "btn btn-primary circular-button btn-outline-blue" %>
          
-          <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: @form.persisted? ? @valid_button_4_class : "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: @form.persisted? ? @valid_button_classes[3] : "btn btn-primary circular-button btn-outline-blue" %>
           
-          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: @form.persisted? ? @valid_button_5_class : "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: @form.persisted? ? @valid_button_classes[4] : "btn btn-primary circular-button btn-outline-blue" %>
           
-          <%= button_to '6', @form.persisted? ? @form : show_error_forms_path, method: :get, class: @form.persisted? ? @valid_button_5_class : "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '6', @form.persisted? ? @form : show_error_forms_path, method: :get, class: @form.persisted? ? @valid_button_classes[4] : "btn btn-primary circular-button btn-outline-blue" %>
 
       </div>
     </div>
@@ -201,9 +201,9 @@
 
   <div class="row mb-5">
     <% if current_user.admin? %>
-      <%= link_to "Back", patients_dashboard_path, class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
+      <%= link_to "Back", admin_root_path, class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
     <% else %>
-      <%= link_to "Back", forms_path, class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
+      <%= link_to "Back", user_root_path, class: "btn btn-lg btn-outline-black rounded-pill", style: 'float: left; margin-right: 5px;' %>
     <% end %>
     <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green", style: 'float: left; margin-right: 5px;' %>
     <%= form.submit "Next", class: "btn btn-lg btn-blue rounded-pill", style: 'float: left; margin-right: 5px;' %>

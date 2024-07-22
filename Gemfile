@@ -47,7 +47,7 @@ gem 'faker'
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 #able to use .env file or smth
-gem 'dotenv-rails'
+gem 'dotenv-rails', groups: [:development, :test]
 
 gem 'devise', '~> 4.9', '>= 4.9.3'
 gem 'devise-jwt'
@@ -86,7 +86,10 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem 'rspec-rails'
+  gem 'rails-controller-testing'
   gem 'cucumber-rails'
   gem 'database_cleaner-active_record'
   gem 'simplecov'
 end
+
+gem "simple_calendar", "~> 3.0"

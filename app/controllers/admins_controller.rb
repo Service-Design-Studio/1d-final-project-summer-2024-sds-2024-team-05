@@ -2,6 +2,7 @@ class AdminsController < ApplicationController
   include AdminsHelper
   before_action :authenticate_user!
   before_action :set_all_meetings
+  after_action :update_last_view, only: [:client_profile]
 
   def index
     @user = current_user
@@ -199,6 +200,15 @@ class AdminsController < ApplicationController
       start_time: Time.now.beginning_of_month.beginning_of_week..Time.now.end_of_month.end_of_week
     )
     @meeting = Meeting.new
+  end
+
+  def update_last_view
+    if params[:id].present?
+      @form = Form.find(params[:id])
+      if current_user.admin?
+        @form.update_last_viewed
+      end
+    end
   end
 
 end

@@ -71,6 +71,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_22_163924) do
     t.string "nok_first_name"
     t.string "nok_last_name"
     t.string "nok_email"
+    t.string "nok_postal"
+    t.string "postal"
     t.boolean "submitted"
     t.datetime "last_edit"
     t.datetime "last_viewed"
@@ -78,9 +80,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_22_163924) do
     t.datetime "updated_at", null: false
     t.integer "user_id"
     t.text "mental_transcription"
-    t.string "postal"
-    t.string "nok_postal"
-    t.boolean "autofill_address", default: false
+    t.boolean "autofill_address", default: true
     t.index ["user_id"], name: "index_forms_on_user_id"
   end
 
@@ -103,6 +103,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_22_163924) do
     t.string "user_last_name"
     t.string "user_contact_number"
     t.string "user_address"
+    t.string "user_postal"
     t.boolean "admin", default: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"

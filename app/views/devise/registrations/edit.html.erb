@@ -50,6 +50,11 @@
     <%= f.label :user_address %><br />
     <%= f.text_field :user_address, autocomplete: "user-address", value: resource.user_address %>
   </div>
+
+  <div class="field">
+    <%= f.label :user_postal %><br />
+    <%= f.text_field :user_postal, autocomplete: "user-postal", value: resource.user_postal %>
+  </div>
   
   <div class="actions">
     <%= f.submit "Update" %>

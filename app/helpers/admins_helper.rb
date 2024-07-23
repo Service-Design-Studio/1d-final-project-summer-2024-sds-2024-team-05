@@ -63,6 +63,36 @@ module AdminsHelper
   def agreement_tab_disabled?(form)
     pending_service_agreement?(form) ? '' : 'disabled'
   end
+
+  def phys_circle(value)
+    case value
+    when 'Good'
+      content_tag(:div, "", class: "assessment-circle assessment-good", data: { tooltip: "Physical Assessment: Good" })
+    when 'Fair'
+      content_tag(:div, "", class: "assessment-circle assessment-fair", data: { tooltip: "Physical Assessment: Fair" })
+    when 'Poor'
+      content_tag(:div, "", class: "assessment-circle assessment-poor", data: { tooltip: "Physical Assessment: Poor" })
+    when nil
+      content_tag(:div, "", class: "assessment-circle assessment-nil", data: { tooltip: "Physical Assessment: Pending" })
+    else
+      content_tag(:div, "", class: "assessment-circle assessment-detailed", data: { tooltip: "Physical Assessment: Detailed" })
+    end
+  end
+
+  def ment_circle(value)
+    case value
+    when 'Good'
+      content_tag(:div, "", class: "assessment-circle assessment-good", data: { tooltip: "Mental Assessment: Good" })
+    when 'Fair'
+      content_tag(:div, "", class: "assessment-circle assessment-fair", data: { tooltip: "Mental Assessment: Fair" })
+    when 'Poor'
+      content_tag(:div, "", class: "assessment-circle assessment-poor", data: { tooltip: "Mental Assessment: Poor" })
+    when nil
+      content_tag(:div, "", class: "assessment-circle assessment-nil", data: { tooltip: "Mental Assessment: Pending" })
+    else
+      content_tag(:div, "", class: "assessment-circle assessment-detailed", data: { tooltip: "Mental Assessment: Detailed" })
+    end
+  end
   
 end
     # def application_status

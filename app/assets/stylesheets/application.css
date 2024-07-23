@@ -417,3 +417,57 @@ h1 {
   .custom-link span {
     padding: 10px; /* Padding inside the square */
   }
+
+  .assessment-circle {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+  }
+
+  .assessment-circle::after {
+    content: attr(data-tooltip); /* Show value as tooltip */
+    position: absolute;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    top: calc(100% + 5px); /* Adjust as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0; /* Hide initially */
+    transition: opacity 0.3s ease; /* Smooth transition */
+  }
+  
+  .assessment-good {
+    background-color: #28a745; /* Green for true */
+    color: white; /* Text color */
+  }
+
+  .assessment-circle:hover::after {
+    opacity: 1; /* Show tooltip on hover */
+  }
+  
+  .assessment-poor {
+    background-color: #dc3545; /* Red for false */
+    color: white; /* Text color */
+  }
+  
+  .assessment-fair {
+    background-color: #28e6ff; /* Yellow for pending */
+    color: black; /* Text color */
+  }
+  
+  .assessment-detailed {
+    background-color: #ffc107; /* Gray for inactive */
+    color: white; /* Text color */
+  }
+
+  .assessment-nil {
+    background-color: #7f7f7f; /* Gray for inactive */
+    color: white; /* Text color */
+  }

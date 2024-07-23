@@ -50,7 +50,7 @@
         <tr>
           <th onclick="sortTable('name')">Patient Name <span id="sort-icon-name"></span></th>
           <th onclick="sortTable('gender')">Gender <span id="sort-icon-gender"></span></th>
-          <th>Media</th>
+          <th>Assessments</th>
           <th onclick="sortTable('application_status')">Action Required <span id="sort-icon-application_status"></span></th>
           <th onclick="sortTable('address')">Address <span id="sort-icon-address"></span></th>
           <th onclick="sortTable('address')">Postal <span id="sort-icon-address"></span></th>
@@ -80,7 +80,12 @@
               <% end %>
             </td>
             <td><%= form.gender %></td>
-            <td><%= "#{form.pg3_valid.inspect} #{form.pg4_valid.inspect} #{form.pg5_valid.inspect}" %></td>
+            <td style="padding-left: 30px; vertical-align: middle; height: 100%;">
+              <a href="<%= client_profile_form_path(form, status: 'Pending Assessment') %>" style="text-decoration: none">
+                <%= phys_circle(form.physical_assessment) %>
+                <%= ment_circle(form.mental_assessment) %>
+              </a>
+            </td>
             <td>
               <a href="<%= client_profile_form_path(form, status: application_status(form)) %>" style="text-decoration: none">
                 <p style="<%= status_colour(form) %>">
@@ -123,7 +128,7 @@
       </thead>
       <tbody>
         <% @incompleteforms&.each do |form| %>
-          <tr class="clickable-row" data-href="<%= client_profile_form_path(form) %>" onmouseover="hoverRow(this, true)" onmouseout="hoverRow(this, false)">
+          <tr onmouseover="hoverRow(this, true)" onmouseout="hoverRow(this, false)">
             <td><%= "#{form.first_name} #{form.last_name}" %></td>
             <td><%= "#{form.nok_first_name} #{form.nok_last_name}" %></td>
             <td><%= form.gender %></td>
@@ -132,9 +137,13 @@
             <td><%= form.start_date %></td>
             <td><%= form.end_date %></td>
 
+            <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info' %></td>
             <td class="text-center">
               <div class="d-flex justify-content-center align-items-center">
-                <button class="btn btn-danger delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" data-form-url="<%= form_path(form) %>">Delete</button>
+                <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2' %>
+                <%= form_with(model: form, method: :delete, url: form_path(form), data: { confirm: 'Are you sure?' }) do |f| %>
+                  <%= f.submit 'Delete', class: 'btn btn-danger' %>
+                <% end %>
               </div>
             </td>
           </tr>

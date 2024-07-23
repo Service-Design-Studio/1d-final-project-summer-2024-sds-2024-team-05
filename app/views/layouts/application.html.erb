@@ -20,15 +20,19 @@
       
 
       <% if user_signed_in? %>
+        <div style="text-align: left; padding-left: 30px; margin-right: 5px">
         <div class = "row nav-lg-btn">
-          <%= link_to "Calendar", meetings_path , class:"btn btn-outline-blue", style: "float: right; font-size: 20px;"%>
+          
 
           <% if current_user.admin? %>
+            <%= link_to "Calendar", meetings_path , class:"btn btn-outline-blue", style: "float: right; font-size: 20px;"%>
+            
             <%= link_to 'Dashboard', admin_root_path, class:"btn btn-outline-blue", style: 'float: left; margin-left: 5px;font-size: 20px;' %>
           <% else %>
             <%= link_to 'Dashboard', user_root_path, class:"btn btn-outline-blue", style: 'float: left; margin-left: 5px;font-size: 20px;' %>
           <% end %>
           
+        </div>
         </div>
 
         <div class = "col nav-btn">

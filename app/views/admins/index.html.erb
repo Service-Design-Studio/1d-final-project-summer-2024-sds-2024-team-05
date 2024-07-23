@@ -11,6 +11,17 @@
     th {
       cursor: pointer;
     }
+    tr.clickable-row {
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    tr.clickable-row:hover {
+      background-color: #f0f0f0;
+      color: pink;
+    }
+    tr.clickable-row:hover a {
+      color: pink;
+    }
   </style>
 </head>
 <body>
@@ -42,16 +53,16 @@
           <th>Media</th>
           <th onclick="sortTable('application_status')">Action Required <span id="sort-icon-application_status"></span></th>
           <th onclick="sortTable('address')">Address <span id="sort-icon-address"></span></th>
+          <th onclick="sortTable('address')">Postal <span id="sort-icon-address"></span></th>
           <th onclick="sortTable('start_date')">Start <span id="sort-icon-start_date"></span></th>
           <th onclick="sortTable('end_date')">End <span id="sort-icon-end_date"></span></th>
-          <th class="text-center">Summary</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
 
       <tbody>
         <% @all_submitted_forms&.each do |form| %>
-          <tr>
+          <tr class="clickable-row" data-href="<%= client_profile_form_path(form) %>" onmouseover="hoverRow(this, true)" onmouseout="hoverRow(this, false)">
             <td>
               <a href="<%= client_profile_form_path(form) %>" style="text-decoration: none; color: black">
                 <%= "#{form.first_name} #{form.last_name}" %>
@@ -78,16 +89,13 @@
               </a>
             </td>
             <td><%= form.address %></td>
+            <td><%= form.postal %></td>
             <td><%= form.start_date %></td>
             <td><%= form.end_date %></td>
 
-            <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info' %></td>
             <td class="text-center">
               <div class="d-flex justify-content-center align-items-center">
-                <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2' %>
-                <%= form_with(model: form, method: :delete, url: form_path(form), data: { confirm: 'Are you sure?' }) do |f| %>
-                  <%= f.submit 'Delete', class: 'btn btn-danger' %>
-                <% end %>
+                <button class="btn btn-danger delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" data-form-url="<%= form_path(form) %>">Delete</button>
               </div>
             </td>
           </tr>
@@ -103,33 +111,30 @@
     <table class="table">
       <thead>
         <tr>
-          <th onclick="sortTable('patient_name')">Patient Name <span id="sort-icon-patient_name"></span></th>
+          <th onclick="sortTable('name')">Patient Name <span id="sort-icon-patient_name"></span></th>
           <th onclick="sortTable('nok_name')">NOK Name <span id="sort-icon-nok_name"></span></th>
           <th onclick="sortTable('gender')">Gender <span id="sort-icon-gender"></span></th>
           <th onclick="sortTable('address')">Address <span id="sort-icon-address"></span></th>
+          <th onclick="sortTable('address')">Postal <span id="sort-icon-address"></span></th>
           <th onclick="sortTable('start_date')">Start Date <span id="sort-icon-start_date"></span></th>
           <th onclick="sortTable('end_date')">End Date <span id="sort-icon-end_date"></span></th>
-          <th class="text-center">Summary</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
       <tbody>
         <% @incompleteforms&.each do |form| %>
-          <tr>
+          <tr class="clickable-row" data-href="<%= client_profile_form_path(form) %>" onmouseover="hoverRow(this, true)" onmouseout="hoverRow(this, false)">
             <td><%= "#{form.first_name} #{form.last_name}" %></td>
             <td><%= "#{form.nok_first_name} #{form.nok_last_name}" %></td>
             <td><%= form.gender %></td>
             <td><%= form.address %></td>
+            <td><%= form.postal %></td>
             <td><%= form.start_date %></td>
             <td><%= form.end_date %></td>
 
-            <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info' %></td>
             <td class="text-center">
               <div class="d-flex justify-content-center align-items-center">
-                <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2' %>
-                <%= form_with(model: form, method: :delete, url: form_path(form), data: { confirm: 'Are you sure?' }) do |f| %>
-                  <%= f.submit 'Delete', class: 'btn btn-danger' %>
-                <% end %>
+                <button class="btn btn-danger delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" data-form-url="<%= form_path(form) %>">Delete</button>
               </div>
             </td>
           </tr>
@@ -141,12 +146,65 @@
     <%= link_to 'Create New Form', new_form_path, class: 'btn btn-primary' %>
   </div>
 
+  <!-- Delete Confirmation Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete this form?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <form id="delete-form" method="post" action="">
+            <input type="hidden" name="_method" value="delete">
+            <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script>
+    function hoverRow(row, hover) {
+      const cells = row.querySelectorAll('td');
+      cells.forEach(function(cell) {
+        if (hover) {
+          cell.style.backgroundColor = '#f0f0f0';
+          cell.style.color = '#253255';
+        } else {
+          cell.style.backgroundColor = '';
+          cell.style.color = '';
+        }
+      });
+    }
+
     document.addEventListener("DOMContentLoaded", function() {
       document.getElementById("clear-button").addEventListener("click", function() {
         document.getElementById("search-input").value = '';
         document.getElementById("search-form").submit();
+      });
+
+      var deleteModal = document.getElementById('deleteModal');
+      deleteModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var formUrl = button.getAttribute('data-form-url');
+        var deleteForm = document.getElementById('delete-form');
+        deleteForm.setAttribute('action', formUrl);
+      });
+
+      document.querySelectorAll('tr.clickable-row').forEach(function(row) {
+        row.addEventListener('click', function(event) {
+          // Prevent row click if delete button is clicked
+          if (!event.target.classList.contains('delete-button')) {
+            window.location = row.dataset.href;
+          }
+        });
       });
 
       updateSortIcons();

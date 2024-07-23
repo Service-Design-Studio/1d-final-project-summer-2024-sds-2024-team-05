@@ -52,6 +52,13 @@
 
         <div class="row mb-3">
           <div class="col-8">
+            <%= form.label :postal, "NOK's Postal Code" %>
+            <%= form.text_field :nok_postal, class: "form-control", id: "postal" %>
+          </div>
+        </div>
+        
+        <div class="row mb-3">
+          <div class="col-8">
             <%= form.label :address, "NOK's Contact No." %>
             <%= form.text_field :nok_contact_no, class: "form-control", id: "address" %>
           </div>
@@ -147,9 +154,15 @@
           <%= form.label :address, "Address" %>
           <%= form.text_field :address, class: "form-control", id: "address", :required => false %>
         </div>
+
+        <div class="col-8">
+          <%= form.label :postal, "Postal Code" %>
+          <%= form.text_field :postal, class: "form-control", id: "postal" %>
+        </div>
+        
         <div class="col-8">
           <%= form.check_box :autofill_address, checked: @form.autofill_address %>
-          <%= form.label :virtual_attribute, 'Same as Next-of-Kin' %>
+          <%= form.label :autofillCheckbox, 'Same as Next-of-Kin' %>
         </div>
       </div>
 
@@ -211,6 +224,27 @@
     </div>
   </div>
   <%= javascript_include_tag "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js", integrity: "sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz", crossorigin: "anonymous" %>
+
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const autofillCheckbox = document.getElementById('autofill_address');
+    const nokAddress = document.getElementById('nok_address');
+    const nokPostal = document.getElementById('nok_postal');
+    const patientAddress = document.getElementById('address');
+    const patientPostal = document.getElementById('postal');
+    
+    autofillCheckbox.addEventListener('change', function() {
+      if (this.checked) {
+        patientAddress.value = nokAddress.value;
+        patientPostal.value = nokPostal.value;
+      } else {
+        patientAddress.value = '';
+        patientPostal.value = '';
+      }
+    });
+  });
+</script>
 </body>
 </html>
 

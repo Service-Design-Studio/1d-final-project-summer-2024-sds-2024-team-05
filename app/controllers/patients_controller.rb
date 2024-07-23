@@ -447,9 +447,9 @@ class PatientsController < ApplicationController
   def form_params_step1
 
     if current_user.admin?
-      permitted_params = params.require(:form).permit(:autofill_address, :nok_address, :nok_contact_no, :nok_email, :nok_first_name, :nok_last_name, :first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :languages_other, languages:[])
+      permitted_params = params.require(:form).permit(:autofill_address, :nok_address, :nok_postal, :nok_contact_no, :nok_email, :nok_first_name, :nok_last_name, :first_name, :last_name, :gender, :date_of_birth, :address, :postal, :hobbies, :relationship, :others_text, :languages_other, languages:[])
     else
-      permitted_params = params.require(:form).permit(:autofill_address, :first_name, :last_name, :gender, :date_of_birth, :address, :hobbies, :relationship, :others_text, :languages_other, languages:[])
+      permitted_params = params.require(:form).permit(:autofill_address, :first_name, :last_name, :gender, :date_of_birth, :address, :postal, :hobbies, :relationship, :others_text, :languages_other, languages:[])
     end
 
     if !current_user.admin?
@@ -463,6 +463,8 @@ class PatientsController < ApplicationController
     if permitted_params[:autofill_address] == "1"
       if current_user.admin?
         permitted_params[:address] = permitted_params[:nok_address]
+        permitted_params[:postal] = permitted_params[:nok_postal]
+        permitted_params[:autofill_address] = "1"
       else
         permitted_params[:address] = current_user.user_address
       end

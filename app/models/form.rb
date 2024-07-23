@@ -121,6 +121,21 @@ class Form < ApplicationRecord
         end
     end
 
+    def update_animal_count
+        return unless self.mental_transcription
+
+        count = TranscriptionService.count_unique_animals(self.mental_transcription)
+        self.update(animal_count: count)
+        Rails.logger.debug "Updated animal_count: #{self.animal_count}"
+    rescue => e
+        Rails.logger.error "Failed to update animal count: #{e.message}"
+    end
+
+
+
+
+
+
 
     # before_save do
     #     self.languages.gsub!(/[\[\]\"]/,"") if attribute_present?("languages")

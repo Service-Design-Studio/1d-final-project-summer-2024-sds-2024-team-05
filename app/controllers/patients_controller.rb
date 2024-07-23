@@ -228,7 +228,7 @@ class PatientsController < ApplicationController
         if @form.save
           Rails.logger.debug "Mental video attached: #{@form.mental_video.attached?}"
           Rails.logger.debug "Calling transcribe_video_and_update_form method"
-          @form.transcribe_video_and_update_form
+
         end
         redirect_to edit_4_form_path(@form)
       end
@@ -239,7 +239,7 @@ class PatientsController < ApplicationController
         if @form.update(form_params_step4) # Use update with strong params
           Rails.logger.debug "Form saved: #{@form.persisted?}"
           Rails.logger.debug "Checking if mental_video is attached: #{@form.mental_video.attached?}"
-          @form.transcribe_video_and_update_form if @form.mental_video.attached?
+
         end
         redirect_to edit_4_form_path(@form)
       end
@@ -250,7 +250,7 @@ class PatientsController < ApplicationController
         if @form.update(form_params_step4) # Use update with strong params
           Rails.logger.debug "Form saved: #{@form.persisted?}"
           Rails.logger.debug "Checking if mental_video is attached: #{@form.mental_video.attached?}"
-          @form.transcribe_video_and_update_form if @form.mental_video.attached?
+
         end
         redirect_to edit_5_form_path(@form)
       end
@@ -277,7 +277,6 @@ class PatientsController < ApplicationController
         @form = current_user.forms.build(form_params_step4)
         if @form.save
           @form.mental_video.attach(params[:form][:mental_video])
-          transcribe_video_and_update_form(@form, :mental_video) if @form.mental_video.attached?
         end
         redirect_to edit_4_form_path(@form)
       end
@@ -287,7 +286,6 @@ class PatientsController < ApplicationController
         if @form.save
           @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
           @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
-          transcribe_video_and_update_form(@form, :mental_video) if @form.mental_video.attached?
         end
         redirect_to edit_4_form_path(@form)
       end
@@ -297,7 +295,6 @@ class PatientsController < ApplicationController
         if @form.save
           @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
           @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
-          transcribe_video_and_update_form(@form, :mental_video) if @form.mental_video.attached?
         end
         redirect_to edit_5_form_path(@form)
       else
@@ -388,6 +385,14 @@ class PatientsController < ApplicationController
     @form = Form.find(params[:id]) # Find your form
 
     if @form.update(submitted: true)
+      if @form.mental_video.attached?
+        @form.transcribe_video_and_update_form
+      end
+
+      if @form.mental_transcription.present?
+        @form.update_animal_count
+      end
+      
       if current_user.admin?
         redirect_to admin_root_path, notice: 'Form submitted successfully.'
       else

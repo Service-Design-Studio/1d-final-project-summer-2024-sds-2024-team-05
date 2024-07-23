@@ -53,6 +53,7 @@
           <th>Media</th>
           <th onclick="sortTable('application_status')">Action Required <span id="sort-icon-application_status"></span></th>
           <th onclick="sortTable('address')">Address <span id="sort-icon-address"></span></th>
+          <th onclick="sortTable('address')">Postal <span id="sort-icon-address"></span></th>
           <th onclick="sortTable('start_date')">Start <span id="sort-icon-start_date"></span></th>
           <th onclick="sortTable('end_date')">End <span id="sort-icon-end_date"></span></th>
           <th class="text-center">Actions</th>
@@ -84,12 +85,12 @@
               <%= application_status(form) %>
             </td>
             <td><%= form.address %></td>
+            <td><%= form.postal %></td>
             <td><%= form.start_date %></td>
             <td><%= form.end_date %></td>
 
             <td class="text-center">
               <div class="d-flex justify-content-center align-items-center">
-                <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2' %>
                 <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-form-url="<%= form_path(form) %>">Delete</button>
               </div>
             </td>
@@ -127,7 +128,6 @@
 
             <td class="text-center">
               <div class="d-flex justify-content-center align-items-center">
-                <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2' %>
                 <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-form-url="<%= form_path(form) %>">Delete</button>
               </div>
             </td>

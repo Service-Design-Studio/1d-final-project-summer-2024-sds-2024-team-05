@@ -91,7 +91,7 @@
 
             <td class="text-center">
               <div class="d-flex justify-content-center align-items-center">
-                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-form-url="<%= form_path(form) %>">Delete</button>
+                <button class="btn btn-danger delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" data-form-url="<%= form_path(form) %>">Delete</button>
               </div>
             </td>
           </tr>
@@ -111,6 +111,7 @@
           <th onclick="sortTable('nok_name')">NOK Name <span id="sort-icon-nok_name"></span></th>
           <th onclick="sortTable('gender')">Gender <span id="sort-icon-gender"></span></th>
           <th onclick="sortTable('address')">Address <span id="sort-icon-address"></span></th>
+          <th onclick="sortTable('address')">Postal <span id="sort-icon-address"></span></th>
           <th onclick="sortTable('start_date')">Start Date <span id="sort-icon-start_date"></span></th>
           <th onclick="sortTable('end_date')">End Date <span id="sort-icon-end_date"></span></th>
           <th class="text-center">Actions</th>
@@ -118,17 +119,18 @@
       </thead>
       <tbody>
         <% @incompleteforms&.each do |form| %>
-          <tr class="clickable-row" data-href="<%= client_profile_form_path(form) %>">
+          <tr class="clickable-row" data-href="<%= client_profile_form_path(form) %>" onmouseover="hoverRow(this, true)" onmouseout="hoverRow(this, false)">
             <td><%= "#{form.first_name} #{form.last_name}" %></td>
             <td><%= "#{form.nok_first_name} #{form.nok_last_name}" %></td>
             <td><%= form.gender %></td>
             <td><%= form.address %></td>
+            <td><%= form.postal %></td>
             <td><%= form.start_date %></td>
             <td><%= form.end_date %></td>
 
             <td class="text-center">
               <div class="d-flex justify-content-center align-items-center">
-                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-form-url="<%= form_path(form) %>">Delete</button>
+                <button class="btn btn-danger delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" data-form-url="<%= form_path(form) %>">Delete</button>
               </div>
             </td>
           </tr>
@@ -193,8 +195,11 @@
       });
 
       document.querySelectorAll('tr.clickable-row').forEach(function(row) {
-        row.addEventListener('click', function() {
-          window.location = row.dataset.href;
+        row.addEventListener('click', function(event) {
+          // Prevent row click if delete button is clicked
+          if (!event.target.classList.contains('delete-button')) {
+            window.location = row.dataset.href;
+          }
         });
       });
 

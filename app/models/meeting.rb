@@ -5,7 +5,7 @@ class Meeting < ApplicationRecord
         datetime = DateTime.parse(start_time.to_s)
   
         # Format the datetime object into custom format
-        formatted_datetime = datetime.strftime("%a, %-d %B %Y, %l:%M%P")
+        formatted_datetime = datetime.strftime("%a,<br> %-d %B %Y, %l:%M%P")
 
         # Return the formatted datetime string
         formatted_datetime

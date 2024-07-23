@@ -22,7 +22,7 @@ module AdminsHelper
     elsif !form.meeting.nil? && form.meeting.past_date
       'Upload Service Agreement'
     elsif !form.meeting.nil?
-      "Meeting on #{form.meeting.readable_start}"
+      "Meeting on #{form.meeting.readable_start}".html_safe
     elsif form.physical_assessment.present? && form.environment_assessment.present?
       'Meeting Date Pending'
     elsif form.submitted

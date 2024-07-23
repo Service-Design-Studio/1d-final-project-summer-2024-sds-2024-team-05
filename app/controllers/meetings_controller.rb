@@ -5,6 +5,7 @@ class MeetingsController < ApplicationController
   # GET /meetings or /meetings.json
   def index
     @meetings = Meeting.all
+    @meeting = Meeting.new()
   end
 
   # GET /meetings/1 or /meetings/1.json
@@ -23,10 +24,11 @@ class MeetingsController < ApplicationController
   # POST /meetings or /meetings.json
   def create
     @meeting = Meeting.new(meeting_params)
+    @form = Form.find(meeting_params[:form_id])
 
     respond_to do |format|
       if @meeting.save
-        format.html { redirect_to admin_root_path, notice: "Meeting was successfully created." }
+        format.html { redirect_to client_profile_form_path(@form, status: 'Meeting Date Pending'), notice: "Meeting was successfully created." }
         format.json { render :show, status: :created, location: @meeting }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -53,8 +55,16 @@ class MeetingsController < ApplicationController
     @meeting.destroy!
 
     respond_to do |format|
-      format.html { redirect_to meetings_url, notice: "Meeting was successfully destroyed." }
-      format.json { head :no_content }
+      if params[:origin]
+        @form = Form.find(params[:origin])
+        format.html { redirect_to client_profile_form_path(@form), notice: "Meeting was successfully destroyed." }
+        
+        format.json { head :no_content }
+      else
+        
+        format.html { redirect_to meetings_url, notice: "Meeting was successfully destroyed." }
+        format.json { head :no_content }
+      end
     end
   end
 

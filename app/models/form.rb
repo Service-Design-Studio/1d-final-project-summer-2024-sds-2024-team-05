@@ -7,7 +7,7 @@ class Form < ApplicationRecord
     has_one_attached :environment_video
     has_one_attached :service_agreement_form
     belongs_to :user
-    has_one :meeting
+    has_one :meeting, dependent: :destroy
 
     before_save :update_last_edit
 

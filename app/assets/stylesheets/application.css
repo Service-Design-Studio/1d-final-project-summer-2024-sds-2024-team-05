@@ -28,6 +28,16 @@ h1 {
     margin-right: 2em;
 }
 
+.nav-lg-btn {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: end;
+    margin-right: 2em;
+}
+
 .btn-green {
     color: white;
     border: 1px solid green;
@@ -356,3 +366,54 @@ h1 {
     text-align: center;
 
 }
+
+.event-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #4CAF50; /* Green color, adjust as needed */
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .event-dot:hover::after {
+    content: attr(data-meeting-title);
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    display: none;
+  }
+  
+  .event-dot:hover::after {
+    display: block;
+  }
+
+  .custom-link {
+    width: 140px;
+    height: 20px; /* Adjust height to match width for a perfect square */
+    background-color: #4CAF50; /* Green color, adjust as needed */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 8px; /* Rounded corners */
+    text-decoration: none; /* Remove underlines */
+  }
+  
+  .custom-link:hover {
+    background-color: #45a049; /* Darker green on hover, adjust as needed */
+  }
+  
+  .custom-link span {
+    padding: 10px; /* Padding inside the square */
+  }

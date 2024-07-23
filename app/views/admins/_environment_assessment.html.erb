@@ -15,15 +15,15 @@
   <div class="row align-items-start">
     <div class="col-md-6">
       <p><strong>Environment Video:</strong></p>
-      <% if form.environment_video.present? %>
-        <%= video_tag url_for(form.environment_video), controls: true, class: "img-thumbnail" %>
+      <% if @form.environment_video.present? %>
+        <%= video_tag url_for(@form.environment_video), controls: true, class: "img-thumbnail" %>
       <% else %>
         <p>null</p>
       <% end %>
     </div>
     <div class="col-md-6">
-      <p><strong>Environment Assessment: </strong><%= form.environment_assessment.presence || "Pending Assessment" %></p>
-      <%= form_with(model: form, url: form.persisted? ? edit_environment_assessment_form_path(form) : edit_environment_assessment_forms_path, method: :patch, local: true, html: { multipart: true }) do |form| %>
+      <p><strong>Environment Assessment: </strong><%= @form.environment_assessment.presence || "Pending Assessment" %></p>
+      <%= form_with(model: @form, url: @form.persisted? ? edit_environment_assessment_form_path(@form) : edit_environment_assessment_forms_path, method: :patch, local: true, html: { multipart: true }) do |form| %>
       <fieldset>
         <div class="form-check form-check-inline">
           <%= form.radio_button :environment_assessment, "Good", class: "form-check-input", id: "good", checked: @form.environment_assessment == "Good", :required => false %>

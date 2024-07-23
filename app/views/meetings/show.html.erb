@@ -4,8 +4,10 @@
 
 <div>
   <%= link_to "Edit this meeting", edit_meeting_path(@meeting) %> |
-  <%= link_to "Back to All Meetings", meetings_path %> |
-  <%= link_to "Show Client", client_profile_form_path(@meeting.form) %>
+  <%= link_to "Back to All Meetings", meetings_path %> 
+  <% if @meeting.form %>
+    | <%= link_to "Show Client", client_profile_form_path(@meeting.form) %>
+  <% end %>
 
   <%= button_to "Destroy this meeting", @meeting, method: :delete %>
 </div>

@@ -41,6 +41,7 @@ Rails.application.routes.draw do
       get 'edit_environment_assessment', to: 'admins#_environment_assessment'
       patch 'edit_environment_assessment', to: 'admins#update_environment_assessment'
       get 'client_profile', to: 'admins#client_profile'
+      patch 'client_profile', to: 'admins#update_client_profile'
 
       patch 'update_submission_status', to: 'patients#update_submission_status'
     end

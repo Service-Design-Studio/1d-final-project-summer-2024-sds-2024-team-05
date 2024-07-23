@@ -91,6 +91,19 @@ class AdminsController < ApplicationController
   def client_profile
     @form = Form.find(params[:id])
     @meetings = Meeting.all
+    @attached_meetings = Meeting.where(form_id: params[:id])
+  end
+
+  def update_client_profile
+    @form = Form.find(params[:id])
+    if params[:form].present? && params[:form][:service_agreement_form].present?
+      @form.service_agreement_form.attach(params[:form][:service_agreement_form])
+      if @form.update(service_params)
+        redirect_to client_profile_form_path(@form, status: 'Upload Service Agreement'), notice: 'Physical video uploaded successfully.'
+      else
+        redirect_to client_profile_form_path(@form, status: 'Upload Service Agreement'), notice: 'Video upload unsuccessful.'
+      end
+    end
   end
 
   def _physical_assessment
@@ -175,6 +188,10 @@ class AdminsController < ApplicationController
       permitted_params[:environment_assessment] = params[:form][:others_text]
     end
     permitted_params
+  end
+
+  def service_params
+    params.require(:form).permit(:service_agreement_form)
   end
 
   def set_all_meetings

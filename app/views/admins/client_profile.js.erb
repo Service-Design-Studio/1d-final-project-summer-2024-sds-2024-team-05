@@ -1,0 +1,1 @@
+$("#meetings_calendar").html("<%= escape_javascript render(partial: 'meetings/calendar', locals:{meeting: @meetings, self_meetings:@attached_meetings}) %>");

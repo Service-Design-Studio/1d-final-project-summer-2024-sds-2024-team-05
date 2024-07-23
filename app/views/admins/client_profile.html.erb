@@ -63,7 +63,7 @@
         <button class="nav-link" id="nok-tab" data-bs-toggle="tab" data-bs-target="#nok" type="button" role="tab" aria-controls="nok" aria-selected="false">NOK Details</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="discharge-tab" data-bs-toggle="tab" data-bs-target="#discharge" type="button" role="tab" aria-controls="discharge" aria-selected="false">Discharge Summary</button>
+        <button class="nav-link <%= agreement_tab_class(@form) %> <%= agreement_tab_disabled?(@form) %>" id="agreement-tab" data-bs-toggle="tab" data-bs-target="#agreement" type="button" role="tab" aria-controls="agreement" aria-selected="false">Service Agreement</button>
       </li>
     </ul>
 
@@ -74,36 +74,64 @@
             <strong>Action Required: </strong>
             <span 
               id="actionRequiredText" 
-              style="color: <%= status_colour(@form) %>; cursor: pointer;"
-              onclick="handleActionRequiredClick('<%= application_status(@form) %>')">
+              style=" <%= status_colour(@form) %>; cursor: pointer;"
+              onclick="handleActionRequiredClick('<%= application_status(@form) %>')"
+            >
               <%= application_status(@form) %> <!-- application_status is called in helper-->
             </span>
           </p>
           <p><strong>Form No.:</strong> <%= @form.id %></p>
           <p><strong>Gender:</strong> <%= @form.gender %></p>
           <p><strong>Birthday:</strong> <%= @form.date_of_birth %></p>
+          <hr/>
           <p style="font-size:2em"><strong>Type of Care:</strong> <%= @form.services %></p>
           <p><strong>Start Date Required:</strong> <%= @form.start_date %></p>
           <p><strong>Physical Assessment:</strong> <%= @form.physical_assessment.presence || "Pending Assessment" %></p>
           <p><strong>Mental Assessment:</strong> <%= @form.mental_assessment.presence || "Pending Assessment" %></p>
+          
           <hr/>
           <p style="font-size:2em"><strong>Address:</strong> <%= @form.address %></p>
           <p><strong>Postal Code:</strong> <%=@form.postal%></p>
           <div id="map" style="height: 400px; width: 100%;"></div>
+          
+          
+          <% if @form.discharge_summary.attached? %>
+            <hr/>
+            <p class="card-text"><strong>Discharge Summary Preview:</strong></p>
+            <%= image_tag @form.discharge_summary, class: "img-thumbnail", style: "max-width: 300px;" %>
+          <% end %>
+
         </div>
       </div>
       
       <div class="tab-pane fade" id="meeting" role="tabpanel" aria-labelledby="meeting-tab">
         <div id="meetingDetails">
-          <%= render partial: 'meetings/calendar', meeting: @meetings %>
+          <div id="meetings_calendar">
+            <%= render partial: 'meetings/calendar', locals:{meeting: @meetings, self_meetings:@attached_meetings}  %>
+          </div>
           <%= render partial: 'meetings/new', form: @form, meeting: @meeting %>
         </div>
       </div>
 
-      <div class="tab-pane fade" id="discharge" role="tabpanel" aria-labelledby="discharge-tab">
-        <div id="dischargeDetails">
-          <p>???</p>      
-        </div>
+      <div class="tab-pane fade" id="agreement" role="tabpanel" aria-labelledby="agreement-tab">
+        <%= form_with(model: @form, url: client_profile_form_path(@form), method: :patch, local: true, html: { multipart: true }) do |form| %>
+          <div id="agreementDetails">
+            <% if @form.service_agreement_form.attached? %>
+              <div class="mt-1 mb-4">
+                <p>Service Agreement Preview:</p>
+                <% if @form.service_agreement_form.content_type == 'application/pdf' %>
+                  <iframe src="<%= rails_blob_path(@form.service_agreement_form, disposition: 'inline') %>" width="80%" height="600px"></iframe>
+                <% else %>
+                  <%= image_tag @form.service_agreement_form, class: "img-thumbnail", style: "max-width: 300px;" %>
+                <% end %>
+                <br>
+                <%= link_to "Download Service Agreement", rails_blob_path(@form.service_agreement_form, disposition: "attachment") %>
+              </div>
+            <% end %>
+            <%= form.file_field :service_agreement_form, accept: '.png,.jpg,.jpeg,.pdf', class: 'form-control mb-3' %>
+            <%= form.submit 'Upload Service Agreement', name: 'commit', value: 'Save', class: 'btn btn-primary me-2' %>    
+          </div>
+        <% end %>
       </div>
 
       <div class="tab-pane fade" id="nok" role="tabpanel" aria-labelledby="nok-tab">
@@ -135,14 +163,22 @@
     document.addEventListener("DOMContentLoaded", function() {
       var urlParams = new URLSearchParams(window.location.search);
       var status = urlParams.get('status');
+      var querydate = urlParams.get('start_date');
 
-      if (status === 'Pending Assessment') {
+      console.log('querydate:', querydate !== null); 
+
+      if (querydate !== null) {
+        var meetingTab = new bootstrap.Tab(document.getElementById('meeting-tab'));
+        meetingTab.show();
+      } else if (status === 'Pending Assessment') {
         var assessmentTab = new bootstrap.Tab(document.getElementById('assessment-tab'));
         assessmentTab.show();
       } else if (status === 'Meeting Date Pending') {
         var meetingTab = new bootstrap.Tab(document.getElementById('meeting-tab'));
         meetingTab.show();
-        meetingTab._element.classList.add('orange-tab'); // Add the orange-tab class to change color
+      } else if (status === 'Upload Service Agreement' || status.startsWith('Meeting on')) {
+        var agreementTab = new bootstrap.Tab(document.getElementById('agreement-tab'));
+        agreementTab.show();
       }
       initMap('<%= @form.postal %>');
     });
@@ -172,7 +208,9 @@
       } else if (status === 'Meeting Date Pending') {
         var meetingTab = new bootstrap.Tab(document.getElementById('meeting-tab'));
         meetingTab.show();
-        document.getElementById('meeting-tab').classList.add('orange-tab'); // Add the orange-tab class to change color
+      } else {
+        var agreementTab = new bootstrap.Tab(document.getElementById('agreement-tab'));
+        agreementTab.show();
       }
     }
   </script>

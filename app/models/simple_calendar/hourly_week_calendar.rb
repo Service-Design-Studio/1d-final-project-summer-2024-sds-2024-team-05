@@ -1,5 +1,6 @@
 
-  class SimpleCalendar::HourlyWeekCalendar < SimpleCalendar::Calendar
+module SimpleCalendar
+  class HourlyWeekCalendar < Calendar
     def date_range
       start_time = start_date.beginning_of_day + 8.hours # Start from 8 AM
       end_time = start_time + additional_days.days + 1.day   # End one day after the last day
@@ -47,4 +48,4 @@
       events_grouped_by_date
     end
   end
-
+end

@@ -22,7 +22,7 @@
       <% end %>
     </div>
     <div class="col-md-6">
-      <p><strong>Mental Assessment: <%= @form.mental_transcription.html_safe %></strong><%= form.mental_assessment.presence || "Pending Assessment" %></p>
+      <p><strong>Mental Assessment: <%= @form.mental_transcription.present? ? @form.mental_transcription.html_safe : "" %></strong><%= form.mental_assessment.presence || "Pending Assessment" %></p>
       <%= form_with(model: form, url: form.persisted? ? edit_mental_assessment_form_path(form) : edit_mental_assessment_forms_path, method: :patch, local: true, html: { multipart: true }) do |form| %>
       <fieldset>
         <div class="form-check form-check-inline">

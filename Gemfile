@@ -57,6 +57,7 @@ gem "bootsnap", require: false
 
 group :production do
   gem 'pg', '~> 1.5.6' # for gcloud deployment
+  gem 'google-cloud-storage'
 end
 
 group :development, :test do

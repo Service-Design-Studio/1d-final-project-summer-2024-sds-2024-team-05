@@ -170,6 +170,8 @@
 
       console.log('querydate:', querydate !== null); 
 
+      initMap('<%= @form.postal %>');
+
       if (querydate !== null) {
         var meetingTab = new bootstrap.Tab(document.getElementById('meeting-tab'));
         meetingTab.show();
@@ -183,7 +185,6 @@
         var agreementTab = new bootstrap.Tab(document.getElementById('agreement-tab'));
         agreementTab.show();
       }
-      initMap('<%= @form.postal %>');
     });
 
     function initMap(address) {

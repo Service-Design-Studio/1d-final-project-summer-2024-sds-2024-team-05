@@ -1,6 +1,6 @@
 class Form < ApplicationRecord
     # include Rails.application.routes.url_helpers
-    attr_accessor :others_text, :autofill_address
+    attr_accessor :others_text, :autofill_address, :admin
     has_one_attached :discharge_summary
     has_one_attached :physical_video
     has_one_attached :mental_video
@@ -37,7 +37,9 @@ class Form < ApplicationRecord
 
     def update_last_edit
         unless changed_attributes.except('last_edit', 'last_viewed').empty?
-            self.last_edit = DateTime.now
+            if !admin
+                self.last_edit = DateTime.now
+            end
         end
     end
 

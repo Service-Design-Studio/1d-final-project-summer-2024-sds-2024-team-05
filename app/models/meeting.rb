@@ -1,5 +1,6 @@
 class Meeting < ApplicationRecord
-    belongs_to :form
+    belongs_to :form, optional: true
+    validates :title, :location, :start_time, presence: true
 
     def readable_start
         datetime = DateTime.parse(start_time.to_s)

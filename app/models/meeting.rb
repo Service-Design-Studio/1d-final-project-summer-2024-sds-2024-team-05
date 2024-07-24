@@ -2,13 +2,33 @@ class Meeting < ApplicationRecord
     belongs_to :form, optional: true
     validates :title, :location, :start_time, presence: true
 
-    def readable_start
+    def readable_day
         datetime = DateTime.parse(start_time.to_s)
   
         # Format the datetime object into custom format
-        formatted_datetime = datetime.strftime("%a,<br> %-d %B %Y, %l:%M%P")
+        formatted_datetime = datetime.strftime("%a")
 
         # Return the formatted datetime string
+        formatted_datetime
+    end
+    
+    def readable_datetime
+        datetime = DateTime.parse(start_time.to_s)
+  
+        # Format the datetime object into custom format
+        formatted_datetime = datetime.strftime("%-d %B %Y, %l:%M%P")
+
+        # Return the formatted datetime string
+        formatted_datetime
+    end
+
+    def overflow_date
+        formatted_datetime = "#{readable_day}, <br> #{readable_datetime}"
+        formatted_datetime
+    end
+
+    def inline_date
+        formatted_datetime = "#{readable_day}, #{readable_datetime}"
         formatted_datetime
     end
 

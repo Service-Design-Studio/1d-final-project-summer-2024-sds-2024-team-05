@@ -16,13 +16,17 @@ module AdminsHelper
     end
   end
 
-  def application_status(form)
+  def application_status(form, page=nil)
     if form.service_agreement_form.present?
       'Onboarded'
     elsif !form.meeting.nil? && form.meeting.past_date
       'Upload Service Agreement'
     elsif !form.meeting.nil?
-      "Meeting on #{form.meeting.readable_start}".html_safe
+      if page == 'client_profile'
+        "Meeting on #{form.meeting.inline_date}".html_safe
+      else
+        "Meeting on #{form.meeting.overflow_date}".html_safe
+      end
     elsif form.physical_assessment.present? && form.environment_assessment.present?
       'Meeting Date Pending'
     elsif form.submitted

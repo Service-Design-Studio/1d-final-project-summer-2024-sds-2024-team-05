@@ -74,7 +74,6 @@ class PatientsController < ApplicationController
 
   # PATCH /forms/1/update_1
   def update_1
-    @form.admin = current_user.admin?
     case params[:commit]
     when 'Save'
       if @form.update(form_params_step1)

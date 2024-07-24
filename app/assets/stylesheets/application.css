@@ -441,10 +441,6 @@ h1 {
     transform: translateX(-50%);
     opacity: 0; /* Hide initially */
     transition: opacity 0.3s ease; /* Smooth transition */
-    z-index: 999;
-    font-size: 12px; /* Adjust tooltip font size as needed */
-    max-width: 500px;
-    overflow-x: auto
   }
   
   .assessment-good {

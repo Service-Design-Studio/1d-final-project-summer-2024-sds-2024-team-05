@@ -37,9 +37,7 @@ class Form < ApplicationRecord
 
     def update_last_edit
         unless changed_attributes.except('last_edit', 'last_viewed').empty?
-            if !admin
-                self.last_edit = DateTime.now
-            end
+            self.last_edit = DateTime.now
         end
     end
 

@@ -10,6 +10,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
       t.string :user_last_name
       t.string :user_contact_number
       t.string :user_address
+      t.string :user_postal
       t.boolean :admin, default: false
 
       ## Recoverable

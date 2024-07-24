@@ -467,6 +467,7 @@ class PatientsController < ApplicationController
         permitted_params[:autofill_address] = "1"
       else
         permitted_params[:address] = current_user.user_address
+        permitted_params[:postal] = current_user.user_postal
       end
     end
 

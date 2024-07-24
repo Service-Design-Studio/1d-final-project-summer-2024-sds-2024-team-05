@@ -37,10 +37,7 @@ class Form < ApplicationRecord
 
     def update_last_edit
         unless changed_attributes.except('last_edit', 'last_viewed').empty?
-            # puts "Changed attributes: #{changed_attributes.keys}"
             self.last_edit = DateTime.now
-        else
-            # puts "No attributes (excluding 'last_edit' and 'last_viewed') have been changed."
         end
     end
 
@@ -62,7 +59,7 @@ class Form < ApplicationRecord
     end
 
     def page1_required
-       return ['date_of_birth', 'nok_address', 'nok_email', 'nok_contact_no', 'nok_first_name', 'nok_last_name', 'first_name', 'last_name', 'gender', 'address', 'relationship', 'languages']
+       return ['date_of_birth', 'nok_address', 'nok_email', 'nok_contact_no', 'nok_first_name', 'nok_last_name', 'first_name', 'last_name', 'gender', 'address', 'relationship', 'languages', 'postal']
     end
 
     def pg1_valid

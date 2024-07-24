@@ -252,8 +252,8 @@ class PatientsController < ApplicationController
           Rails.logger.debug "Checking if mental_video is attached: #{@form.mental_video.attached?}"
           @form.transcribe_video_and_update_form if @form.mental_video.attached?
         end
-        redirect_to edit_5_form_path(@form)
       end
+      redirect_to edit_5_form_path(@form)
     else
       redirect_to edit_4_form_path(@form), alert: 'Invalid action.'
     end

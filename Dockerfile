@@ -114,9 +114,9 @@ RUN bundle exec rake assets:precompile
 
 ENV RAILS_ENV=production
 
-RUN bundle exec rake db:create
-RUN bundle exec rake db:migrate
-RUN bundle exec rake db:seed
+# RUN bundle exec rake db:create
+# RUN bundle exec rake db:migrate
+# RUN bundle exec rake db:seed
 
 EXPOSE 8080
 CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "8080"]

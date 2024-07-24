@@ -1,4 +1,3 @@
-
 module SimpleCalendar
   class HourlyWeekCalendar < Calendar
     def date_range

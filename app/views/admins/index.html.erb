@@ -87,9 +87,9 @@
               </a>
             </td>
             <td>
-              <a href="<%= client_profile_form_path(form, status: application_status(form)) %>" style="text-decoration: none">
+              <a href="<%= client_profile_form_path(form, status: application_status(form, 'index')) %>" style="text-decoration: none">
                 <p style="<%= status_colour(form) %>">
-                  <%= application_status(form) %>
+                  <%= application_status(form, 'index') %>
                 </p>
               </a>
             </td>

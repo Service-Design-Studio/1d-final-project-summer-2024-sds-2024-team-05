@@ -243,6 +243,7 @@ class PatientsController < ApplicationController
         end
         redirect_to edit_4_form_path(@form)
       end
+      
     when 'Next'
       if params[:form].present?
         @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?

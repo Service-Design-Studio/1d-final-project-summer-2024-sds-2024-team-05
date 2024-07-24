@@ -24,12 +24,19 @@ class MeetingsController < ApplicationController
   # POST /meetings or /meetings.json
   def create
     @meeting = Meeting.new(meeting_params)
-    @form = Form.find(meeting_params[:form_id])
+
+    
 
     respond_to do |format|
       if @meeting.save
-        format.html { redirect_to client_profile_form_path(@form, status: 'Meeting Date Pending'), notice: "Meeting was successfully created." }
-        format.json { render :show, status: :created, location: @meeting }
+        if meeting_params[:form_id]
+          @form = Form.find(meeting_params[:form_id])
+          format.html { redirect_to client_profile_form_path(@form, status: 'Meeting Date Pending'), notice: "Meeting was successfully created." }
+          format.json { render :show, status: :created, location: @meeting }
+        else
+          format.html { redirect_to meetings_url, notice: "Meeting was successfully created." }
+          format.json { render :show, status: :created, location: @meeting }
+        end
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @meeting.errors, status: :unprocessable_entity }
@@ -58,7 +65,6 @@ class MeetingsController < ApplicationController
       if params[:origin]
         @form = Form.find(params[:origin])
         format.html { redirect_to client_profile_form_path(@form), notice: "Meeting was successfully destroyed." }
-        
         format.json { head :no_content }
       else
         
@@ -82,7 +88,7 @@ class MeetingsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def meeting_params
-      permitted_params = params.require(:meeting).permit(:title, :description, :location, :start_time, :end_time, :form_id)
+      permitted_params = params.require(:meeting).permit(:title, :description, :location, :start_time, :form_id)
       permitted_params
     end
 end

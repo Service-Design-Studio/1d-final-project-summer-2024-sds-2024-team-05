@@ -5,6 +5,7 @@ class AdminsController < ApplicationController
   after_action :update_last_view, only: [:client_profile]
 
   def index
+    session[:form_origin] = 'index'
     @user = current_user
     @newforms = Form.where(submitted: true).where(last_viewed: nil)
     @changedforms = Form.where(submitted: true).where.not(last_viewed: nil).where('last_edit > last_viewed')

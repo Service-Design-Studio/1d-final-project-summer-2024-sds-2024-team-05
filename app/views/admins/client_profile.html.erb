@@ -77,11 +77,9 @@
               style=" <%= status_colour(@form) %>; cursor: pointer;"
               onclick="handleActionRequiredClick('<%= application_status(@form) %>')"
             >
-              <%= application_status(@form) %> <!-- application_status is called in helper-->
+              <%= application_status(@form, 'client_profile') %> <!-- application_status is called in helper-->
             </span>
           </p>
-          <p><strong>last_edit</strong> <%= @form.last_edit %></p>
-          <p><strong>last viewed</strong> <%= @form.last_viewed %></p>
 
           <p><strong>Form No.:</strong> <%= @form.id %></p>
           <p><strong>Gender:</strong> <%= @form.gender %></p>

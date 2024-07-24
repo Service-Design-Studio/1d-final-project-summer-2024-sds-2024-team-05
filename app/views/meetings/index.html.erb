@@ -38,7 +38,8 @@
             <%= render meeting %>
             <p>
               <%= link_to "Show this meeting", meeting %>
-              <%= link_to "Delete this meeting", meeting_path(meeting), method: :delete, data: { confirm: "Are you sure you want to delete this meeting?" }, class: 'btn btn-danger' %>
+
+              <%= button_to "Destroy this meeting", meeting_path(meeting), method: :delete, data: { confirm: "Are you sure you want to delete this meeting?" }, class: 'btn btn-danger' %>
 
             </p>
           </div>

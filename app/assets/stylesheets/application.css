@@ -440,6 +440,7 @@ h1 {
     left: 50%;
     transform: translateX(-50%);
     opacity: 0; /* Hide initially */
+    white-space: nowrap;
     transition: opacity 0.3s ease; /* Smooth transition */
   }
   

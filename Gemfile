@@ -16,7 +16,7 @@ end
 # For AI transcription
 gem 'google-cloud-speech', '~> 1.7.0'
 gem 'grpc', '~> 1.64.0'
-  gem 'streamio-ffmpeg', '~> 3.0', '>= 3.0.2'
+gem 'streamio-ffmpeg', '~> 3.0', '>= 3.0.2'
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 

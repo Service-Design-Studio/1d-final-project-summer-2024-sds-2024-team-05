@@ -81,11 +81,11 @@
           <fieldset>
             <p>Has the Patient been Hospitalised Recently?</p>
             <div class="form-check form-check-inline">
-              <%= form.radio_button :hospital, '1', class: 'form-check-input', checked: @form.hospital == true %>
+              <%= form.radio_button :hospital, '1', class: 'form-check-input', id: 'Yes', checked: @form.hospital == true %>
               <%= form.label :hospital_yes, "Yes", class: 'form-check-label' %>
             </div>
             <div class="form-check form-check-inline">
-              <%= form.radio_button :hospital, '0', class: 'form-check-input', checked: @form.hospital == false %>
+              <%= form.radio_button :hospital, '0', class: 'form-check-input', id: 'No', checked: @form.hospital == false %>
               <%= form.label :hospital_no, "No", class: 'form-check-label' %>
             </div>
           </fieldset>

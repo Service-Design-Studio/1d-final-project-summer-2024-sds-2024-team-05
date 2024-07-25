@@ -9,6 +9,40 @@ require 'cucumber/rails'
 require 'capybara/cucumber'
 require 'rspec/expectations'
 
+require 'cucumber/rails'
+require 'capybara/cucumber'
+require 'selenium-webdriver'
+
+require 'cucumber/rails'
+require 'capybara/cucumber'
+require 'selenium-webdriver'
+
+require 'selenium-webdriver'
+
+Capybara.default_max_wait_time = 20
+
+Capybara.register_driver :selenium_chrome do |app|
+  options = Selenium::WebDriver::Chrome::Options.new
+  # Set the path to the ChromeDriver
+  Selenium::WebDriver::Chrome::Service.driver_path = "C:/Users/charm/Downloads/chromedriver-win64/chromedriver-win64/chromedriver.exe"
+
+  options.add_argument('headless') if ENV['HEADLESS']
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+end
+
+Capybara.configure do |config|
+  config.default_driver = :rack_test
+  config.javascript_driver = :selenium_chrome
+  config.app_host = 'http://127.0.0.1:3000' # Adjust if running on a different port
+end
+
+Before('@use_selenium') do
+  Capybara.current_driver = :selenium_chrome
+end
+
+After('@use_selenium') do
+  Capybara.use_default_driver
+end
 # By default, any exception happening in your Rails application will bubble up
 # to Cucumber so that your scenario will fail. This is a different from how
 # your application behaves in the production environment, where an error page will

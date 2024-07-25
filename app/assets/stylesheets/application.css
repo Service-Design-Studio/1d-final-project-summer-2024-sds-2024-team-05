@@ -276,6 +276,8 @@ h1 {
     margin: auto;
     margin-top: 1em;
     box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.5);
+    overflow: auto;    
+    padding-bottom: 2em; 
 }
 
 .video-form {

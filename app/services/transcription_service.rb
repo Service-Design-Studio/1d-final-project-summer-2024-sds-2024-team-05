@@ -29,13 +29,13 @@ class TranscriptionService
     response = Net::HTTP.post(uri, request_body, "Content-Type" => "application/json")
     result = JSON.parse(response.body)
 
-    Rails.logger.debug "Transcription API response: #{result.inspect}"
+    # Rails.logger.debug "Transcription API response: #{result.inspect}"
 
     if result["results"].nil? || result["results"].empty?
       Rails.logger.error "No transcription results returned"
       ""
     else
-      Rails.logger.info "Transcription results: #{result['results'].inspect}"
+      # Rails.logger.info "Transcription results: #{result['results'].inspect}"
 
       # Collect words with their speaker tags, filtering out words without speaker tags
       words_with_speaker = result["results"].flat_map do |res|

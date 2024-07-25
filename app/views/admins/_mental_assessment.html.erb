@@ -22,7 +22,11 @@
       <% end %>
     </div>
     <div class="col-md-6">
-      <p><strong>Mental Assessment: <br></strong><%= @form.mental_transcription.present? ? @form.mental_transcription.html_safe : "" %></p>
+      <p><strong>Mental Assessment: </strong>
+        <br>
+        <i><u>Transcript:</u></i>
+        <br>
+        <%= @form.mental_transcription.present? ? @form.mental_transcription.html_safe : "" %></p>
       <br>
       <p><strong>Animal Count: <br></strong><%= @form.animal_count.present? ? @form.animal_count : "" %></p>
       <br>

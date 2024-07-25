@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe PatientsController, type: :controller do
-  let(:user) { create(:user) }
-  let(:admin) { create(:user, email: "nursejoon@ninkatec.com", admin: true) }
+  let(:user) { create(:user, email:"testing123@gmail.com") }
+  let(:admin) { User.find_by(email: "nursejoon@ninkatec.com") }
   let(:form) { create(:form, user: user) }
   
   before do

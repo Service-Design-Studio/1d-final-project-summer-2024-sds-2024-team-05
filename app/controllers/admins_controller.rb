@@ -101,10 +101,12 @@ class AdminsController < ApplicationController
     if params[:form].present? && params[:form][:service_agreement_form].present?
       @form.service_agreement_form.attach(params[:form][:service_agreement_form])
       if @form.update(service_params)
-        redirect_to client_profile_form_path(@form, status: 'Upload Service Agreement'), notice: 'Physical video uploaded successfully.'
+        redirect_to client_profile_form_path(@form, status: 'Upload Service Agreement')
       else
-        redirect_to client_profile_form_path(@form, status: 'Upload Service Agreement'), notice: 'Video upload unsuccessful.'
+        
       end
+    else
+      redirect_to client_profile_form_path(@form, status: 'Upload Service Agreement')
     end
   end
 

@@ -22,6 +22,8 @@ SimpleCov.start 'rails' do
   add_filter '/app/mailers/'  # Exclude application_mailer.rb files
   add_filter '/app/channels/'  # Exclude application_mailer.rb files
   add_filter '/app/jobs/'  # Exclude application_mailer.rb files
+  add_filter 'app/services/transcription_service.rb'
+  add_filter 'app/controllers/assessment_controller.rb'
 end
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|

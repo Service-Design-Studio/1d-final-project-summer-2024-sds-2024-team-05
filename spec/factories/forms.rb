@@ -23,9 +23,9 @@ FactoryBot.define do
       mental_primary_assessment { "Good" }
       physical_primary_assessment { "Good" }
       environment_primary_assessment { "Good" }
-      mental_assessment { "No issues" }
-      physical_assessment { "Good health" }
-      environment_assessment { "Good environment" }
+      # mental_assessment { "No issues" }
+      # physical_assessment { "Good health" }
+      # environment_assessment { "Good environment" }
       meet_date { DateTime.now }
       # nok_address { "25 Upper Changi Road" }
       # nok_contact_no { "123-456-7890" }

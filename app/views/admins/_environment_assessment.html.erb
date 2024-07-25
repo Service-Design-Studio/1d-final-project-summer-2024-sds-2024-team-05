@@ -26,29 +26,29 @@
       <%= form_with(model: @form, url: @form.persisted? ? edit_environment_assessment_form_path(@form) : edit_environment_assessment_forms_path, method: :patch, local: true, html: { multipart: true }) do |form| %>
       <fieldset>
         <div class="form-check form-check-inline">
-          <%= form.radio_button :environment_assessment, "Good", class: "form-check-input", id: "good", checked: @form.environment_assessment == "Good", :required => false %>
-          <%= form.label "good", class: "form-check-label", for: "good" do %>
+          <%= form.radio_button :environment_assessment, "Good", class: "form-check-input", id: "good_env", checked: @form.environment_assessment == "Good", :required => false %>
+          <%= form.label "good_env", class: "form-check-label", for: "good_env" do %>
             Good
           <% end %>
         </div>
 
         <div class="form-check form-check-inline">
-          <%= form.radio_button :environment_assessment, "Fair", class: "form-check-input", id: "fair", checked: @form.environment_assessment == "Fair", :required => false %>
-          <%= form.label "fair", class: "form-check-label", for: "fair" do %>
+          <%= form.radio_button :environment_assessment, "Fair", class: "form-check-input", id: "fair_env", checked: @form.environment_assessment == "Fair", :required => false %>
+          <%= form.label "fair_env", class: "form-check-label", for: "fair_env" do %>
             Fair
           <% end %>
         </div>
 
         <div class="form-check form-check-inline">
-          <%= form.radio_button :environment_assessment, "Poor", class: "form-check-input", id: "poor", checked: @form.environment_assessment == "Poor", :required => false %>
-          <%= form.label "Poor", class: "form-check-label", for: "poor" do %>
+          <%= form.radio_button :environment_assessment, "Poor", class: "form-check-input", id: "poor_env", checked: @form.environment_assessment == "Poor", :required => false %>
+          <%= form.label "poor_env", class: "form-check-label", for: "poor_env" do %>
             Poor
           <% end %>
         </div>
 
         <div class="form-check form-check-inline">
-          <%= form.radio_button :environment_assessment, "Detailed Assessment Needed", class: "form-check-input", id: "others", checked: !["Good", "Fair", "Poor", ""].include?(@form.environment_assessment) %>
-          <%= form.label "others", class: "form-check-label", for: "others" do %>
+          <%= form.radio_button :environment_assessment, "Detailed Assessment Needed", class: "form-check-input", id: "others_env", checked: !["Good", "Fair", "Poor", ""].include?(@form.environment_assessment) %>
+          <%= form.label "others_env", class: "form-check-label", for: "others_env" do %>
             Detailed Assessment Needed:
           <% end %>
         </div>
@@ -57,11 +57,11 @@
 
         <div class="form-check">
             
-          <%= form.text_field :others_text, class: "form-control", id: "others_text", placeholder: "Detailed Assessment here", style: "font-style: italic; height: 175px; width: 300 px;", value: (!["Good", "Fair", "Poor", ""].include?(@form.environment_assessment)) ? @form.environment_assessment : ''%>
+          <%= form.text_field :others_text, class: "form-control", id: "others_text_env", placeholder: "Detailed Assessment here", style: "font-style: italic; height: 175px; width: 300 px;", value: (!["Good", "Fair", "Poor", ""].include?(@form.environment_assessment)) ? @form.environment_assessment : ''%>
         </div>
 
         <div class="d-flex justify-content-center mt-5 mb-5">
-          <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green me-2", style: 'float: left; margin-right: 5px;'  %>
+          <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green me-2", id: "save_env", style: 'float: left; margin-right: 5px;'  %>
 
         </div>
 

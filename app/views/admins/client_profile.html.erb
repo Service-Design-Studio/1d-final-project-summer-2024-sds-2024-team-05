@@ -46,7 +46,7 @@
         <h1><%= @form.first_name %> <%= @form.last_name %></h1>
       </div>
       <div class="col-auto">
-        <%= link_to 'Edit', edit_1_form_path(@form), class: 'btn btn-primary', style: "width: 10em" %>
+        <%= link_to 'Edit', edit_1_form_path(@form), class: 'btn btn-primary', style: "width: 10em", id: "edit" %>
       </div>
     </div>
     <ul class="nav nav-tabs" id="clientTabs" role="tablist">
@@ -129,7 +129,7 @@
                 <%= link_to "Download Service Agreement", rails_blob_path(@form.service_agreement_form, disposition: "attachment") %>
               </div>
             <% end %>
-            <%= form.file_field :service_agreement_form, accept: '.png,.jpg,.jpeg,.pdf', class: 'form-control mb-3' %>
+            <%= form.file_field :service_agreement_form, accept: '.png,.jpg,.jpeg,.pdf', class: 'form-control mb-3', id: 'svs_agreement' %>
             <%= form.submit 'Upload Service Agreement', name: 'commit', value: 'Save', class: 'btn btn-primary me-2' %>    
           </div>
         <% end %>

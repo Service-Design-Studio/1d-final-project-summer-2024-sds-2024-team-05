@@ -26,7 +26,7 @@
       </div>
         <% meetings.each do |meeting| %>
             <div style="width: 150px; padding: 8px; padding-top: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: center;" >
-              <%= link_to "#{meeting.title} #{meeting.condensed_time}", meeting_path(meeting), class: 'custom-link'%>
+              <%= link_to "#{truncate(meeting.title, length: 16)} #{meeting.condensed_time}", meeting_path(meeting), class: 'custom-link'%>
             </div>
         <% end %>
     <% end %>

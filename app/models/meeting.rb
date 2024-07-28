@@ -45,9 +45,6 @@ class Meeting < ApplicationRecord
     def past_date
         current_datetime = DateTime.now
 
-        # Convert attribute_datetime to a DateTime object if it's not already
-        attribute_datetime = DateTime.parse(start_time.to_s) unless attribute_datetime.is_a?(DateTime)
-
         # Compare current_datetime with attribute_datetime
         current_datetime > start_time
     end

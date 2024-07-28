@@ -406,7 +406,7 @@ h1 {
     align-items: center;
     justify-content: center;
     text-align: center;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
     border-radius: 8px; /* Rounded corners */
     text-decoration: none; /* Remove underlines */
@@ -474,3 +474,18 @@ h1 {
     background-color: #7f7f7f; /* Gray for inactive */
     color: white; /* Text color */
   }
+
+  .name-overflow {
+    white-space: normal; /* Allow text to wrap */
+    overflow: hidden; /* Hide overflowed content */
+    text-overflow: ellipsis; /* Add ellipsis if needed */
+    display: -webkit-box;
+    line-clamp: 2;
+    -webkit-line-clamp: 2; /* Limit text to 2 lines */
+    -webkit-box-orient: vertical; /* Vertical box layout */
+    max-width: 200px; /* Set your desired maximum width */
+
+    
+  }
+
+  

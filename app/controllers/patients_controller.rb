@@ -352,7 +352,7 @@ class PatientsController < ApplicationController
   end
 
   def cv_assessment(form)
-    url = "http://127.0.0.1:3002/process_video" # Replace with the actual URL
+    url = "https://ninkatec-cv-oreggozlqa-as.a.run.app/process_video" # Replace with http://127.0.0.1:3002 if development without deployed microservice
     headers = { 'Content-Type' => 'application/json' }
     body = { "file_name": form.physical_video_file_name}.to_json
 

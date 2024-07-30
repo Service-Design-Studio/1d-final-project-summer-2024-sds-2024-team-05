@@ -42,7 +42,7 @@ h1 {
     color: white;
     border: 1px solid green;
     background-color: green;
-    width: 7em;
+    width: auto;
     margin-top: 0.5em;
 }
 
@@ -50,7 +50,7 @@ h1 {
     color: green;
     border: 1px solid green;
     background-color: white;
-    width: 7em;
+    width: auto;
     margin-top: 0.5em;
 }
 
@@ -58,7 +58,7 @@ h1 {
     color: rgb(107, 124, 107);
     border: 1px solid rgb(107, 124, 107);
     background-color: white;
-    width: 7em;
+    width: auto;
     margin-top: 0.5em;
 }
 
@@ -66,7 +66,7 @@ h1 {
     color: rgb(107, 124, 107);
     border: 1px solid rgb(107, 124, 107);
     background-color: white;
-    width: 7em;
+    width: auto;
     margin-top: 0.5em;
 }
 
@@ -74,7 +74,7 @@ h1 {
     color: white;
     border: 1px solid #253255;
     background-color: #253255;
-    width: 7em;
+    width: auto;
     margin-top: 0.5em;
 }
 
@@ -92,7 +92,7 @@ h1 {
     color: white;
     border: 1px solid #a80000;
     background-color: #a80000;
-    width: 7em;
+    width: auto;
     margin-top: 0.5em;
 }
 
@@ -100,7 +100,7 @@ h1 {
     color: #253255;
     border: 1px solid #253255;
     background-color: white;
-    width: 7em;
+    width: auto;
     margin-top: 0.5em;
 }
 
@@ -108,7 +108,7 @@ h1 {
     color: #253255;
     border: 1px solid #253255;
     background-color: white;
-    width: 7em;
+    width: auto;
     margin-top: 0.5em;
 }
 
@@ -125,7 +125,7 @@ h1 {
     color: #a80000;
     border: 1px solid #a80000;
     background-color: white;
-    width: 7em;
+    width: auto;
     margin-top: 0.5em;
 }
 
@@ -133,7 +133,7 @@ h1 {
     color: white;
     border: 1px solid #253255;
     background-color: #253255;
-    width: 7em;
+    width: auto;
     margin-top: 0.5em;
 }
 
@@ -151,14 +151,14 @@ h1 {
     color: white;
     border: 1px solid #a80000;
     background-color: #a80000;
-    width: 7em;
+    width: auto;
     margin-top: 0.5em;
 }
 
 .btn-outline-save {
     color: #7c7d7e;
     border: 1px solid #7c7d7e;
-    width: 7em;
+    width: auto;
     margin-top: 0.5em;
 }
 
@@ -171,7 +171,7 @@ h1 {
 .btn-outline-black {
     color: black;
     border: 1px solid black;
-    width: 7em;
+    width: auto;
     margin-top: 0.5em;
 }
 

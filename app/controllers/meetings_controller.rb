@@ -33,9 +33,12 @@ class MeetingsController < ApplicationController
           @form = Form.find(meeting_params[:form_id])
           format.html { redirect_to client_profile_form_path(@form, status: 'Meeting Date Pending'), notice: "Meeting was successfully created." }
           format.json { render :show, status: :created, location: @meeting }
+        elsif current_user.admin?
+          format.html { redirect_to admin_root_path(start_date: DateTime.now), notice: "Meeting was successfully destroyed." }
+          format.json { head :no_content }
         else
-          format.html { redirect_to meetings_url, notice: "Meeting was successfully created." }
-          format.json { render :show, status: :created, location: @meeting }
+          format.html { redirect_to user_root_path, notice: "How did you do this." }
+          format.json { head :no_content }
         end
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -59,17 +62,23 @@ class MeetingsController < ApplicationController
 
   # DELETE /meetings/1 or /meetings/1.json
   def destroy
+    if @meeting.form
+      @form = @meeting.form
+    end
     @meeting.destroy!
 
     respond_to do |format|
-      if params[:origin]
-        @form = Form.find(params[:origin])
+      if params[:origin] && @form
         format.html { redirect_to client_profile_form_path(@form), notice: "Meeting was successfully destroyed." }
         format.json { head :no_content }
       else
-        
-        format.html { redirect_to meetings_url, notice: "Meeting was successfully destroyed." }
-        format.json { head :no_content }
+        if current_user.admin?
+          format.html { redirect_to admin_root_path(start_date: DateTime.now), notice: "Meeting was successfully destroyed." }
+          format.json { head :no_content }
+        else
+          format.html { redirect_to user_root_path, notice: "How did you do this." }
+          format.json { head :no_content }
+        end
       end
     end
   end
@@ -89,6 +98,7 @@ class MeetingsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def meeting_params
       permitted_params = params.require(:meeting).permit(:title, :description, :location, :start_time, :form_id)
+      permitted_params[:start_time] = permitted_params[:start_time].in_time_zone('Asia/Singapore')
       permitted_params
     end
 end

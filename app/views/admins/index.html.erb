@@ -28,156 +28,242 @@
   <div class="container">
 
     <h1 class="card-text" style="padding-bottom: 30px"><%= "#{'Welcome'} #{@user.user_first_name} #{'!'}" %></h1>
-    <form class="d-flex" method="GET" action="/search" id="search-form">
-      <input class="form-control me-2" type="search" name="query" placeholder="Enter Client's/NOK's Name" id="search-input" value="<%= @query %>">
-      <button class="btn btn-primary me-2" type="submit">Search</button>
-      <button class="btn btn-secondary" type="button" id="clear-button">Clear</button>
-    </form>
 
-    <% if @no_results %>
-      <div class="alert alert-warning mt-3" role="alert">
-        Patient/NOK name does not exist.
-      </div>
-    <% end %>
+    <ul class="nav nav-tabs" id="clientTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="client-tab" data-bs-toggle="tab" data-bs-target="#client" type="button" role="tab" aria-controls="client" aria-selected="true">Application Dashboard</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="meeting-tab" data-bs-toggle="tab" data-bs-target="#meeting" type="button" role="tab" aria-controls="meeting" aria-selected="false">Scheduled Meetings</button>
+      </li>
+    </ul>
+    
+    <br>
 
-    <br></br>
-
-    <h2>Submitted Forms</h2>
-
-    <!-- Table of Submitted forms -->
-    <table class="table">
-      <thead>
-        <tr>
-          <th onclick="sortTable('name')">Patient Name <span id="sort-icon-name"></span></th>
-          <th onclick="sortTable('gender')">Gender <span id="sort-icon-gender"></span></th>
-          <th>Assessments</th>
-          <th onclick="sortTable('application_status')">Action Required <span id="sort-icon-application_status"></span></th>
-          <th onclick="sortTable('address')">Address <span id="sort-icon-address"></span></th>
-          <th onclick="sortTable('address')">Postal <span id="sort-icon-address"></span></th>
-          <th onclick="sortTable('start_date')">Start <span id="sort-icon-start_date"></span></th>
-          <th onclick="sortTable('end_date')">End <span id="sort-icon-end_date"></span></th>
-          <th class="text-center">Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <% @all_submitted_forms&.each do |form| %>
-          <tr class="clickable-row" data-href="<%= client_profile_form_path(form) %>" onmouseover="hoverRow(this, true)" onmouseout="hoverRow(this, false)">
-            <td>
-              <a href="<%= client_profile_form_path(form) %>" style="text-decoration: none; color: black">
-                <%= "#{form.first_name} #{form.last_name}" %>
-              </a>
-              <% if !form.last_edit.nil? %>
-                <% if form.unseen_changes %>
-                  <% if form.last_viewed.nil? %>
-                    <br>
-                    <span style="font-size: 12px; color: #155724;"><%= "New Submission!" %></span>
-                  <% else %>
-                    <br>
-                    <span style="font-size: 12px; color: #3498db;"><%= "New Changes Made!" %></span>
-                  <% end %>
-                <% end %>
-              <% end %>
-            </td>
-            <td><%= form.gender %></td>
-            <td style="padding-left: 30px; vertical-align: middle; height: 100%;">
-              <a href="<%= client_profile_form_path(form, status: 'Pending Assessment') %>" style="text-decoration: none">
-                <%= phys_circle(form.physical_assessment) %>
-                <%= ment_circle(form.mental_assessment) %>
-              </a>
-            </td>
-            <td>
-              <a href="<%= client_profile_form_path(form, status: application_status(form, 'index')) %>" style="text-decoration: none">
-                <p style="<%= status_colour(form) %>">
-                  <%= application_status(form, 'index') %>
-                </p>
-              </a>
-            </td>
-            <td><%= form.address %></td>
-            <td><%= form.postal %></td>
-            <td><%= form.start_date %></td>
-            <td><%= form.end_date %></td>
-
-            <td class="text-center">
-              <div class="d-flex justify-content-center align-items-center">
-                <button class="btn btn-danger delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" data-form-url="<%= form_path(form) %>">Delete</button>
-              </div>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-
-    <br></br>
-
-    <h2>Ongoing Forms</h2>
-
-    <!-- Table of Ongoing forms -->
-    <table class="table">
-      <thead>
-        <tr>
-          <th onclick="sortTable('name')">Patient Name <span id="sort-icon-patient_name"></span></th>
-          <th onclick="sortTable('nok_name')">NOK Name <span id="sort-icon-nok_name"></span></th>
-          <th onclick="sortTable('gender')">Gender <span id="sort-icon-gender"></span></th>
-          <th onclick="sortTable('address')">Address <span id="sort-icon-address"></span></th>
-          <th onclick="sortTable('address')">Postal <span id="sort-icon-address"></span></th>
-          <th onclick="sortTable('start_date')">Start Date <span id="sort-icon-start_date"></span></th>
-          <th onclick="sortTable('end_date')">End Date <span id="sort-icon-end_date"></span></th>
-          <th class="text-center">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @incompleteforms&.each do |form| %>
-          <tr onmouseover="hoverRow(this, true)" onmouseout="hoverRow(this, false)">
-            <td><%= "#{form.first_name} #{form.last_name}" %></td>
-            <td><%= "#{form.nok_first_name} #{form.nok_last_name}" %></td>
-            <td><%= form.gender %></td>
-            <td><%= form.address %></td>
-            <td><%= form.postal %></td>
-            <td><%= form.start_date %></td>
-            <td><%= form.end_date %></td>
-
-            <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info' %></td>
-            <td class="text-center">
-              <div class="d-flex justify-content-center align-items-center">
-                <%= link_to 'Edit', edit_1_form_path(form), class: 'btn btn-primary me-2' %>
-                <%= form_with(model: form, method: :delete, url: form_path(form), data: { confirm: 'Are you sure?' }) do |f| %>
-                  <%= f.submit 'Delete', class: 'btn btn-danger' %>
-                <% end %>
-              </div>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-
-    <!-- Link to new form creation page -->
-    <%= link_to 'Create New Form', new_form_path, class: 'btn btn-primary' %>
-  </div>
-
-  <!-- Delete Confirmation Modal -->
-  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          Are you sure you want to delete this form?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <form id="delete-form" method="post" action="">
-            <input type="hidden" name="_method" value="delete">
-            <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-            <button type="submit" class="btn btn-danger">Delete</button>
+    <div class="tab-content" id="clientTabsContent">
+      <div class="tab-pane fade show active" id="client" role="tabpanel" aria-labelledby="client-tab">
+        <div id="clientDetails">
+          <form class="d-flex" method="GET" action="/search" id="search-form">
+            <input class="form-control me-2" type="search" name="query" placeholder="Enter Client's/NOK's Name" id="search-input" value="<%= @query %>">
+            <button class="btn btn-primary me-2" type="submit">Search</button>
+            <button class="btn btn-secondary" type="button" id="clear-button">Clear</button>
           </form>
+
+          <% if @no_results %>
+            <div class="alert alert-warning mt-3" role="alert">
+              Patient/NOK name does not exist.
+            </div>
+          <% end %>
+
+          <br></br>
+
+          <h2>Submitted Forms</h2>
+
+          <!-- Table of Submitted forms -->
+          <table class="table">
+            <thead>
+              <tr>
+                <th onclick="sortTable('name')">Patient Name <span id="sort-icon-name"></span></th>
+                <th onclick="sortTable('gender')">Gender <span id="sort-icon-gender"></span></th>
+                <th>Assessments</th>
+                <th onclick="sortTable('application_status')">Action Required <span id="sort-icon-application_status"></span></th>
+                <th onclick="sortTable('address')">Address <span id="sort-icon-address"></span></th>
+                <th onclick="sortTable('address')">Postal <span id="sort-icon-address"></span></th>
+                <th onclick="sortTable('start_date')">Start <span id="sort-icon-start_date"></span></th>
+                <th onclick="sortTable('end_date')">End <span id="sort-icon-end_date"></span></th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% @all_submitted_forms&.each do |form| %>
+                <tr class="clickable-row" data-href="<%= client_profile_form_path(form) %>" onmouseover="hoverRow(this, true)" onmouseout="hoverRow(this, false)">
+                    <td>
+                      <a href="<%= client_profile_form_path(form) %>" style="text-decoration: none; color: black" >
+                        <span class="name-overflow">
+                        <%= "#{form.first_name} #{form.last_name}" %>
+                        </span>
+                      </a>
+                      <% if !form.last_edit.nil? %>
+                        <% if form.unseen_changes %>
+                          <% if form.last_viewed.nil? %>
+                            <span style="font-size: 12px; color: #155724;"><%= "New Submission!" %></span>
+                          <% else %>
+                            <span style="font-size: 12px; color: #3498db;"><%= "New Changes Made!" %></span>
+                          <% end %>
+                        <% end %>
+                      <% end %>
+                    </td>
+                    <td><%= form.gender %></td>
+                    <td style="padding-left: 30px; vertical-align: middle; height: 100%;">
+                      <a href="<%= client_profile_form_path(form, status: 'Pending Assessment') %>" style="text-decoration: none">
+                        <%= phys_circle(form.physical_assessment) %>
+                        <%= ment_circle(form.mental_assessment) %>
+                      </a>
+                    </td>
+                    <td>
+                      <a href="<%= client_profile_form_path(form, status: application_status(form, 'index')) %>" style="text-decoration: none">
+                        <p style="<%= status_colour(form) %>">
+                          <%= application_status(form, 'index') %>
+                        </p>
+                      </a>
+                    </td>
+                    <td><%= form.address %></td>
+                    <td><%= form.postal %></td>
+                    <td><%= readable_date(form.start_date) %></td>
+                    <td><%= readable_date(form.end_date) %></td>
+                  
+                  <td class="text-center">
+                    <div class="d-flex justify-content-center align-items-center style="position: relative; z-index: 10;">
+                      <button class="btn btn-danger delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" data-form-url="<%= form_path(form) %>">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                      </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+
+          <br></br>
+
+          <h2>Ongoing Forms</h2>
+
+          <!-- Table of Ongoing forms -->
+          <table class="table">
+            <thead>
+              <tr>
+                <th onclick="sortTable('name')">Patient Name <span id="sort-icon-patient_name"></span></th>
+                <th onclick="sortTable('nok_name')">NOK Name <span id="sort-icon-nok_name"></span></th>
+                <th onclick="sortTable('gender')">Gender <span id="sort-icon-gender"></span></th>
+                <th onclick="sortTable('address')">Address <span id="sort-icon-address"></span></th>
+                <th onclick="sortTable('address')">Postal <span id="sort-icon-address"></span></th>
+                <th onclick="sortTable('start_date')">Start Date <span id="sort-icon-start_date"></span></th>
+                <th onclick="sortTable('end_date')">End Date <span id="sort-icon-end_date"></span></th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @incompleteforms&.each do |form| %>
+                <tr onmouseover="hoverRow(this, true)" onmouseout="hoverRow(this, false)">
+                  <td>
+                  <span class="name-overflow">
+                  <%= "#{form.first_name} #{form.last_name}" %>
+                  </span>
+                  </td>
+                  <td><%= "#{form.nok_first_name} #{form.nok_last_name}" %></td>
+                  <td><%= form.gender %></td>
+                  <td><%= form.address %></td>
+                  <td><%= form.postal %></td>
+                  <td>
+                    <% if form.start_date %>
+                      <%= readable_date(form.start_date) %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% if form.end_date %>
+                      <%= readable_date(form.end_date) %>
+                    <% end %>
+                  </td>
+
+                  <td class="text-center"><%= link_to 'View Summary', form_path(form), class: 'btn btn-info' %></td>
+                  <td class="text-center">
+                    <div class="d-flex justify-content-center align-items-center">
+                      <%= link_to edit_1_form_path(form), class: 'btn btn-primary me-2' do %>
+                        <!-- SVG for Pen Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                          <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                          <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                        </svg>
+                      <% end %>
+                    
+                    
+                      <%= form_with(model: form, method: :delete, url: form_path(form), data: { confirm: 'Are you sure?' }) do |f| %>
+                        <%= button_to form_path(form), method: :delete, class: 'btn btn-danger', data: { confirm: 'Are you sure?' } do %>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                          </svg>
+                        <% end %>
+                      <% end %>
+
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+
+          <!-- Link to new form creation page -->
+          <%= link_to 'Create New Form', new_form_path, class: 'btn btn-primary' %>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to delete this form?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="delete-form" method="post" action="">
+                  <input type="hidden" name="_method" value="delete">
+                  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane fade" id="meeting" role="tabpanel" aria-labelledby="meeting-tab">
+        <div id="meetingDetails">
+          <h1>Meetings</h1>
+
+          <%= month_calendar(events: @meetings) do |date, meetings| %>
+            <div class="day">
+              <%= date.day %>
+            </div>
+              <% meetings.each do |meeting| %>
+                  <div style="width: 150px; padding: 8px; padding-top: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: center" >
+                    <%= link_to "#{truncate(meeting.title, length: 16)} #{meeting.condensed_time}", meeting_path(meeting), class: 'custom-link'%>
+                  </div>
+              <% end %>
+          <% end %>
+      
+          <div id="meetings">
+            <% @meetings.each do |meeting| %>
+              <div class = "card"  style="width: 500px;">
+                <div class="card-body">
+                  <%= render meeting %>
+                  <p>
+                    <%= link_to "Show this meeting", meeting %>
+      
+                    <%= button_to "Destroy this meeting", meeting_path(meeting), method: :delete, data: { confirm: "Are you sure you want to delete this meeting?" }, class: 'btn btn-danger' %>
+      
+                  </p>
+                </div>
+              </div>
+              <hr/>
+            <% end %>
+          </div>
+      
+          <%= link_to "New meeting", new_meeting_path %>
         </div>
       </div>
     </div>
   </div>
 
+  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script>
     function hoverRow(row, hover) {
@@ -193,7 +279,16 @@
       });
     }
 
+
     document.addEventListener("DOMContentLoaded", function() {
+      var urlParams = new URLSearchParams(window.location.search);
+      var querydate = urlParams.get('start_date');
+
+      if (querydate !== null) {
+        var meetingTab = new bootstrap.Tab(document.getElementById('meeting-tab'));
+        meetingTab.show();
+      }
+
       document.getElementById("clear-button").addEventListener("click", function() {
         document.getElementById("search-input").value = '';
         document.getElementById("search-form").submit();

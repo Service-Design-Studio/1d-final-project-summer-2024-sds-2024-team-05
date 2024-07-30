@@ -90,10 +90,6 @@
         <p class="card-text"><strong>Medication:</strong> <%= @form.medication %></p>
         <p class="card-text"><strong>Hospitalised recently:</strong> <%= @form.hospital.nil? ? "" : (@form.hospital ? "Yes" : "No") %></p>
 
-        <p class="card-text"><strong>Weight:</strong> <%= @form.mental_video.class %></p>
-        <p class="card-text"><strong>Weight:</strong> <%= @form.physical_video %></p>
-        <p class="card-text"><strong>Weight:</strong> <%= @form.environment_video %></p>
-
         <% if @form.discharge_summary.attached? %>
           <div class="mt-3">
             <p class="card-text"><strong>Discharge Summary Preview:</strong></p>
@@ -113,12 +109,15 @@
         <div class="col-md-6">
           <div class="video-container text-center">
             <p>Physical Video:</p>
-            <% if @form.physical_video.attached? %>
-              <%= video_tag rails_blob_path(@form.physical_video, disposition: "attachment"), controls: true, class: "img-thumbnail video-preview rounded-video" %>
+            <% if @form.physical_video_file_name.present? %>
+              <% gcs_service = GoogleCloudStorageService.new %>
+              <% signed_url = gcs_service.generate_signed_url_for_viewing(@form.physical_video_file_name) %>
+                <div class="video-container text-center mt-3">
+                  <%= video_tag signed_url, controls: true, class: "img-thumbnail video-preview rounded-video" %>
+                </div>
               <% if @form.submitted %>
                 <p class="card-text"><strong>Primary Physical Assessment:</strong><%= @form.physical_primary_assessment %></p>
                 <p class="card-text"><strong>Final Physical Assessment:</strong><%= @form.physical_assessment %></p>
-
               <% end %>
             <% else %>
               <p>No physical video attached</p>
@@ -128,8 +127,12 @@
         <div class="col-md-6">
           <div class="video-container text-center">
             <p>Mental Video:</p>
-            <% if @form.mental_video.attached? %>
-              <%= video_tag rails_blob_path(@form.mental_video, disposition: "attachment"), controls: true, class: "img-thumbnail" %>
+            <% if @form.mental_video_file_name.present? %>
+              <% gcs_service = GoogleCloudStorageService.new %>
+              <% signed_url = gcs_service.generate_signed_url_for_viewing(@form.mental_video_file_name) %>
+                <div class="video-container text-center mt-3">
+                  <%= video_tag signed_url, controls: true, class: "img-thumbnail video-preview rounded-video" %>
+                </div>
               <% if @form.submitted %>
                 <p class="card-text"><strong>Primary Mental Assessment:</strong><%= @form.mental_primary_assessment %></p>
                 <p class="card-text"><strong>Final Mental Assessment:</strong><%= @form.mental_assessment %></p>
@@ -145,8 +148,12 @@
         <div class="col-md-6">
           <div class="video-container text-center">
             <p>Environment Video:</p>
-            <% if @form.environment_video.attached? %>
-              <%= video_tag rails_blob_path(@form.environment_video, disposition: "attachment"), controls: true, class: "img-thumbnail" %>
+            <% if @form.environment_video_file_name.present? %>
+              <% gcs_service = GoogleCloudStorageService.new %>
+              <% signed_url = gcs_service.generate_signed_url_for_viewing(@form.environment_video_file_name) %>
+                <div class="video-container text-center mt-3">
+                  <%= video_tag signed_url, controls: true, class: "img-thumbnail video-preview rounded-video" %>
+                </div>
               <% if @form.submitted %>
                 <p class="card-text"><strong>Primary Environment Assessment:</strong><%= @form.environment_primary_assessment %></p>
                 <p class="card-text"><strong>Final Environment Assessment:</strong><%= @form.environment_assessment %></p>

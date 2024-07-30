@@ -15,8 +15,12 @@
   <div class="row align-items-start">
     <div class="col-md-6">
       <p><strong>Environment Video:</strong></p>
-      <% if @form.environment_video.present? %>
-        <%= video_tag url_for(@form.environment_video), controls: true, class: "img-thumbnail" %>
+        <% if @form.environment_video_file_name.present? %>
+          <% gcs_service = GoogleCloudStorageService.new %>
+          <% signed_url = gcs_service.generate_signed_url_for_viewing(@form.environment_video_file_name) %>
+            <div class="video-container text-center mt-3">
+              <%= video_tag signed_url, controls: true, class: "img-thumbnail video-preview rounded-video" %>
+            </div>
       <% else %>
         <p>null</p>
       <% end %>

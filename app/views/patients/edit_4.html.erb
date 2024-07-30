@@ -67,11 +67,12 @@
             Video should contain patient moving around the house just like how he/she would on a daily basis
             <%= form.file_field :physical_video, accept: 'video/*', class: 'form-control mb-3', id: 'physical_video' %>
             <%= form.submit 'Upload Physical Video', name: 'commit', value: 'Upload Physical Video', class: 'btn btn-primary me-2' %>
-            <% if @form.physical_video.attached? %>
-
+            <% if @form.physical_video_file_name.present? %>
+              <% gcs_service = GoogleCloudStorageService.new %>
+              <% signed_url = gcs_service.generate_signed_url_for_viewing(@form.physical_video_file_name) %>
             <div class="video-container text-center mt-3">
                   <p>Physical Video Uploaded:</p>
-                  <%= video_tag rails_blob_path(@form.physical_video, disposition: "attachment"), controls: true, class: "img-thumbnail video-preview rounded-video" %>
+                  <%= video_tag signed_url, controls: true, class: "img-thumbnail video-preview rounded-video" %>
             </div>
             <% end %>
           </div>
@@ -94,12 +95,13 @@
             Possible Questions: “How are you today?”, “What is your name?”, “What day is it today?”, “Who is this person?”
             <%= form.file_field :mental_video, accept: 'video/*', class: 'form-control mb-3', id: 'mental_video' %>
             <%= form.submit 'Upload Mental Video', name: 'commit', value: 'Upload Mental Video', class: 'btn btn-primary me-2' %>
-            <% if @form.mental_video.attached? %>
-
-              <div class="video-container text-center mt-3">
-                <p>Video Uploaded:</p>
-                  <%= video_tag rails_blob_path(@form.mental_video, disposition: "attachment"), controls: true, class: "img-thumbnail video-preview rounded-video" %>
-              </div>
+            <% if @form.mental_video_file_name.present? %>
+              <% gcs_service = GoogleCloudStorageService.new %>
+              <% signed_url = gcs_service.generate_signed_url_for_viewing(@form.mental_video_file_name) %>
+            <div class="video-container text-center mt-3">
+                  <p>Mental Video Uploaded:</p>
+                  <%= video_tag signed_url, controls: true, class: "img-thumbnail video-preview rounded-video" %>
+            </div>
             <% end %>
         </div>
       </div>

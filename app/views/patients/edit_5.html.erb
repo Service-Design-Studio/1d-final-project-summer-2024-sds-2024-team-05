@@ -56,9 +56,13 @@
           <%= form.file_field :environment_video, accept: 'video/*', class: 'form-control mb-3', id: 'environment_video'%>
           <%= form.submit 'Upload', name: 'commit', value: 'Upload Environment Video', class: 'btn btn-primary' %>
           <div class=" text-center">
-            <% if @form.environment_video.attached? %>
-              <p>Current Environment Video:</p>
-                <%= video_tag rails_blob_path(@form.environment_video, disposition: "attachment"), controls: true, class: "img-thumbnail video-preview rounded-video",width:" 100%", height:"10" %>
+            <% if @form.environment_video_file_name.present? %>
+              <% gcs_service = GoogleCloudStorageService.new %>
+              <% signed_url = gcs_service.generate_signed_url_for_viewing(@form.environment_video_file_name) %>
+            <div class="video-container text-center mt-3">
+                  <p>Environment Video Uploaded:</p>
+                  <%= video_tag signed_url, controls: true, class: "img-thumbnail video-preview rounded-video" %>
+            </div>
             <% end %>
           </div>
         </div>

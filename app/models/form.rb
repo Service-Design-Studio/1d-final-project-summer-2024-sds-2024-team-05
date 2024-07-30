@@ -2,9 +2,6 @@ class Form < ApplicationRecord
     # include Rails.application.routes.url_helpers
     attr_accessor :others_text, :autofill_address, :admin
     has_one_attached :discharge_summary
-    has_one_attached :physical_video
-    has_one_attached :mental_video
-    has_one_attached :environment_video
     has_one_attached :service_agreement_form
     belongs_to :user
     has_one :meeting, dependent: :destroy
@@ -83,11 +80,11 @@ class Form < ApplicationRecord
     end
 
     def pg4_valid
-        physical_video.attached? && mental_video.attached?
+        ['physical_video_file_name', 'mental_video_file_name'].all? { |key| self.send(key).present? }
     end
 
     def pg5_valid
-        environment_video.attached?
+        ['environment_video_file_name'].all? { |key| self.send(key).present? }
     end
 
     def submittable

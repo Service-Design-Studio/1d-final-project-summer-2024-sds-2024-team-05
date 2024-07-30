@@ -20,6 +20,9 @@ class CreateForms < ActiveRecord::Migration[7.1]
       t.date :end_date
       t.string :languages
       t.text :languages_other
+      t.string :physical_video_file_name
+      t.string :mental_video_file_name
+      t.string :environment_video_file_name
       t.text :mental_primary_assessment
       t.text :physical_primary_assessment
       t.text :environment_primary_assessment

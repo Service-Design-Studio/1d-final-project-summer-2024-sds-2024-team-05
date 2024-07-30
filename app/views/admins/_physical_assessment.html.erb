@@ -15,13 +15,25 @@
     <div class="row align-items-start">
       <div class="col-md-6">
         <p><strong>Physical Video:</strong></p>
-        <% if @form.physical_video.present? %>
-          <%= video_tag url_for(@form.physical_video), controls: true, class: "img-thumbnail" %>
+          <% if @form.physical_video_file_name.present? %>
+            <% gcs_service = GoogleCloudStorageService.new %>
+            <% signed_url = gcs_service.generate_signed_url_for_viewing(@form.physical_video_file_name) %>
+              <div class="video-container text-center mt-3">
+                <%= video_tag signed_url, controls: true, class: "img-thumbnail video-preview rounded-video" %>
+              </div>
+              <br>
+        <p><strong>Physical Video AI Assessment:</strong></p>
+            <% ai_file = @form.physical_video_file_name.split('.')[0] + '_AI.mp4' %>
+            <% ai_url = gcs_service.generate_signed_url_for_viewing(ai_file) %>
+            <div class="video-container text-center mt-1">
+              <%= video_tag ai_url, controls: true, class: "img-thumbnail video-preview rounded-video" %>
+            </div>
         <% else %>
           <p>null</p>
         <% end %>
       </div>
       <div class="col-md-6">
+        <p><strong>AI Primary Physical Assessment: </strong><%= @form.physical_primary_assessment.presence || "Pending Assessment" %></p>
         <p><strong>Physical Assessment: </strong><%= @form.physical_assessment.presence || "Pending Assessment" %></p>
         <%= form_with(model: @form, url: @form.persisted? ? edit_physical_assessment_form_path(@form) : edit_physical_assessment_forms_path, method: :patch, local: true, html: { multipart: true }) do |form| %>
         <fieldset>

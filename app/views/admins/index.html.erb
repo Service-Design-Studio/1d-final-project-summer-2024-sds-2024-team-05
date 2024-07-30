@@ -229,7 +229,7 @@
         <div id="meetingDetails">
           <h1>Meetings</h1>
 
-          <%= month_calendar(events: @meetings) do |date, meetings| %>
+          <%= week_calendar(events: @meetings) do |date, meetings| %>
             <div class="day">
               <%= date.day %>
             </div>
@@ -239,25 +239,9 @@
                   </div>
               <% end %>
           <% end %>
+
       
-          <div id="meetings">
-            <% @meetings.each do |meeting| %>
-              <div class = "card"  style="width: 500px;">
-                <div class="card-body">
-                  <%= render meeting %>
-                  <p>
-                    <%= link_to "Show this meeting", meeting %>
-      
-                    <%= button_to "Destroy this meeting", meeting_path(meeting), method: :delete, data: { confirm: "Are you sure you want to delete this meeting?" }, class: 'btn btn-danger' %>
-      
-                  </p>
-                </div>
-              </div>
-              <hr/>
-            <% end %>
-          </div>
-      
-          <%= link_to "New meeting", new_meeting_path %>
+          
         </div>
       </div>
     </div>

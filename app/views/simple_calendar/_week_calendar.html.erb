@@ -30,17 +30,18 @@
         </tr>
       </thead>
       <tbody>
-        <% @meeting.hours.each do |hour| %>
+        <% Meeting.hours.each do |hour| %>
           <tr>
-            <td style="font-size: 10px; text-align: center; border: 1px solid grey">
+            <td style="font-size: 15px; text-align: center; border: 1px solid grey">
               <%= hour %>
             </td>
             <% date_range.slice(0, 7).each do |day| %>
               <td style="width: 150px; text-align: center; border: 1px solid grey">
                 <% @meetings.each do |meeting| %>
-                  <% if meeting.parsed_start_time == hour && meeting.start_time.to_date == day %>
+                  <% # Check if the meeting starts within this hour and on this day %>
+                  <% if meeting.start_time.to_date == day && meeting.parsed_start_time == hour %>
                     <div class="d-flex justify-content-center">
-                      <%= link_to "#{meeting.title} #{meeting.condensed_time}", meeting_path(meeting), class: 'p-3 btn btn-green rounded-3', style: 'width: auto; font-size: 10px;' %>
+                      <%= link_to "#{meeting.title} #{meeting.condensed_time}", meeting_path(meeting), class: 'p-3 btn btn-green rounded-3', style: 'width: auto; font-size: 15px;' %>
                     </div>
                   <% end %>
                 <% end %>

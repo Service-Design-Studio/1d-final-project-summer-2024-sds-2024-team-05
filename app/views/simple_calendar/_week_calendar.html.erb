@@ -1,77 +1,54 @@
+<style>
+  .friend:hover {
+    color: blue;
+  }
+
+  .friend {
+    color: black;
+  }
+</style>
+
 <div class="simple-calendar">
-  <div class="calendar-heading">
-    <span class="calendar-title">
-      <h3>
+  <div class="container">
+    <div class="calendar-heading mb-4">
+      <h3 style="text-align: center; margin: 0 auto; width: 100%;">
         <time datetime="<%= start_date.strftime('%Y-%m') %>" class="calendar-title"><%= t('date.month_names')[start_date.month] %> <%= start_date.year %></time>
       </h3>
-      <%= t('simple_calendar.week', default: 'Week') %>
-      <%= calendar.week_number %>
-      <% if calendar.number_of_weeks > 1 %>
-        - <%= calendar.end_week %>
-      <% end %>
-    </span>
-
-    <nav>
-      <%= link_to t('simple_calendar.previous', default: 'Previous'), calendar.url_for_previous_view %>
-      <%= link_to t('simple_calendar.today', default: 'Today'), calendar.url_for_today_view %>
-      <%= link_to t('simple_calendar.next', default: 'Next'), calendar.url_for_next_view %>
-    </nav>
-  </div>
-
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <% date_range.slice(0, 7).each do |day| %>
-          <th><%= t('date.abbr_day_names')[day.wday] %></th>
-        <% end %>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% date_range.each_slice(7) do |week| %>
+      <nav style = "width: 100%;" class = "d-flex justify-content-between px-3 mt-2">
+        <%= link_to t('simple_calendar.previous', default: '<'), calendar.url_for_previous_view, style:'text-decoration: none; font-size: 25px', class: 'friend' %>
+        <%= link_to t('simple_calendar.today', default: 'Today'), calendar.url_for_today_view, style:'text-decoration: none; font-size: 20px', class: 'friend' %>
+        <%= link_to t('simple_calendar.next', default: '>'), calendar.url_for_next_view, style:'text-decoration: none; font-size: 25px', class: 'friend' %>
+      </nav>
+    </div>
+    <table class="table table-striped">
+      <thead>
         <tr>
-          <% week.each do |day| %>
-            <td style="width: 150px; /* Adjust width as needed */">
-              <% @meeting.hours.each do |hour| %>
-                <div style="font-size: 10px;">
-                  <%= hour %>
-                  <% if !@attached_meetings.nil? %>
-                    <% @attached_meetings.each do |meeting| %>
-
-                      <% if meeting.parsed_start_time == hour && meeting.start_time.to_date == day %>
-                        <div style="float: inline-end;">
-                          <%= link_to "#{meeting.title} #{meeting.condensed_time}", meeting_path(meeting), class: 'btn btn-green rounded-pill', style: 'font-size: 10px;'%>
-                        </div>
-                        
-                      <% end %>
-                    <% end %>
-                  <% else %>
-                    <% @meetings.each do |meeting| %>
-
-                      <% if meeting.parsed_start_time == hour && meeting.start_time.to_date == day %>
-                        <div style="float: inline-end;">
-                          <div class="event-dot" data-meeting-title="<%= meeting.title %>" data-meeting-path="<%= meeting_path(meeting) %>"></div>
-                        </div>
-                        
-                      <% end %>
-                    <% end %>
-                  <% end %>
-                </div>
-                <hr/> 
-              <% end %>
-            </td>
+          <th style="width: 80px; text-align: center; border: 1px solid grey">Time</th>
+          <% date_range.slice(0, 7).each do |day| %> <!-- Adjusted to include dates next to day names -->
+            <th style="width: 80px; text-align: center; border: 1px solid grey"><%= t('date.abbr_day_names')[day.wday] %> <%= day.day %></th>
           <% end %>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% @meeting.hours.each do |hour| %>
+          <tr>
+            <td style="font-size: 10px; text-align: center; border: 1px solid grey">
+              <%= hour %>
+            </td>
+            <% date_range.slice(0, 7).each do |day| %>
+              <td style="width: 150px; text-align: center; border: 1px solid grey">
+                <% @meetings.each do |meeting| %>
+                  <% if meeting.parsed_start_time == hour && meeting.start_time.to_date == day %>
+                    <div class="d-flex justify-content-center">
+                      <%= link_to "#{meeting.title} #{meeting.condensed_time}", meeting_path(meeting), class: 'p-3 btn btn-green rounded-3', style: 'width: auto; font-size: 10px;' %>
+                    </div>
+                  <% end %>
+                <% end %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
-
-<script>
-  $(document).ready(function() {
-    $('.event-dot').click(function() {
-      var meetingPath = $(this).data('meeting-path');
-      window.location.href = meetingPath;
-    });
-  });
-</script>

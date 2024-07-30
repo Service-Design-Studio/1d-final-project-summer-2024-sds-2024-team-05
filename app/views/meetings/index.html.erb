@@ -20,7 +20,7 @@
 
     <h1>Meetings</h1>
 
-    <%= month_calendar(events: @meetings) do |date, meetings| %>
+    <%= week_calendar(events: @meetings) do |date, meetings| %>
       <div class="day">
         <%= date.day %>
       </div>

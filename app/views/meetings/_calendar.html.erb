@@ -18,9 +18,9 @@
   <div class="container">
   
 
-    <h1>Meetings</h1>
+    <h1 style="text-align: center; margin: 2 auto; width: 100%;"> Meetings</h1>
 
-    <%= month_calendar(events: @meetings) do |date, meetings| %>
+    <%= week_calendar(events: @meetings) do |date, meetings| %>
       <div class="day">
         <%= date.day %>
       </div>
@@ -48,7 +48,6 @@
       <% end %>
     </div>
 
-    <%= link_to "New meeting", new_meeting_path %>
 
   </div>
 

@@ -106,19 +106,19 @@ class TranscriptionService
   end
 
   ANIMALS = {
-    'Alligator' => %w[Bull Cow Hatchling],
-    'Alpaca' => %w[Male Female Cria],
+    'Alligator' => %w[],
+    'Alpaca' => %w[Macho Hembra Cria],
     'Antelope' => %w[Buck Doe Calf],
-    'Armadillo' => %w[Male Female Pup],
-    'Baboon' => %w[Male Female Infant],
+    'Armadillo' => %w[Pup],
+    'Baboon' => %w[],
     'Bear' => %w[Boar Sow Cub],
-    'Beaver' => ['Male', 'Female', 'Kit', 'Pup', 'Kitten'],
+    'Beaver' => %w[Kit],
     'Bee' => %w[Drone Worker Queen Larva],
     'Buffalo' => %w[Bull Cow Calf],
     'Bison' => %w[Bull Cow Calf],
     'Butterfly' => %w[Male Female Chrysalis Larva],
     'Camel' => %w[Bull Cow Calf],
-    'Cat' => %w[Tom Queen Kitten],
+    'Cat' => %w[Tom Queen Kitten Kitty],
     'Cattle' => %w[Bull Cow Calf],
     'Cheetah' => %w[Male Female Cub],
     'Chicken' => %w[Rooster Hen Chick Pullet Cockrell],
@@ -139,7 +139,6 @@ class TranscriptionService
     'Flamingo' => %w[Male Female Chick],
     'Fox' => %w[Renyard Dog Vixen Cub],
     'Frog' => %w[Male Female Tadpole Polliwog Froglet],
-    'Giant Panda' => %w[Boar Sow Cub],
     'Giraffe' => %w[Bull Doe Calf],
     'Goat' => %w[Billy Doe Kid],
     'Goose' => %w[Gander Goose Gosling],
@@ -166,11 +165,14 @@ class TranscriptionService
     'Louse' => %w[Male Female Nymph],
     'Lynx' => %w[Male Female Kit],
     'Mole' => %w[Male Female Pup],
-    'Mouse' => %w[Buck Doe Pinkie Pup],
+    'Mouse' => %w[Rat Buck Doe Pinkie Pup],
     'Opossum' => %w[Jack Jill Joey],
     'Otter' => %w[Male Female Whelp],
-    'Owl' => %w[Owl Hen Owlet],
-    'Oyster' => %w[- - Spat],
+    'Owl' => %w[Hen Owlet],
+    'Ox' => %w[stot],
+    'Oyster' => %w[Spat],
+    'Panda' => %w[Boar Sow Cub],
+    'Pig' => %w[Boar Sow Piglet Gilt],
     'Peafowl' => %w[Peacock Peahen Chick],
     'Penguin' => %w[Male Female Chick Nestling],
     'Platypus' => %w[Male Female Platypup Puggle],
@@ -200,14 +202,18 @@ class TranscriptionService
 
   def self.count_unique_animals(mental_transcription)
     unique_animals = Set.new
+    counted_words = Set.new
     transcription_words = mental_transcription.downcase.split(/[^\w']+/)  # Convert transcription to lowercase
 
     transcription_words.each do |word|
       next if %w[male female].include?(word) # Skip the words "male" and "female"
+      next if counted_words.include?(word) # Skip if the word has already been counted
 
       ANIMALS.each do |animal, stages|
         if stages.map(&:downcase).include?(word) || animal.downcase == word
-          unique_animals.add(word)
+          unique_animals.add(animal)
+          counted_words.add(word)
+          break
         end
       end
     end

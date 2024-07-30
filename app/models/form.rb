@@ -104,7 +104,7 @@ class Form < ApplicationRecord
 
         begin
           Rails.logger.debug "Extracting audio from #{video.filename} to #{audio_path}"
-          video_path = TranscriptionService.download_video(video.blob) # Download the video to a local path
+          video_path = TranscriptionService.download_video(video.blob) # Download the video to a path
           TranscriptionService.extract_audio(video_path, audio_path.to_s)
 
           Rails.logger.debug "Transcribing audio from #{audio_path}"

@@ -106,11 +106,66 @@
       </div>
       
       <div class="tab-pane fade" id="meeting" role="tabpanel" aria-labelledby="meeting-tab">
+        <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
+          <h2 class="text-center">Meetings</h2>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createMeetingModal">
+            Create Meeting
+          </button>
+        </div>
         <div id="meetingDetails">
           <div id="meetings_calendar">
             <%= render partial: 'meetings/calendar', locals:{meeting: @meetings, self_meetings:@attached_meetings}  %>
           </div>
-          <%= render partial: 'meetings/new', form: @form, meeting: @meeting %>
+          <div class="modal fade" id="createMeetingModal" tabindex="-1" aria-labelledby="createMeetingModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="createMeetingModalLabel">New Meeting</h5>
+                  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <%= form_with(model: @meeting) do |form| %>
+                    <% if @meeting.errors.any? %>
+                      <div style="color: red">
+                        <h2><%= pluralize(meeting.errors.count, "error") %> prohibited this meeting from being saved:</h2>
+
+                        <ul>
+                          <% @meeting.errors.each do |error| %>
+                            <li><%= error.full_message %></li>
+                          <% end %>
+                        </ul>
+                      </div>
+                    <% end %>
+
+                    <%= form.hidden_field :title, value: "#{@form.first_name} #{@form.last_name}" %>
+
+                    <%= form.hidden_field :form_id, value: @form.id %>
+
+                    <div>
+                      <%= form.label :description, style: "display: block" %>
+                      <%= form.text_area :description %>
+                    </div>
+
+                    <div>
+                      <%= form.label :location, style: "display: block"%>
+                      <%= form.text_area :location , required: true %>
+                    </div>
+
+                    <div>
+                      <%= form.label :start_time, style: "display: block"%>
+                      <%= form.datetime_field :start_time, required: true  %>
+                    </div>
+
+                    <div>
+                      <%= form.submit %>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

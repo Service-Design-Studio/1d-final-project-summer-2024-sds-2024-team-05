@@ -31,6 +31,23 @@
     .orange-tab {
       color: #fd7e14 !important;
     }
+
+    .modal-dialog {
+      max-width: 600px; 
+      margin: auto; 
+    }
+
+    .modal-content {
+      min-height: 500px;  /* Set this to your desired height */
+    }
+
+    .modal-backdrop.show {
+      opacity: 0.2; 
+    }
+
+    .modal-body {
+        padding: 40px; /* Increased padding for more space */
+    }
   </style>
 </head>
 <body>
@@ -117,7 +134,7 @@
             <%= render partial: 'meetings/calendar', locals:{meeting: @meetings, self_meetings:@attached_meetings}  %>
           </div>
           <div class="modal fade" id="createMeetingModal" tabindex="-1" aria-labelledby="createMeetingModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-centered custom-modal-size">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="createMeetingModalLabel">New Meeting</h5>

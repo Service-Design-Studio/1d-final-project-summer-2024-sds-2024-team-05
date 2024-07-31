@@ -246,12 +246,15 @@
       var urlParams = new URLSearchParams(window.location.search);
       var status = urlParams.get('status');
       var querydate = urlParams.get('start_date');
+      var view = urlParams.get('view'); // Parameter that indicates the calendar view
 
-      console.log('querydate:', querydate !== null); 
+      console.log('querydate:', querydate !== null);
 
+      // Initialize the map
       initMap('<%= @form.postal %>');
 
-      if (querydate !== null) {
+      // Check if there's a specific view requested and show the meeting tab if it's a calendar view change
+      if (view === 'weekly' || view === 'monthly') {
         var meetingTab = new bootstrap.Tab(document.getElementById('meeting-tab'));
         meetingTab.show();
       } else if (status === 'Pending Assessment') {
@@ -260,7 +263,7 @@
       } else if (status === 'Meeting Date Pending') {
         var meetingTab = new bootstrap.Tab(document.getElementById('meeting-tab'));
         meetingTab.show();
-      } else if (status === 'Upload Service Agreement' || status.startsWith('Meeting on')) {
+      } else if (status.startsWith('Meeting on') || status === 'Upload Service Agreement') {
         var agreementTab = new bootstrap.Tab(document.getElementById('agreement-tab'));
         agreementTab.show();
       }

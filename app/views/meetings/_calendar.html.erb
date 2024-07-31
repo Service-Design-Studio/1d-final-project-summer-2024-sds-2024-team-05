@@ -14,26 +14,30 @@
   </style>
 </head>
 <body>
-
   <div class="container">
-  
-
-    
-
-    <%= week_calendar(events: @meetings) do |date, meetings| %>
-      <div class="day">
-        <%= date.day %>
-      </div>
-        <% meetings.each do |meeting| %>
-            <div style="width: 150px; padding: 8px; padding-top: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: center;" >
-              <%= link_to "#{truncate(meeting.title, length: 16)} #{meeting.condensed_time}", meeting_path(meeting), class: 'custom-link'%>
+    <% if params[:view] == 'monthly' %>
+      <%= month_calendar events: @meetings do |date, meetings| %>
+        <div class="day">
+          <%= date.day %>
+          <% meetings.each do |meeting| %>
+            <div style="width: 150px; padding: 8px; padding-top: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: center;">
+              <%= link_to "#{truncate(meeting.title, length: 16)} #{meeting.condensed_time}", meeting_path(meeting), class: 'custom-link' %>
             </div>
-        <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <%= week_calendar(events: @meetings) do |date, meetings| %>
+        <div class="day">
+          <%= date.day %>
+        </div>
+          <% meetings.each do |meeting| %>
+              <div style="width: 150px; padding: 8px; padding-top: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: center;" >
+                <%= link_to "#{truncate(meeting.title, length: 16)} #{meeting.condensed_time}", meeting_path(meeting), class: 'custom-link'%>
+              </div>
+          <% end %>
+      <% end %>
     <% end %>
-
-  
-
-
   </div>
 
 </body>

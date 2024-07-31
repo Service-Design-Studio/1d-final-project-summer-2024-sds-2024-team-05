@@ -33,7 +33,7 @@ steps:
 substitutions:
   _REGION: "asia-southeast1"
   _SERVICE_NAME: "ninkatec-2"
-  _INSTANCE_NAME: "ninkatec-pgsql"
+  _INSTANCE_NAME: "ninkatec-pgsql1"
 
 images:
   - "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}"

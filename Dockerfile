@@ -85,7 +85,20 @@ WORKDIR /app
 
 COPY Gemfile Gemfile.lock ./
 
-RUN apt-get update && apt-get install -y libpq-dev && apt-get install -y python3-distutils
+# RUN apt-get update && apt-get install -y libpq-dev && apt-get install -y python3-distutils
+# Update package list and install necessary packages
+RUN apt-get update && \
+    apt-get install -y \
+    nodejs \
+    lsb-release \
+    python3-distutils \
+    libpq-dev \
+    ffmpeg
+
+# Verify installation
+RUN ffmpeg -version
+RUN ffprobe -version
+
 # RUN gem install bundler && \
 #     bundle config set --local deployment 'true' && \
 #     bundle config set --local without 'development test' && \

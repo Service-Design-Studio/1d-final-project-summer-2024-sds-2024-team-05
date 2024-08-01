@@ -43,6 +43,9 @@ Rails.application.routes.draw do
       get 'client_profile', to: 'admins#client_profile'
       patch 'client_profile', to: 'admins#update_client_profile'
 
+      get 'edit_patient_assessment', to: 'admins#_patient_assessment'
+      patch 'edit_patient_assessment', to: 'admins#update_patient_assessment'
+
       patch 'update_submission_status', to: 'patients#update_submission_status'
     end
 

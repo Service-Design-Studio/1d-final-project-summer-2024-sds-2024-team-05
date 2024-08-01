@@ -16,7 +16,7 @@
 <body>
   <div class="container">
     <% if params[:view] == 'monthly' %>
-      <%= month_calendar events: @meetings do |date, meetings| %>
+      <%= month_calendar(events: @meetings) do |date, meetings| %>
         <div class="day">
           <%= date.day %>
           <% meetings.each do |meeting| %>

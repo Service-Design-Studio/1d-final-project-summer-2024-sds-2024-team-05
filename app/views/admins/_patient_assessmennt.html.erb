@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ninkatec Onboarding | Complete Patient Assessment</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div class="container">
+  <h1>Patient Assessment for <%= @form.first_name %> <%= @form.last_name %></h1>
+
+  <%= form_with(model: @form, url: @form.persisted? ? edit_patient_assessment_form_path(@form) : edit_patient_assessment_form_path, method: :patch, local: true, html: { multipart: true }) do |form| %>
+    <!-- Physical Assessment Partial -->
+    <%= render 'physical_assessment', form: form %>
+    
+    <!-- Mental Assessment Partial -->
+    <%= render 'mental_assessment', form: form %>
+    
+    <!-- Environmental Assessment Partial -->
+    <%= render 'environment_assessment', form: form %>
+    
+    <div class="d-flex justify-content-center mt-5 mb-5">
+      <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green me-2", id: "save_phy", style: 'float: left; margin-right: 5px;'  %>
+    </div>
+  <% end %>
+</div>
+</body>
+</html>

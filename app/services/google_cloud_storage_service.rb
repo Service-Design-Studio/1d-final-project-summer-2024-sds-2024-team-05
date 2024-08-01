@@ -2,12 +2,12 @@ require "google/cloud/storage"
 
 class GoogleCloudStorageService
   def initialize
-    credentials_path = ENV['GCS_CREDENTIALS_PATH']
+    credentials_path = '/config/ninkatec-2-d2112f9ef735.json'
     storage_client = Google::Cloud::Storage.new(
       credentials: credentials_path
     )
         # Access the bucket
-    bucket_name = ENV['GCS_BUCKET_NAME']
+    bucket_name = 'ninkatec-bucket-1'
     @bucket = storage_client.bucket(bucket_name)
   end
 

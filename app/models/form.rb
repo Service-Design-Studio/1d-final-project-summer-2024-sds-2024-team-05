@@ -92,14 +92,19 @@ class Form < ApplicationRecord
     end
 
 
-    def transcribe_video_and_update_form
-        video = self.mental_video
+    def transcribe_video_and_update_form(filename)
+        gcs_service = GoogleCloudStorageService.new
         audio_path = Rails.root.join('tmp', "mental_audio.wav")
+        video_path = Rails.root.join('tmp', "mental_video.mp4")
+        TranscriptionService.delete_mental_video(video_path)
 
         begin
-          Rails.logger.debug "Extracting audio from #{video.filename} to #{audio_path}"
-          video_path = TranscriptionService.download_video(video.blob) # Download the video to a local path
-          TranscriptionService.extract_audio(video_path, audio_path.to_s)
+          Rails.logger.debug "Downloading video file #{filename} to #{video_path}"
+          gcs_service.download_file(filename, video_path.to_s)
+
+          Rails.logger.debug "Extracting audio from #{video_path} to #{audio_path}"
+        #   video_path = TranscriptionService.download_video(video.blob) # Download the video to a path
+          TranscriptionService.extract_audio(video_path.to_s, audio_path.to_s)
 
           Rails.logger.debug "Transcribing audio from #{audio_path}"
           transcription = TranscriptionService.transcribe_local_audio(audio_path.to_s)
@@ -114,6 +119,21 @@ class Form < ApplicationRecord
           File.delete(audio_path) if File.exist?(audio_path)
         end
     end
+
+    def update_animal_count
+        return unless self.mental_transcription
+
+        count = TranscriptionService.count_unique_animals(self.mental_transcription)
+        self.update(animal_count: count)
+        Rails.logger.debug "Updated animal_count: #{self.animal_count}"
+    rescue => e
+        Rails.logger.error "Failed to update animal count: #{e.message}"
+    end
+
+
+
+
+
 
 
     # before_save do

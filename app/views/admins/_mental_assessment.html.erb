@@ -24,17 +24,23 @@
       <% end %>
     </div>
     <div class="col-md-6">
-      <p><strong>Mental Assessment: <%= @form.mental_transcription.present? ? @form.mental_transcription.html_safe : "" %></strong></p>
+      <p><strong>Mental Assessment: </strong>
+        <br>
+        <i><u>Transcript:</u></i>
+        <br>
+        <%= @form.mental_transcription.present? ? @form.mental_transcription.html_safe : "" %></p>
+      <br>
+      <p><strong>Animal Count: <br></strong><%= @form.animal_count.present? ? @form.animal_count : "" %></p>
+      <br>
       <%= @form.mental_assessment.presence || "Pending Assessment" %>
-
-  <%= form_with(model: @form, url: @form.persisted? ? edit_mental_assessment_form_path(@form) : edit_mental_assessment_forms_path, method: :patch, local: true, html: { multipart: true }) do |form| %>
-    <fieldset>
-      <div class="form-check form-check-inline">
-        <%= form.radio_button :mental_assessment, "Good", class: "form-check-input", id: "good_mental", checked: @form.mental_assessment == "Good" %>
-        <%= form.label "good_mental", class: "form-check-label", for: "good_mental" do %>
-          Good
-        <% end %>
-      </div>
+      <%= form_with(model: @form, url: form.persisted? ? edit_mental_assessment_form_path(form) : edit_mental_assessment_forms_path, method: :patch, local: true, html: { multipart: true }) do |form| %>
+      <fieldset>
+        <div class="form-check form-check-inline">
+          <%= form.radio_button :mental_assessment, "Good", class: "form-check-input", id: "good", checked: @form.mental_assessment == "Good", :required => false %>
+          <%= form.label "good", class: "form-check-label", for: "good" do %>
+            Good
+          <% end %>
+        </div>
 
       <div class="form-check form-check-inline">
         <%= form.radio_button :mental_assessment, "Fair", class: "form-check-input", id: "fair_mental", checked: @form.mental_assessment == "Fair" %>

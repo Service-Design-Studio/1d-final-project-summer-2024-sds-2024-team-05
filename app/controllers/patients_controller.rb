@@ -343,6 +343,14 @@ class PatientsController < ApplicationController
     cv_assessment(@form)
 
     if @form.update(submitted: true)
+      if @form.mental_video_file_name.present?
+        @form.transcribe_video_and_update_form(@form.mental_video_file_name)
+      end
+
+      if @form.mental_transcription.present?
+        @form.update_animal_count
+      end
+      
       if current_user.admin?
         redirect_to admin_root_path, notice: 'Form submitted successfully.'
       else

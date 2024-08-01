@@ -26,4 +26,11 @@ class GoogleCloudStorageService
     Rails.logger.debug "Signed URL generated: #{signed_url}"
     signed_url
   end
+
+  def download_file(filename, local_path)
+    Rails.logger.debug "Downloading file from Google Cloud Storage: #{filename}"
+    file = @bucket.file(filename)
+    file.download(local_path)
+    Rails.logger.debug "File downloaded to: #{local_path}"
+  end
 end

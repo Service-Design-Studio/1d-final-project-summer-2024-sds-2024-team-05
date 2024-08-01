@@ -25,7 +25,7 @@ class MeetingsController < ApplicationController
   def create
     @meeting = Meeting.new(meeting_params)
 
-    
+
 
     respond_to do |format|
       if @meeting.save

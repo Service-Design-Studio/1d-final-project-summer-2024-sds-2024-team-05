@@ -181,12 +181,12 @@ class AdminsController < ApplicationController
     when 'Back'
       redirect_to @form, notice: 'No changes were made.'
     else
-      redirect_to physical_assessment_path, alert: 'Invalid action.'
+      redirect_to physical_assessment_form_path, alert: 'Invalid action.'
     end
   end
 
   def combined_assessment_params
-    params.require(:form).permit(:physical_assessment, :mental_assessment, :environment_assessment).tap do |permitted_params|
+    params.require(:form).permit(:physical_assessment, :mental_assessment, :environment_assessment, :physical_assessment_detail, :mental_assessment_detail, :environment_assessment_detail  ).tap do |permitted_params|
       # Update physical assessment if a detailed description is required
       if params[:form][:physical_assessment] == "Detailed Assessment Needed"
         permitted_params[:physical_assessment] = params[:form][:others_text_physical]
@@ -203,6 +203,7 @@ class AdminsController < ApplicationController
       end
     end
   end
+
 
 
   def service_params

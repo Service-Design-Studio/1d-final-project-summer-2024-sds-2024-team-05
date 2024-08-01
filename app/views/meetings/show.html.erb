@@ -4,7 +4,11 @@
 
 <div>
   <%= link_to "Edit this meeting", edit_meeting_path(@meeting) %> |
-  <%= link_to "Back to All Meetings", meetings_path %> 
+  <% if current_user.admin? %>
+    <%= link_to "Back to Dashboard", admin_root_path %> 
+  <% else %>
+    <%= link_to "Back to Dashboard", user_root_path %> 
+  <% end %>
   <% if @meeting.form %>
     | <%= link_to "Show Client", client_profile_form_path(@meeting.form) %>
   <% end %>

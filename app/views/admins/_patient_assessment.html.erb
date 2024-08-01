@@ -34,7 +34,7 @@
         <% end %>
       </div>
       <div class="col-md-6">
-        <p><strong>Physical Assessment: </strong><%= @form.physical_assessment.presence || "Pending Assessment" %></p>
+        <p><strong>Physical Assessment: </strong>
         <%= form_with(model: @form, url: @form.persisted? ? edit_patient_assessment_form_path(@form) : edit_patient_assessment_form_path, method: :patch, local: true, html: { multipart: true }) do |form| %>
         <fieldset>
           <div class="form-check form-check-inline">
@@ -72,7 +72,8 @@
             <%= form.text_field :others_text, class: "form-control", id: "others_text_phy", placeholder: "Detailed Assessment here", style: "font-style: italic; height: 175px; width: 300 px;", value: (!["Good", "Fair", "Poor", ""].include?(@form.physical_assessment)) ? @form.physical_assessment : ''%>
           </div>
 
-        
+          
+          <p><strong>Mental Assessment: </strong>
           <div class="form-check form-check-inline">
           <%= form.radio_button :mental_assessment, "Good", class: "form-check-input", id: "good_mental", checked: @form.mental_assessment == "Good" %>
           <%= form.label "good_mental", class: "form-check-label", for: "good_mental" do %>
@@ -104,11 +105,13 @@
         <br>
 
         <div class="form-check">
-          <%= form.text_field :others_text, class: "form-control", id: "others_text_mental", placeholder: "Detailed Assessment here", style: "font-style: italic; height: 175px; width: 300px;", value: (!["Good", "Fair", "Poor", ""].include?(@form.mental_assessment)) ? @form.mental_assessment : '' %>
+          <%= form.text_field :others_text, class: "form-control", id: "others_text_mental", placeholder: "Detailed Assessment here", style: "font-style: italic; height: 175px; width: 300 px;", value: (!["Good", "Fair", "Poor", ""].include?(@form.mental_assessment)) ? @form.mental_assessment : ''%>
         </div>
 
+        
 
-            
+
+        <p><strong>Environment Assessment: </strong>   
         <div class="form-check form-check-inline">
             <%= form.radio_button :environment_assessment, "Good", class: "form-check-input", id: "good_env", checked: @form.environment_assessment == "Good", :required => false %>
             <%= form.label "good_env", class: "form-check-label", for: "good_env" do %>

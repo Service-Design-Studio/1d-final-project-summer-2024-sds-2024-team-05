@@ -6,225 +6,230 @@
   <title>Edit Form - Step 1</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <style>
+    .container {
+      max-width: 800px;
+    }
+    .circular-button {
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+    }
+    .btn-blue {
+      background-color: #253255;
+      color: white;
+    }
+    .btn-outline-blue {
+      border-color: #253255;
+      color: #253255;
+    }
+    .btn-green {
+      background-color: green;
+      color: white;
+    }
+    .steps .page {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .step-label {
+      margin-top: 0.5rem;
+      font-size: 18px;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container mt-5">
     <div class="steps">
       <div class="page">
+        <div class="step">
           <button type="button" class="btn btn-primary circular-button btn-blue">1</button>
-        
+          <p class="step-label">Patient Details</p>
+        </div>
+        <div class="step">
           <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: @form.persisted? ? @valid_button_classes[1] : "btn btn-primary circular-button btn-outline-blue" %>
-         
-          
+          <p class="step-label">Medical Conditions</p>
+        </div>
+        <div class="step">
           <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: @form.persisted? ? @valid_button_classes[2] : "btn btn-primary circular-button btn-outline-blue" %>
-         
+          <p class="step-label">Service Required</p>
+        </div>
+        <div class="step">
           <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: @form.persisted? ? @valid_button_classes[3] : "btn btn-primary circular-button btn-outline-blue" %>
-          
+          <p class="step-label">Patient Assessment</p>
+        </div>
+        <div class="step">
           <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: @form.persisted? ? @valid_button_classes[4] : "btn btn-primary circular-button btn-outline-blue" %>
-          
+          <p class="step-label">Home Assessment</p>
+        </div>
+        <div class="step">
           <%= button_to '6', @form.persisted? ? @form : show_error_forms_path, method: :get, class: @form.persisted? ? @valid_button_classes[4] : "btn btn-primary circular-button btn-outline-blue" %>
-
+          <p class="step-label">Summary Page</p>
+        </div>
       </div>
     </div>
-    <h1><%= @form_origin_text %> - Step 1</h1>
+
+    <h1 class="text-center mb-4">Page 1 - Patient Details</h1>
     
     <%= form_with(model: @form, url: @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: :patch, local: true, class: "mb-4") do |form| %>
-
       <% if current_user.admin? %>
         <div class="row mb-3">
-          <div class="col-4">
+          <div class="col-6">
             <%= form.label :first_name, "NOK's First Name" %>
             <%= form.text_field :nok_first_name, class: "form-control", id: "first_name" %>
           </div>
-
-          <div class="col-4">
+          <div class="col-6">
             <%= form.label :last_name, "NOK's Last Name" %>
             <%= form.text_field :nok_last_name, class: "form-control", id: "last_name" %>
           </div>
         </div>
 
-        <div class="row mb-3">
-          <div class="col-8">
-            <%= form.label :address, "NOK's Address" %>
-            <%= form.text_field :nok_address, class: "form-control", id: "address" %>
-          </div>
+        <div class="mb-3">
+          <%= form.label :nok_address, "NOK's Address" %>
+          <%= form.text_field :nok_address, class: "form-control", id: "nok_address" %>
         </div>
 
-        <div class="row mb-3">
-          <div class="col-8">
-            <%= form.label :postal, "NOK's Postal Code" %>
-            <%= form.text_field :nok_postal, class: "form-control", id: "postal" %>
-          </div>
-        </div>
-        
-        <div class="row mb-3">
-          <div class="col-8">
-            <%= form.label :address, "NOK's Contact No." %>
-            <%= form.text_field :nok_contact_no, class: "form-control", id: "address" %>
-          </div>
+        <div class="mb-3">
+          <%= form.label :nok_postal, "NOK's Postal Code" %>
+          <%= form.text_field :nok_postal, class: "form-control", id: "nok_postal" %>
         </div>
 
-        <div class="row mb-3">
-          <div class="col-8">
-            <%= form.label :address, "NOK's Email" %>
-            <%= form.text_field :nok_email, class: "form-control", id: "address" %>
-          </div>
+        <div class="mb-3">
+          <%= form.label :nok_contact_no, "NOK's Contact No." %>
+          <%= form.text_field :nok_contact_no, class: "form-control", id: "nok_contact_no" %>
         </div>
-        
+
+        <div class="mb-3">
+          <%= form.label :nok_email, "NOK's Email" %>
+          <%= form.text_field :nok_email, class: "form-control", id: "nok_email" %>
+        </div>
       <% end %>
 
       <div class="row mb-3">
-        <div class="col-4">
+        <div class="col-6">
           <%= form.label :first_name, "Patient's First Name" %>
           <%= form.text_field :first_name, class: "form-control", id: "first_name", :required => false %>
         </div>
-
-        <div class="col-4">
+        <div class="col-6">
           <%= form.label :last_name, "Patient's Last Name" %>
           <%= form.text_field :last_name, class: "form-control", id: "last_name", :required => false %>
         </div>
       </div>
 
-      <div class="row mb-3">
-        <div class="col-4">
-          <p>Gender</p>
-          <div class="form-check form-check-inline">
-            <%= form.radio_button :gender, "Male", class: "form-check-input", id: "male", checked: @form.gender == "Male", :required => false %>
-            <%= form.label "male", class: "form-check-label", for: "male" do %>
-              Male
-            <% end %>
-          </div>
-
-          <div class="form-check form-check-inline">
-            <%= form.radio_button :gender, "Female", class: "form-check-input", id: "female", checked: @form.gender == "Female" %>
-            <%= form.label "female", class: "form-check-label", for: "female" do %>
-              Female
-            <% end %>
-          </div>
+      <div class="mb-3">
+        <p>Gender</p>
+        <div class="form-check form-check-inline">
+          <%= form.radio_button :gender, "Male", class: "form-check-input", id: "male", checked: @form.gender == "Male", :required => false %>
+          <%= form.label "male", class: "form-check-label", for: "male" do %>Male<% end %>
+        </div>
+        <div class="form-check form-check-inline">
+          <%= form.radio_button :gender, "Female", class: "form-check-input", id: "female", checked: @form.gender == "Female" %>
+          <%= form.label "female", class: "form-check-label", for: "female" do %>Female<% end %>
         </div>
       </div>
 
-      <div class="row mb-3">
-          <div class="col-4">
-            <%= form.label :date_of_birth, "Date of Birth" %>
-            <%= form.date_field :date_of_birth, class: "form-control", id: "date_of_birth", :required => false %>
-          </div>
+      <div class="mb-3">
+        <%= form.label :date_of_birth, "Date of Birth" %>
+        <%= form.date_field :date_of_birth, class: "form-control", id: "date_of_birth", :required => false %>
       </div>
-              
-      <div class="col-sm-12">
+
+      <div class="mb-3">
         <fieldset>
           <p>Languages Spoken</p>
           <div class="form-check form-check-inline">
             <%= check_box_tag 'form[languages][]', 'English', checked_languages('English'), id: 'languages_english', class: 'form-check-input' %>
-            <%= label_tag 'languages_english', 'English', style: "display: block", class: 'form-check-label' %>
-            
+            <%= label_tag 'languages_english', 'English', class: 'form-check-label' %>
           </div>
           <div class="form-check form-check-inline">
             <%= check_box_tag 'form[languages][]', 'Mandarin', checked_languages('Mandarin'), id: 'languages_mandarin', class: 'form-check-input' %>
-            <%= label_tag 'languages_mandarin', 'Mandarin', style: "display: block", class: 'form-check-label'  %>
-            
+            <%= label_tag 'languages_mandarin', 'Mandarin', class: 'form-check-label' %>
           </div>
           <div class="form-check form-check-inline">
             <%= check_box_tag 'form[languages][]', 'Malay', checked_languages('Malay'), id: 'languages_malay', class: 'form-check-input' %>
-            <%= label_tag 'languages_malay', 'Malay', style: "display: block", class: 'form-check-label'  %>
-            
+            <%= label_tag 'languages_malay', 'Malay', class: 'form-check-label' %>
           </div>
           <div class="form-check form-check-inline">
             <%= check_box_tag 'form[languages][]', 'Tamil', checked_languages('Tamil'), id: 'languages_tamil', class: 'form-check-input' %>
-            <%= label_tag 'languages_tamil', 'Tamil', style: "display: block", class: 'form-check-label'  %>
-            
+            <%= label_tag 'languages_tamil', 'Tamil', class: 'form-check-label' %>
           </div>
           <div class="form-check form-check-inline">
             <%= check_box_tag 'form[languages][]', 'Others', checked_languages('Others'), id: 'languages_etc', class: 'form-check-input' %>
-            <%= label_tag 'languages_etc', 'Others', style: "display: block", class: 'form-check-label'  %>
-            
+            <%= label_tag 'languages_etc', 'Others', class: 'form-check-label' %>
           </div>
         </fieldset>
       </div>
 
-      <div class="form-group">
-        <%= label_tag 'languages_other', 'Other Spoken Languages:', style: "display: block" %>
+      <div class="mb-3">
+        <%= form.label :languages_other, 'Other Spoken Languages:' %>
         <%= form.text_field :languages_other, class: "form-control", id: "languages_other" %>
       </div>
-      
-      <br>
 
-      <div class="row mb-3">
-        <div class="col-8">
-          <%= form.label :address, "Address" %>
-          <%= form.text_field :address, class: "form-control", id: "address", :required => false %>
-        </div>
-
-        <div class="col-8">
-          <%= form.label :postal, "Postal Code" %>
-          <%= form.text_field :postal, class: "form-control", id: "postal" %>
-        </div>
-        
-        <div class="col-8">
-          <%= form.check_box :autofill_address, checked: @form.autofill_address %>
-          <%= form.label :autofillCheckbox, 'Same as Next-of-Kin' %>
-        </div>
+      <div class="mb-3">
+        <%= form.label :address, "Address" %>
+        <%= form.text_field :address, class: "form-control", id: "address", :required => false %>
       </div>
 
-      <div class="row mb-3">
-        <div class="col-8">
-          <fieldset>
-            <p>Relationship to Account Holder</p>
-
-            <div class="form-check form-check-inline">
-              <%= form.radio_button :relationship, "Direct Family member", class: "form-check-input", id: "family", checked: @form.relationship == "Direct Family member", :required => false %>
-              <%= form.label "family", class: "form-check-label", for: "family" do %>
-                Direct Family member
-              <% end %>
-            </div>
-
-            <div class="form-check form-check-inline">
-              <%= form.radio_button :relationship, "Relative", class: "form-check-input", id: "relative", checked: @form.relationship == "Relative" %>
-              <%= form.label "relative", class: "form-check-label", for: "relative" do %>
-                Relative
-              <% end %>
-            </div>
-
-            <div class="form-check form-check-inline">
-              <%= form.radio_button :relationship, "Employer - Domestic Helper", class: "form-check-input", id: "employer", checked: @form.relationship == "Employer - Domestic Helper" %>
-              <%= form.label "employer", class: "form-check-label", for: "employer" do %>
-                Employer - Domestic Helper
-              <% end %>
-            </div>
-
-            <div class="form-check form-check-inline">
-              <%= form.radio_button :relationship, "Others", class: "form-check-input", id: "others", checked: !["Direct Family member", "Relative", "Employer - Domestic Helper", ""].include?(@form.relationship.to_s.strip) %>
-              <%= form.label "others", class: "form-check-label", for: "others" do %>
-                Others:
-              <% end %>
-            </div>
-            <div class="form-check form-check-inline">
-              <%= form.text_field :others_text, class: "form-control", id: "others_text", placeholder: "Please Fill", style: "font-style: italic; width: 150px;", value: (!["Direct Family member", "Relative", "Employer - Domestic Helper", ""].include?(@form.relationship)) ? @form.relationship : '' %>
-            </div>
-          </fieldset>
-        </div>
+      <div class="mb-3">
+        <%= form.label :postal, "Postal Code" %>
+        <%= form.text_field :postal, class: "form-control", id: "postal" %>
       </div>
 
-      <div class="row mb-3">
-        <div class="col-8">
-          <%= form.label :hobbies, "Hobbies and Pastime" %><br>
-          <%= form.text_area :hobbies, class: "form-control", id: "hobbies", style: "width: 50%; height: 100px; text-align: left;" %>
-        </div>
+      <div class="form-check mb-3">
+        <%= form.check_box :autofill_address, checked: @form.autofill_address %>
+        <%= form.label :autofillCheckbox, 'Same as Next-of-Kin' %>
       </div>
 
-  <div class="row mb-5">
-    <% if current_user.admin? %>
-      <%= link_to "Back", admin_root_path, class: "btn btn-lg btn-outline-black rounded-pill", id: "back", style: 'float: left; margin-right: 5px;' %>
-    <% else %>
-      <%= link_to "Back", user_root_path, class: "btn btn-lg btn-outline-black rounded-pill", id: "back", style: 'float: left; margin-right: 5px;' %>
+      <div class="mb-3">
+        <fieldset>
+          <p>Relationship to Account Holder</p>
+          <div class="form-check form-check-inline">
+            <%= form.radio_button :relationship, "Direct Family member", class: "form-check-input", id: "family", checked: @form.relationship == "Direct Family member", :required => false %>
+            <%= form.label "family", class: "form-check-label", for: "family" do %>Direct Family member<% end %>
+          </div>
+          <div class="form-check form-check-inline">
+            <%= form.radio_button :relationship, "Relative", class: "form-check-input", id: "relative", checked: @form.relationship == "Relative" %>
+            <%= form.label "relative", class: "form-check-label", for: "relative" do %>Relative<% end %>
+          </div>
+          <div class="form-check form-check-inline">
+            <%= form.radio_button :relationship, "Employer - Domestic Helper", class: "form-check-input", id: "employer", checked: @form.relationship == "Employer - Domestic Helper" %>
+            <%= form.label "employer", class: "form-check-label", for: "employer" do %>Employer - Domestic Helper<% end %>
+          </div>
+          <div class="form-check form-check-inline">
+            <%= form.radio_button :relationship, "Others", class: "form-check-input", id: "others", checked: !["Direct Family member", "Relative", "Employer - Domestic Helper", ""].include?(@form.relationship.to_s.strip) %>
+            <%= form.label "others", class: "form-check-label", for: "others" do %>Others:<% end %>
+          </div>
+          <div class="form-check form-check-inline">
+            <%= form.text_field :others_text, class: "form-control", id: "others_text", placeholder: "Please Fill", style: "font-style: italic; width: 150px;", value: (!["Direct Family member", "Relative", "Employer - Domestic Helper", ""].include?(@form.relationship)) ? @form.relationship : '' %>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :hobbies, "Hobbies and Pastime" %>
+        <%= form.text_area :hobbies, class: "form-control", id: "hobbies", style: "height: 100px;" %>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <% if current_user.admin? %>
+          <%= link_to "Back", admin_root_path, class: "btn btn-lg btn-outline-black rounded-pill" %>
+        <% else %>
+          <%= link_to "Back", user_root_path, class: "btn btn-lg btn-outline-black rounded-pill" %>
+        <% end %>
+        <div>
+          <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green me-2" %>
+          <%= form.submit "Next", class: "btn btn-lg btn-blue rounded-pill" %>
+        </div>
+      </div>
     <% end %>
-    <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green", id: "save", style: 'float: left; margin-right: 5px;' %>
-    <%= form.submit "Next", class: "btn btn-lg btn-blue rounded-pill", style: 'float: left; margin-right: 5px;' %>
-    <% end %>
-    </div>
   </div>
-  <%= javascript_include_tag "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js", integrity: "sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz", crossorigin: "anonymous" %>
 
+  <%= javascript_include_tag "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js", integrity: "sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz", crossorigin: "anonymous" %>
 
   <script>
   document.addEventListener("DOMContentLoaded", function() {
@@ -244,7 +249,6 @@
       }
     });
   });
-</script>
+  </script>
 </body>
 </html>
-

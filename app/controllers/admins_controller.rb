@@ -170,6 +170,11 @@ class AdminsController < ApplicationController
     end
   end
 
+  def _patient_assessment
+    @form = Form.find(params[:id])
+    # @form_origin_text = determine_form_origin_text
+  end
+
   def update_patient_assessment
     @form = Form.find(params[:id])
 
@@ -186,22 +191,7 @@ class AdminsController < ApplicationController
   end
 
   def combined_assessment_params
-    params.require(:form).permit(:physical_assessment, :mental_assessment, :environment_assessment, :physical_assessment_detail, :mental_assessment_detail, :environment_assessment_detail  ).tap do |permitted_params|
-      # Update physical assessment if a detailed description is required
-      if params[:form][:physical_assessment] == "Detailed Assessment Needed"
-        permitted_params[:physical_assessment] = params[:form][:others_text_physical]
-      end
-
-      # Update mental assessment if a detailed description is required
-      if params[:form][:mental_assessment] == "Detailed Assessment Needed"
-        permitted_params[:mental_assessment] = params[:form][:others_text_mental]
-      end
-
-      # Update environmental assessment if a detailed description is required
-      if params[:form][:environment_assessment] == "Detailed Assessment Needed"
-        permitted_params[:environment_assessment] = params[:form][:others_text_environmental]
-      end
-    end
+    params.require(:form).permit(:physical_assessment, :mental_assessment, :environment_assessment, :physical_assessment_detail, :mental_assessment_detail, :environment_assessment_detail  )
   end
 
 

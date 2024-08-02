@@ -41,7 +41,7 @@
                   <% # Check if the meeting starts within this hour and on this day %>
                   <% if meeting.start_time.to_date == day && meeting.parsed_start_time == hour %>
                     <div class="d-flex justify-content-center">
-                      <%= link_to "#{meeting.title} #{meeting.condensed_time}", meeting_path(meeting), class: 'p-3 btn btn-green rounded-3', style: 'width: auto; font-size: 15px;' %>
+                      <%= link_to "#{meeting.title} #{meeting.condensed_time}", meeting_path(meeting), class: 'p-3 btn btn-blue rounded-3', style: 'width: auto; font-size: 15px;' %>
                     </div>
                   <% end %>
                 <% end %>

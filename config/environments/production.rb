@@ -10,7 +10,7 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'ninkatec-2-7tifx5rv7q-as.a.run.app', port: 443 }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              'smtp.example.com',
+    address:              'smtp.gmail.com',
     port:                 587,
     domain:               'ninkatec-2-7tifx5rv7q-as.a.run.app',
     user_name:            '<insert email here>',

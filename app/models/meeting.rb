@@ -4,17 +4,18 @@ class Meeting < ApplicationRecord
 
     def readable_day
         datetime = DateTime.parse(start_time.to_s)
-  
+
         # Format the datetime object into custom format
         formatted_datetime = datetime.strftime("%a")
 
         # Return the formatted datetime string
         formatted_datetime
     end
-    
+
+
     def readable_datetime
         datetime = DateTime.parse(start_time.to_s)
-  
+
         # Format the datetime object into custom format
         formatted_datetime = datetime.strftime("%-d %B %Y, %l:%M%P")
 
@@ -53,27 +54,33 @@ class Meeting < ApplicationRecord
         "#{start_time.hour}:00"
     end
 
+    def self.hours
+        start_hour = 8  # Calendar starts at 08:00 AM
+        end_hour = 22   # Calendar ends at 10:00 PM
+        (start_hour..end_hour).map { |hour| "#{hour}:00" }
+    end
+
     def hours
         timestamps = []
 
         # Define start and end times
         start_time = Time.parse("08:00")
-        end_time = Time.parse("19:00")
-      
+        end_time = Time.parse("22:00")
+
         current_time = start_time
-      
+
         # Iterate from start_time to end_time in steps of 1 hour
         while current_time <= end_time do
           # Format the current_time in military time format ("%H:%M")
           military_time = current_time.strftime("%H:%M")
-      
+
           # Add to the timestamps array
           timestamps << military_time
-      
+
           # Move to the next hour
           current_time += 1.hour
         end
-      
+
         timestamps
     end
 end

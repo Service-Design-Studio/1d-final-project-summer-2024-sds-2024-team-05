@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_22_163924) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_01_190036) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -81,6 +81,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_22_163924) do
     t.integer "user_id"
     t.text "mental_transcription"
     t.boolean "autofill_address", default: true
+    t.text "physical_assessment_detail"
+    t.text "mental_assessment_detail"
+    t.text "environment_assessment_detail"
     t.index ["user_id"], name: "index_forms_on_user_id"
   end
 
@@ -92,6 +95,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_22_163924) do
     t.integer "form_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "ending_time"
     t.index ["form_id"], name: "index_meetings_on_form_id"
   end
 

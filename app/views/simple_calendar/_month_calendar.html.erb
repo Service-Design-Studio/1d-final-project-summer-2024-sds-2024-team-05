@@ -1,25 +1,35 @@
+<style>
+  .friend:hover {
+    color: blue;
+  }
+
+  .friend {
+    color: black;
+  }
+
+  .day-cell {
+    border: 1px solid #000; /* You can change the color to whatever you prefer */
+  }
+</style>
+
 <div class="simple-calendar">
-  
   <div class="container">
-    <div class="row justify-content-center">
-      <div class="calendar-heading">
+    <div class="calendar-heading mb-4">
+      <h3 style="text-align: center; margin: 2 auto; width: 100%; font-size: 30px">
         <time datetime="<%= start_date.strftime('%Y-%m') %>" class="calendar-title"><%= t('date.month_names')[start_date.month] %> <%= start_date.year %></time>
-
-        <nav>
-          <%= link_to t('simple_calendar.previous', default: 'Previous'), calendar.url_for_previous_view %>
-          <%= link_to t('simple_calendar.today', default: 'Today'), calendar.url_for_today_view %>
-          <%= link_to t('simple_calendar.next', default: 'Next'), calendar.url_for_next_view %>
-        </nav>
-      </div>
+      </h3>
+      <nav style = "width: 100%;" class = "d-flex justify-content-between px-3 mt-2">
+        <%= link_to t('simple_calendar.previous', default: '<'), calendar.url_for_previous_view, style:'text-decoration: none; font-size: 25px', class: 'friend' %>
+        <%= link_to t('simple_calendar.today', default: 'Today'), calendar.url_for_today_view, style:'text-decoration: none; font-size: 20px', class: 'friend' %>
+        <%= link_to t('simple_calendar.next', default: '>'), calendar.url_for_next_view, style:'text-decoration: none; font-size: 25px', class: 'friend' %>
+      </nav>
     </div>
-
-
     <div class="d-flex justify-content-center">
       <table class="table table-hover table-striped" style="width: 1450px;">
         <thead class="thead-dark">
           <tr>
             <% date_range.slice(0, 7).each do |day| %>
-              <th style="width: 150px;"><%= t('date.abbr_day_names')[day.wday] %></th>
+              <th style="width: 150px; text-align: center; border: 1px solid grey"><%= t('date.abbr_day_names')[day.wday] %></th>
             <% end %>
           </tr>
         </thead>
@@ -28,9 +38,11 @@
           <% date_range.each_slice(7) do |week| %>
             <tr>
               <% week.each do |day| %>
-                <%= content_tag :td, class: calendar.td_classes_for(day) do %>
-                  <% instance_exec(day, calendar.sorted_events_for(day), &passed_block) %>
-                <% end %>
+                <td class="day-cell">
+                  <%= content_tag :div, class: calendar.td_classes_for(day) do %>
+                    <% instance_exec(day, calendar.sorted_events_for(day), &passed_block) %>
+                  <% end %>
+                </td>
               <% end %>
             </tr>
           <% end %>
@@ -38,5 +50,4 @@
       </table>
     </div>
   </div>
-  
 </div>

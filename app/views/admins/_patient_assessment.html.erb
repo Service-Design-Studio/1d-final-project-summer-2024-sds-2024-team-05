@@ -30,6 +30,7 @@
 
     .form-control {
       margin-top: 10px; 
+      /* width: 90%; */
     }
 
     .save-button {
@@ -52,6 +53,19 @@
     <%= form_with(model: @form, url: @form.persisted? ? edit_patient_assessment_form_path(@form) : edit_patient_assessment_form_path, method: :patch, local: true, html: { multipart: true }) do |form| %>
       <div class="row">
         <div class="col-md-4">
+          <div class="assessment-container">
+            <p><strong>Physical Assessment:</strong></p>
+            <% ['Good', 'Fair', 'Poor'].each do |option| %>
+              <div class="form-check form-check-inline">
+                <%= form.radio_button :physical_assessment, option, class: "form-check-input", id: "physical_#{option.parameterize}" %>
+                <%= form.label "physical_#{option.parameterize}", option, class: "form-check-label" %>
+              </div>
+            <% end %>
+            <div class="form-group">
+              <label for="physical_assessment_detail">Physical Assessment Detail:</label>
+              <%= form.text_field :physical_assessment_detail, class: "form-control", id: "physical_assessment_detai" %>
+            </div>
+          </div>
           <p><strong>Physical Video:</strong></p>
           <%# <div class="video-preview"> %>
               <% if @form.physical_video_file_name.present? %>
@@ -63,6 +77,7 @@
                   <br>
             <%# </div> %>
             <p><strong>Physical Video AI Assessment:</strong></p>
+            <i><u>AI Primary Physical Assessment:</i></u> <%= @form.physical_primary_assessment.presence || "Pending Assessment" %>
             <%# <div class="video-preview"> %>
                 <% ai_file = @form.physical_video_file_name.split('.')[0] + '_AI.mp4' %>
                 <% ai_url = gcs_service.generate_signed_url_for_viewing(ai_file) %>
@@ -80,47 +95,9 @@
             <%# <% else %> 
               <%# <p>No video available.</p> %>
             <%# <% end %>
-          <div class="assessment-container">
-            <p><strong>Physical Assessment:</strong></p>
-            <% ['Good', 'Fair', 'Poor'].each do |option| %>
-              <div class="form-check form-check-inline">
-                <%= form.radio_button :physical_assessment, option, class: "form-check-input", id: "physical_#{option.parameterize}" %>
-                <%= form.label "physical_#{option.parameterize}", option, class: "form-check-label" %>
-              </div>
-            <% end %>
-            <div class="form-group">
-              <label for="physical_assessment_detail">Physical Assessment Detail:</label>
-              <%= form.text_field :physical_assessment_detail, class: "form-control", id: "physical_assessment_detai" %>
-            </div>
-          </div>
+
         </div>
         <div class="col-md-4">
-          <p><strong>Mental Video:</strong></p>
-          <%# <div class="video-preview"> %>
-            <% if @form.mental_video_file_name.present? %>
-                <% gcs_service = GoogleCloudStorageService.new %>
-                <% signed_url = gcs_service.generate_signed_url_for_viewing(@form.mental_video_file_name) %>
-                  <div class="video-container text-center mt-3">
-                    <%= video_tag signed_url, controls: true, class: "img-thumbnail video-preview rounded-video" %>
-                  </div>
-            <% else %>
-              <p>null</p>
-            <% end %>
-            <br>
-              <i><u>Transcript:</u></i>
-              <br>
-              <%= @form.mental_transcription.present? ? @form.mental_transcription.html_safe : "" %></p>
-            <br>
-            <p><strong>Animal Count: <br></strong><%= @form.animal_count.present? ? @form.animal_count : "" %></p>
-            <br>
-            <%# </div> %>
-
-            <%# <% if @form.mental_video.present? %>
-              <%# <%= video_tag url_for(@form.mental_video), controls: true, class: "img-thumbnail" %>
-            <%# <% else %>
-              <%# <p>No video available.</p> %>
-            <%# <% end %> 
-      
           <div class="assessment-container">
             <p><strong>Mental Assessment:</strong></p>
             <% ['Good', 'Fair', 'Poor'].each do |option| %>
@@ -134,8 +111,47 @@
               <%= form.text_field :mental_assessment_detail, class: "form-control", id: "mental_assessment_detail" %>
             </div>
           </div>
+          <p><strong>Mental Video:</strong></p>
+          <%# <div class="video-preview"> %>
+            <% if @form.mental_video_file_name.present? %>
+                <% gcs_service = GoogleCloudStorageService.new %>
+                <% signed_url = gcs_service.generate_signed_url_for_viewing(@form.mental_video_file_name) %>
+                  <div class="video-container text-center mt-3">
+                    <%= video_tag signed_url, controls: true, class: "img-thumbnail video-preview rounded-video" %>
+                  </div>
+            <% else %>
+              <p>null</p>
+            <% end %>
+            <br>
+            <p><strong>Mental Video AI Assessment:</strong></p>
+              <i><u>Transcript:</u></i>
+              <br>
+              <%= @form.mental_transcription.present? ? @form.mental_transcription.html_safe : "" %>
+              <br>
+            <i><u>Animal Count:</u></i> <%= @form.animal_count.present? ? @form.animal_count : "" %>
+            <%# </div> %>
+
+            <%# <% if @form.mental_video.present? %>
+              <%# <%= video_tag url_for(@form.mental_video), controls: true, class: "img-thumbnail" %>
+            <%# <% else %>
+              <%# <p>No video available.</p> %>
+            <%# <% end %> 
+      
         </div>
         <div class="col-md-4">
+          <div class="assessment-container">
+            <p><strong>Environment Assessment:</strong></p>
+            <% ['Good', 'Fair', 'Poor'].each do |option| %>
+              <div class="form-check form-check-inline">
+                <%= form.radio_button :environment_assessment, option, class: "form-check-input", id: "environment_#{option.parameterize}" %>
+                <%= form.label "environment_#{option.parameterize}", option, class: "form-check-label" %>
+              </div>
+            <% end %>
+            <div class="form-group">
+              <label for="environment_assessment_detail">Environment Assessment Detail:</label>
+              <%= form.text_field :environment_assessment_detail, class: "form-control", id: "environment_assessment_detail" %>
+            </div>
+          </div>
           <p><strong>Environment Video:</strong></p>
           <%# <div class="video-preview"> %>
             <% if @form.environment_video_file_name.present? %>
@@ -155,19 +171,6 @@
               <%# <p>No video available.</p> %>
             <%# <% end %> 
 
-          <div class="assessment-container">
-            <p><strong>Environment Assessment:</strong></p>
-            <% ['Good', 'Fair', 'Poor'].each do |option| %>
-              <div class="form-check form-check-inline">
-                <%= form.radio_button :environment_assessment, option, class: "form-check-input", id: "environment_#{option.parameterize}" %>
-                <%= form.label "environment_#{option.parameterize}", option, class: "form-check-label" %>
-              </div>
-            <% end %>
-            <div class="form-group">
-              <label for="environment_assessment_detail">Environment Assessment Detail:</label>
-              <%= form.text_field :environment_assessment_detail, class: "form-control", id: "environment_assessment_detail" %>
-            </div>
-          </div>
         </div>
       </div>
       <div class="row">

@@ -12,13 +12,15 @@ Rails.application.configure do
     address:              'smtp.gmail.com',
     port:                 587,
     domain:               'localhost',
-    user_name:            '<INSERT YOUR EMAIL HERE>',
-    password:             '<INSERT YOUR PASSWORD HERE>', #needs to be some approved password on gmail
+    user_name:            '<insert email here>',
+    password:             '<insert password here>', #needs to be some approved password on gmail
     authentication:       'login',
     enable_starttls_auto: true
   }
 
-  config.action_mailer.perform_deliveries = true
+  config.action_mailer.perform_deliveries = false
+  # Don't care if the mailer can't send if raise delivery errors.
+  config.action_mailer.raise_delivery_errors = true
 
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development
@@ -52,9 +54,6 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
-
-  # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = true
 
   config.action_mailer.perform_caching = false
 

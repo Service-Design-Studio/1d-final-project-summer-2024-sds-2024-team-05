@@ -484,8 +484,10 @@ h1 {
     -webkit-line-clamp: 2; /* Limit text to 2 lines */
     -webkit-box-orient: vertical; /* Vertical box layout */
     max-width: 200px; /* Set your desired maximum width */
+  }
 
-    
+  .custom-divider {
+    border-right: 1px solid #868181;
   }
 
   

@@ -34,6 +34,33 @@
     #map {
       height: 400px;
       width: 100%;
+      }
+    .modal-dialog {
+      max-width: 600px; 
+      margin: auto; 
+    }
+
+    .modal-content {
+      min-height: 500px;  /* Set this to your desired height */
+    }
+
+    .modal-backdrop.show {
+      opacity: 0.3; 
+    }
+
+    #createMeetingModal {
+      background: rgba(255, 255, 255, 0.5);
+    }
+    .btn-blue {
+      color: white;
+      background-color: #253255; 
+      border-color: #253255; 
+      width: auto; 
+      margin-top: 0.5em; 
+    }
+
+    .modal-body {
+        padding: 40px; /* Increased padding for more space */
     }
   </style>
 </head>
@@ -85,7 +112,6 @@
             </span>
           </p>
 
-          
           <p><strong>Form No.:</strong> <%= @form.id %></p>
           <p><strong>Gender:</strong> <%= @form.gender %></p>
           <p><strong>Birthday:</strong> <%= @form.date_of_birth %></p>
@@ -111,11 +137,75 @@
       </div>
       
       <div class="tab-pane fade" id="meeting" role="tabpanel" aria-labelledby="meeting-tab">
+        <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              Calendar View
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item" href="?view=weekly">Weekly</a></li>
+              <li><a class="dropdown-item" href="?view=monthly">Monthly</a></li>
+            </ul>
+          </div>
+          <h2 class="text-center flex-grow-1">Meetings</h2>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createMeetingModal">
+            Create Meeting
+          </button>
+        </div>
         <div id="meetingDetails">
           <div id="meetings_calendar">
             <%= render partial: 'meetings/calendar', locals:{meeting: @meetings, self_meetings:@attached_meetings}  %>
           </div>
-          <%= render partial: 'meetings/new', form: @form, meeting: @meeting %>
+          <div class="modal" id="createMeetingModal" tabindex="-1" aria-labelledby="createMeetingModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered custom-modal-size">
+              <div class="modal-content">
+                <div class="modal-header justify-content-between">
+                  <h5 class="modal-title" id="createMeetingModalLabel">New Meeting</h5>
+                  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <%= form_with(model: @meeting) do |form| %>
+                    <% if @meeting.errors.any? %>
+                      <div style="color: red">
+                        <h2><%= pluralize(meeting.errors.count, "error") %> prohibited this meeting from being saved:</h2>
+
+                        <ul>
+                          <% @meeting.errors.each do |error| %>
+                            <li><%= error.full_message %></li>
+                          <% end %>
+                        </ul>
+                      </div>
+                    <% end %>
+
+                    <%= form.hidden_field :title, value: "#{@form.first_name} #{@form.last_name}" %>
+
+                    <%= form.hidden_field :form_id, value: @form.id %>
+
+                    <div>
+                      <%= form.label :description, style: "display: block;" %>
+                      <%= form.text_area :description, style: "width:100%" %>
+                    </div>
+
+                    <div>
+                      <%= form.label :location, style: "display: block"%>
+                      <%= form.text_area :location , required: true , style: "width:100%"%>
+                    </div>
+
+                    <div>
+                      <%= form.label :start_time, style: "display: block"%>
+                      <%= form.datetime_field :start_time, required: true  %>
+                    </div>
+
+                    <div style = "width: 100%; display: flex; justify-content: end" class = "mt-5">
+                      <%= form.submit class: "btn-blue rounded-1 p-2"%>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -152,12 +242,7 @@
 
       <div class="tab-pane fade" id="assessment" role="tabpanel" aria-labelledby="assessment-tab">
         <div id="assessmentDetails">
-          <%= render 'physical_assessment', form: @form %>
-          <hr/>
-          <%= render 'mental_assessment', form: @form %>
-          <hr/>
-          <%= render 'environment_assessment', form: @form %>
-          <hr/>
+          <%= render 'patient_assessment', form: @form %>
         </div>
       </div>
 
@@ -170,10 +255,16 @@
       var urlParams = new URLSearchParams(window.location.search);
       var status = urlParams.get('status');
       var querydate = urlParams.get('start_date');
+      var view = urlParams.get('view'); // Parameter that indicates the calendar view
 
-      console.log('querydate:', querydate !== null); 
+      console.log('querydate:', querydate !== null);
 
       if (querydate !== null) {
+        var meetingTab = new bootstrap.Tab(document.getElementById('meeting-tab'));
+        meetingTab.show();
+
+      // Check if there's a specific view requested and show the meeting tab if it's a calendar view change
+      }else if (view === 'weekly' || view === 'monthly') {
         var meetingTab = new bootstrap.Tab(document.getElementById('meeting-tab'));
         meetingTab.show();
       } else if (status === 'Pending Assessment') {
@@ -182,13 +273,15 @@
       } else if (status === 'Meeting Date Pending') {
         var meetingTab = new bootstrap.Tab(document.getElementById('meeting-tab'));
         meetingTab.show();
-      } else if (status && (status === 'Upload Service Agreement' || status.startsWith('Meeting on'))) {
+        // need to add status && because if no status, status = null and null.startsWith will throw an error
+      } else if (status && status.startsWith('Meeting on') || status === 'Upload Service Agreement') {
         var agreementTab = new bootstrap.Tab(document.getElementById('agreement-tab'));
         agreementTab.show();
       }
 
       initMap('<%= @form.postal %>');
     });
+    
 
     function initMap(address) {
       const mapContainer = document.getElementById('map');

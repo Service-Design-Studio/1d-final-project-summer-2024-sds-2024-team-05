@@ -52,7 +52,7 @@ class AdminsController < ApplicationController
 
   def search
     @query = params[:query].downcase
-    @forms = Form.where("LOWER(first_name) LIKE :query OR LOWER(last_name) LIKE :query OR LOWER(CONCAT(first_name, ' ', last_name)) LIKE :query OR 
+    @forms = Form.where("LOWER(first_name) LIKE :query OR LOWER(last_name) LIKE :query OR LOWER(CONCAT(first_name, ' ', last_name)) LIKE :query OR
                         LOWER(nok_first_name) LIKE :query OR LOWER(nok_last_name) LIKE :query OR LOWER(CONCAT(nok_first_name, ' ', nok_last_name)) LIKE :query", query: "%#{@query}%")
     @user = current_user
 
@@ -103,7 +103,7 @@ class AdminsController < ApplicationController
       if @form.update(service_params)
         redirect_to client_profile_form_path(@form, status: 'Upload Service Agreement')
       else
-        
+
       end
     else
       redirect_to client_profile_form_path(@form, status: 'Upload Service Agreement')
@@ -170,29 +170,31 @@ class AdminsController < ApplicationController
     end
   end
 
-  def physical_assessment_params
-    permitted_params = params.require(:form).permit(:physical_assessment)
-    if params[:form][:physical_assessment] == "Detailed Assessment Needed"
-      permitted_params[:physical_assessment] = params[:form][:others_text]
-    end
-    permitted_params
+  def _patient_assessment
+    @form = Form.find(params[:id])
+    # @form_origin_text = determine_form_origin_text
   end
 
-  def mental_assessment_params
-    permitted_params = params.require(:form).permit(:mental_assessment)
-    if params[:form][:mental_assessment] == "Detailed Assessment Needed"
-      permitted_params[:mental_assessment] = params[:form][:others_text]
+  def update_patient_assessment
+    @form = Form.find(params[:id])
+
+    case params[:commit]
+    when 'Save'
+      if @form.update(combined_assessment_params)
+        redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Combined  Assessment Updated'
+      end
+    when 'Back'
+      redirect_to @form, notice: 'No changes were made.'
+    else
+      redirect_to physical_assessment_form_path, alert: 'Invalid action.'
     end
-    permitted_params
   end
 
-  def environment_assessment_params
-    permitted_params = params.require(:form).permit(:environment_assessment)
-    if params[:form][:environment_assessment] == "Detailed Assessment Needed"
-      permitted_params[:environment_assessment] = params[:form][:others_text]
-    end
-    permitted_params
+  def combined_assessment_params
+    params.require(:form).permit(:physical_assessment, :mental_assessment, :environment_assessment, :physical_assessment_detail, :mental_assessment_detail, :environment_assessment_detail  )
   end
+
+
 
   def service_params
     params.require(:form).permit(:service_agreement_form)
@@ -213,5 +215,7 @@ class AdminsController < ApplicationController
       end
     end
   end
+
+
 
 end

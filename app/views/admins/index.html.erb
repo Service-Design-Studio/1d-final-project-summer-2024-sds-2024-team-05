@@ -226,38 +226,12 @@
       </div>
 
       <div class="tab-pane fade" id="meeting" role="tabpanel" aria-labelledby="meeting-tab">
+        <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
+        </div>
         <div id="meetingDetails">
-          <h1>Meetings</h1>
-
-          <%= month_calendar(events: @meetings) do |date, meetings| %>
-            <div class="day">
-              <%= date.day %>
-            </div>
-              <% meetings.each do |meeting| %>
-                  <div style="width: 150px; padding: 8px; padding-top: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: center" >
-                    <%= link_to "#{truncate(meeting.title, length: 16)} #{meeting.condensed_time}", meeting_path(meeting), class: 'custom-link'%>
-                  </div>
-              <% end %>
-          <% end %>
-      
-          <div id="meetings">
-            <% @meetings.each do |meeting| %>
-              <div class = "card"  style="width: 500px;">
-                <div class="card-body">
-                  <%= render meeting %>
-                  <p>
-                    <%= link_to "Show this meeting", meeting %>
-      
-                    <%= button_to "Destroy this meeting", meeting_path(meeting), method: :delete, data: { confirm: "Are you sure you want to delete this meeting?" }, class: 'btn btn-danger' %>
-      
-                  </p>
-                </div>
-              </div>
-              <hr/>
-            <% end %>
+          <div id="meetings_calendar">
+            <%= render partial: 'meetings/calendar', locals:{meeting: @meetings, self_meetings:@attached_meetings}  %>
           </div>
-      
-          <%= link_to "New meeting", new_meeting_path %>
         </div>
       </div>
     </div>

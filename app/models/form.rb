@@ -1,5 +1,6 @@
 class Form < ApplicationRecord
     # include Rails.application.routes.url_helpers
+    attr_accessor :physical_assessment_detail, :mental_assessment_detail, :environment_assessment_detail
     attr_accessor :others_text, :autofill_address, :admin
     has_one_attached :discharge_summary
     has_one_attached :service_agreement_form

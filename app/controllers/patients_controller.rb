@@ -364,7 +364,7 @@ class PatientsController < ApplicationController
     headers = { 'Content-Type' => 'application/json' }
     body = { "file_name": form.physical_video_file_name}.to_json
 
-    response = HTTParty.post(url, headers: headers, body: body)
+    response = HTTParty.post(url, headers: headers, body: body, timeout: 600)
     if response.success?
       parsed_response = JSON.parse(response.body)
       result = parsed_response['result']

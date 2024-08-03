@@ -26,9 +26,10 @@ class MeetingsController < ApplicationController
     @meeting = Meeting.new(meeting_params)
     respond_to do |format|
       if @meeting.save
-        if meeting_params[:form_id]
+        if @meeting.form_id.present?
+          start_time = @meeting.start_time
           @form = Form.find(meeting_params[:form_id])
-          MeetingMailer.schedule_meeting_email(@form).deliver_now
+          MeetingMailer.schedule_meeting_email(@form, start_time).deliver_now
           format.html { redirect_to client_profile_form_path(@form, status: 'Meeting Date Pending'), notice: "Meeting was successfully created." }
           format.json { render :show, status: :created, location: @meeting }
         elsif current_user.admin?

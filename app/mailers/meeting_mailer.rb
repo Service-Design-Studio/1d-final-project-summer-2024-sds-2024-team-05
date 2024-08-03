@@ -1,7 +1,7 @@
 class MeetingMailer < ApplicationMailer
   default from: 'custom_sender@example.com'
 
-  def schedule_meeting_email(form)
+  def schedule_meeting_email(form, start_time)
     @form = form
     nok = @form.user
     puts nok.email
@@ -12,7 +12,7 @@ class MeetingMailer < ApplicationMailer
         <html>
         <body>
           <p>Dear #{nok.user_first_name},</p>
-          <p>Thank you for registering for our services. Our nurse has scheduled a house visit appointment on <strong>#{@form.meeting.start_time.strftime("%B %d, %Y %I:%M %p")}</strong> to assess the situation for patient <strong>#{@form.first_name} #{@form.last_name}</strong> and confirm the service agreements.</p>
+          <p>Thank you for registering for our services. Our nurse has scheduled a house visit appointment on <strong>#{start_time.strftime("%B %d, %Y %I:%M %p")}</strong> to assess the situation for patient <strong>#{@form.first_name} #{@form.last_name}</strong> and confirm the service agreements.</p>
           <p>If you are unable to make it or if you have any questions, please contact our nurse at <strong>999999999</strong>.</p>
           <p></p>
           <p>Best regards,</p>

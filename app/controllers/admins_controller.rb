@@ -51,7 +51,9 @@ class AdminsController < ApplicationController
   end
 
   def search
-    @query = params[:query].downcase
+    if params[:query]
+      @query = params[:query].downcase
+    end
     @forms = Form.where("LOWER(first_name) LIKE :query OR LOWER(last_name) LIKE :query OR LOWER(CONCAT(first_name, ' ', last_name)) LIKE :query OR
                         LOWER(nok_first_name) LIKE :query OR LOWER(nok_last_name) LIKE :query OR LOWER(CONCAT(nok_first_name, ' ', nok_last_name)) LIKE :query", query: "%#{@query}%")
     @user = current_user

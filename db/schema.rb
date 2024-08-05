@@ -96,6 +96,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_01_190036) do
     t.text "description"
     t.text "location"
     t.datetime "start_time"
+    t.datetime "end_time"
     t.integer "form_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

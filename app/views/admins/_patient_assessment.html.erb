@@ -150,6 +150,11 @@
             <div class="form-group">
               <label for="environment_assessment_detail">Environment Assessment Detail:</label>
               <%= form.text_field :environment_assessment_detail, class: "form-control", id: "environment_assessment_detail" %>
+              <% if @form.environment_assessment_detail %>
+                <%= @form.environment_assessment_detail %>
+              <% else %>
+                <p>nil</p>
+              <% end %>
             </div>
           </div>
           <p><strong>Environment Video:</strong></p>

@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Client Profile</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
   <style>
     video {
       width: 100%;
@@ -106,8 +108,7 @@
             <span 
               id="actionRequiredText" 
               style=" <%= status_colour(@form) %>; cursor: pointer;"
-              onclick="handleActionRequiredClick('<%= application_status(@form) %>')"
-            >
+              onclick="handleActionRequiredClick('<%= application_status(@form) %>')">
               <%= application_status(@form, 'client_profile') %> <!-- application_status is called in helper-->
             </span>
           </p>
@@ -221,7 +222,9 @@
                   <%= image_tag @form.service_agreement_form, class: "img-thumbnail", style: "max-width: 300px;" %>
                 <% end %>
                 <br>
-                <%= link_to "Download Service Agreement", rails_blob_path(@form.service_agreement_form, disposition: "attachment") %>
+                <%= link_to rails_blob_path(@form.service_agreement_form, disposition: "attachment"), class: "btn btn-secondary mt-3" do %>
+                  <i class="fas fa-download"></i> Download Service Agreement
+                <% end %>
               </div>
             <% end %>
             <%= form.file_field :service_agreement_form, accept: '.png,.jpg,.jpeg,.pdf', class: 'form-control mb-3', id: 'svs_agreement' %>

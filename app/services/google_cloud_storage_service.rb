@@ -17,11 +17,23 @@ class GoogleCloudStorageService
   end
 
   def generate_signed_url_for_viewing(filename)
-    Rails.logger.debug "Generating signed URL for: #{filename}"
+    # Rails.logger.debug "Generating signed URL for: #{filename}"
     signed_url = @bucket.signed_url(
       filename,
       method: "GET",
       expires: 15.minutes
+    )
+    # Rails.logger.debug "Signed URL generated: #{signed_url}"
+    signed_url
+  end
+
+  def generate_signed_url_for_uploading(filename)
+    Rails.logger.debug "Generating signed URL for: #{filename}"
+    signed_url = @bucket.signed_url(
+      filename,
+      method: "PUT",
+      expires: 15.minutes,
+      content_type: 'video/mp4'
     )
     Rails.logger.debug "Signed URL generated: #{signed_url}"
     signed_url

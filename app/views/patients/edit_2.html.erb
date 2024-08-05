@@ -78,19 +78,26 @@
     <h1 class="text-center mb-4">Page 2 - Medical Conditions</h1>
     
     <%= form_with(model: @form, url: @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :patch, local: true, multipart: true, class: "mb-4") do |form| %>
-      <div class="mb-3">
-        <%= form.label :height %>
-        <%= form.number_field :height, class: "form-control" %>
+      <div class="row mb-3">
+        <div class="col-6">
+          <%= form.label :height do %>
+            Patient's Height/cm <span style="color: red;">*</span> 
+          <% end %>
+          <%= form.number_field :height, class: "form-control",placeholder: '/cm' %>
+        </div>
+        <div class="col-6">
+          <%= form.label :weight do %>
+            Patient's Weight/Kg <span style="color: red;">*</span> 
+          <% end %>
+          <%= form.number_field :weight, class: "form-control",placeholder: '/kg' %>
+        </div>
       </div>
 
-      <div class="mb-3">
-        <%= form.label :weight %>
-        <%= form.number_field :weight, class: "form-control" %>
-      </div>
+      
 
       <div class="mb-3">
         <fieldset>
-          <p>Patient's Medical Conditions</p>
+          <p>Patient's Medical Conditions<span style="color: red;"> *</span></p>
           <div class="form-check form-check-inline">
             <%= check_box_tag 'form[conditions][]', 'Dementia', checked_conditions('Dementia'), id: 'conditions_dementia', class: 'form-check-input'%>
             <%= label_tag 'conditions_dementia', 'Dementia', class: 'form-check-label' %>
@@ -120,13 +127,15 @@
       </div>
 
       <div class="mb-3">
-        <%= form.label :medication %>
+        <%= form.label :medication do %>
+          Patient's Medication <span style="color: red;">*</span> 
+        <% end %>
         <%= form.text_field :medication, class: "form-control" %>
       </div>
 
       <div class="mb-3">
         <fieldset>
-          <p>Has the Patient been Hospitalised Recently?</p>
+          <p>Has the Patient been Hospitalised Recently?<span style="color: red;"> *</span></p>
           <div class="form-check form-check-inline">
             <%= form.radio_button :hospital, '1', class: 'form-check-input', id: 'Yes', checked: @form.hospital == true %>
             <%= form.label :hospital_yes, "Yes", class: 'form-check-label' %>

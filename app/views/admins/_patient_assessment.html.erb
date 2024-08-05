@@ -63,7 +63,7 @@
             <% end %>
             <div class="form-group">
               <label for="physical_assessment_detail">Physical Assessment Detail:</label>
-              <%= form.text_field :physical_assessment_detail, class: "form-control", id: "physical_assessment_detai" %>
+              <%= form.text_area :physical_assessment_detail, class: "form-control", id: "physical_assessment_detail", style: "height: 150px" %>
             </div>
           </div>
           <p><strong>Physical Video:</strong></p>
@@ -108,7 +108,7 @@
             <% end %>
             <div class="form-group">
               <label for="mental_assessment_detail">Mental Assessment Detail:</label>
-              <%= form.text_field :mental_assessment_detail, class: "form-control", id: "mental_assessment_detail" %>
+              <%= form.text_area :mental_assessment_detail, class: "form-control", id: "mental_assessment_detail", style: "height: 150px" %>
             </div>
           </div>
           <p><strong>Mental Video:</strong></p>
@@ -149,11 +149,9 @@
             <% end %>
             <div class="form-group">
               <label for="environment_assessment_detail">Environment Assessment Detail:</label>
-              <%= form.text_field :environment_assessment_detail, class: "form-control", id: "environment_assessment_detail" %>
+              <%= form.text_area :environment_assessment_detail, class: "form-control", id: "environment_assessment_detail", style: "height: 150px"%>
               <% if @form.environment_assessment_detail %>
                 <%= @form.environment_assessment_detail %>
-              <% else %>
-                <p>nil</p>
               <% end %>
             </div>
           </div>

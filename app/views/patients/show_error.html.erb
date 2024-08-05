@@ -31,7 +31,11 @@
 
     <!-- Navigation Buttons -->
     <div class="d-flex justify-content-center mt-5 mb-5">
-      <%= link_to "Back to List", forms_path, class: 'btn btn-lg btn-outline-black rounded-pill', style: 'float: left; margin-right: 5px;' %>
+      <% if current_user.admin? %>
+        <%= link_to 'Back to List', admin_root_path, class: 'btn btn-lg btn-outline-black rounded-pill' %>
+      <% else %>
+        <%= link_to 'Back to List', user_root_path, class: 'btn btn-lg btn-outline-black rounded-pill' %>
+      <% end %>
     </div>
     
   </div>

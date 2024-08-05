@@ -184,18 +184,23 @@
                     <%= form.hidden_field :form_id, value: @form.id %>
 
                     <div>
-                      <%= form.label :description, style: "display: block;" %>
+                      <%= form.label :description%>
                       <%= form.text_area :description, style: "width:100%" %>
                     </div>
 
                     <div>
-                      <%= form.label :location, style: "display: block"%>
+                      <%= form.label :location do %>
+                        Meeting Location <span style="color: red;">*</span> 
+                      <% end %>
                       <%= form.text_area :location , required: true , style: "width:100%"%>
                     </div>
 
                     <div>
-                      <%= form.label :start_time, style: "display: block"%>
-                      <%= form.datetime_field :start_time, required: true  %>
+                      <%= form.label :start_time do %>
+                          Meeting Start Time:<span style="color: red;">*</span> 
+                      <% end %>
+                      <br>
+                      <%= form.datetime_field :start_time, class: "form-control", required: true, id: "startTime"  %>
                     </div>
 
                     <div style = "width: 100%; display: flex; justify-content: end" class = "mt-5">
@@ -255,9 +260,11 @@
       var urlParams = new URLSearchParams(window.location.search);
       var status = urlParams.get('status');
       var querydate = urlParams.get('start_date');
-      var view = urlParams.get('view'); // Parameter that indicates the calendar view
+      var view = urlParams.get('view');
+      const textareas = document.querySelectorAll('#environment_assessment_detail, #metal_assessment_detail, #physical_assessment_detail');
 
       console.log('querydate:', querydate !== null);
+      
 
       if (querydate !== null) {
         var meetingTab = new bootstrap.Tab(document.getElementById('meeting-tab'));
@@ -280,6 +287,13 @@
       }
 
       initMap('<%= @form.postal %>');
+
+      textareas.forEach(textarea => {
+        textarea.addEventListener('input', () => {
+          textarea.style.height = 'auto'; // Reset height
+          textarea.style.height = `${textarea.scrollHeight}px`; // Adjust height to fit content
+        });
+      });
     });
     
 

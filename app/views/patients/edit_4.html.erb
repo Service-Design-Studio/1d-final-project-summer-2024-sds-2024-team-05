@@ -85,10 +85,11 @@
     <%= form_with(model: @form, url: @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :patch, local: true, html: { multipart: true }) do |form| %>
       <div class="row">
         <!-- Step 1: Physical Video -->
-        <div class="col-md-6 box">         <%# <div class="box"> %>
+        <div class="col-md-6 box">
+          <%# <div class="box"> %>
             <h3>Step 1</h3>
             <hr/>
-            <h4>Upload Physical Video</h4>
+            <h4>Upload Physical Video<span style="color: red;"> *</span></h4>
             Film a video of the patient moving around the house
             <div class="video-preview" style="margin-top: 20px;">
               <iframe class="rounded-video" width="100%" height="300" 
@@ -108,13 +109,13 @@
                   <%= video_tag signed_url, controls: true, class: "img-thumbnail video-preview rounded-video" %>
             </div>
             <% end %>
-        </div>
+          </div>
 
         <!-- Step 2: Mental Video -->
         <div class="box">
           <h3>Step 2</h3>
           <hr/>
-          <h4>Upload Mental Video</h4>
+          <h4>Upload Mental Video<span style="color: red;"> *</span></h4>
           <p>Film a video of the patient conversing with family.</p>
           <div class="video-preview mt-3">
             <iframe class="rounded-video" width="100%" height="300" src="https://www.youtube.com/embed/QrPGDtVVyVo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

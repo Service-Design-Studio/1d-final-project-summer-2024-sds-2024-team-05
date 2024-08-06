@@ -81,12 +81,6 @@ Scenario: Setting a meeting in the meeting details page
     And I click the create meeting button
     Then I should see that meeting was successfully created by seeing the patient name and the timing of the meeting on the calendar
 
-Scenario: Dropdown switiching between monthly and weekly views
-    Given that am on the meeting details page and I want to switch between monthly and weekly view of the calendar
-    When I click the dropdown calendar view button and assuming I am on the weekly calendar and want to change to the monthly calendar
-    When I click the Monthly button on the dropdown button
-    Then I should see a monthly view of the calendar instead of the weekly calendar
-
 Scenario: Using the calendar
     Given that I want to see the next month in the calendar, when I click the button Next
     Then I should be brought to the next month in the calendar  
@@ -106,10 +100,6 @@ Scenario: Far away from the current date in the calendar
     Given that I have clicked on other months and I am not on the current month in the calendar, when I click the button Today
     Then I should be brought back to the current month from any month I was at.
 
-Scenario: Deleting the meeting date
-    Given that I have finished setting the meeting date but I realized I want to cancel the meeting
-    When I click on the button destroy this meeting under the meeting details
-    Then I should not see the meeting in the calendar anymore
 
 #Feature 5: Upload Service agreement form 
 

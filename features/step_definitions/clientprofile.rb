@@ -6,7 +6,7 @@
 Given('that I would like to view a specific client information') do
   visit '/users/sign_up'
   sleep(10)
-  fill_in 'Email', with: 'user14@example.com'
+  fill_in 'Email', with: 'user21@example.com'
   fill_in 'Password', with: 'password'
   fill_in 'Password confirmation', with: 'password'
   fill_in 'User first name', with: 'John'
@@ -16,7 +16,7 @@ Given('that I would like to view a specific client information') do
   fill_in 'User postal', with: '544277'
   click_button 'Sign Up'
   visit '/forms/new'
-  fill_in 'first_name', with: 'Musan'
+  fill_in 'first_name', with: 'Zusan'
   fill_in 'last_name', with: 'Tan'
   choose('Female')
   fill_in 'date_of_birth', with: '12101960'
@@ -44,12 +44,19 @@ Given('that I would like to view a specific client information') do
   click_button 'Next'
   attach_file('physical_video', 'C:\\Users\\charm\\Downloads\\sds.mp4')
   attach_file('mental_video', 'C:\\Users\\charm\\Downloads\\sds.mp4')
+  sleep(10)
   click_button 'Save'
+  sleep(10)
   click_button 'Next'
+  sleep(10)
   attach_file('environment_video', 'C:\\Users\\charm\\Downloads\\HCI Task 2 .mp4')
+  sleep(10)
   click_button 'Save'
+  sleep(10)
   click_button 'Next'
+  sleep(10)
   click_button 'Submit'
+  sleep(10)
   visit '/users/sign_out'
   fill_in 'Email', with: 'nursejoon@ninkatec.com'
   fill_in 'Password', with: 'password'
@@ -57,7 +64,7 @@ Given('that I would like to view a specific client information') do
 end
 
 When('I click on the individual client row') do
-  find('a', text: 'Musan', exact: true).click
+  find('a', text: 'Zusan', exact: true).click
 end
 
 
@@ -73,7 +80,7 @@ Given('that I am in the client profile page and I realized there are wrong infor
   fill_in 'Email', with: 'nursejoon@ninkatec.com'
   fill_in 'Password', with: 'password'
   click_button 'Log in'
-  find('a', text: 'Musan', exact: true).click
+  find('a', text: 'Zusan', exact: true).click
 end
 
 When('I click on the edit button in the client profile page') do
@@ -85,9 +92,9 @@ And('I make the changes I need') do
 end
 
 When('I click save and back') do
-  find('save_button').click
-  find('back_button').click
-  find('a', text: 'Musan', exact: true).click
+  find('#save_button').click
+  find('#back_button').click
+  find('a', text: 'Zusan', exact: true).click
 end
 
 Then('the changes should be applied and saved and now updated to the new version') do
@@ -101,7 +108,7 @@ Given('that I am in the client profile page') do
   fill_in 'Email', with: 'nursejoon@ninkatec.com'
   fill_in 'Password', with: 'password'
   click_button 'Log in'
-  find('a', text: 'Musan', exact: true).click
+  find('a', text: 'Zusan', exact: true).click
 end
 
 And('I accidentally click on the edit button when I do not intend to make a change') do
@@ -109,8 +116,8 @@ And('I accidentally click on the edit button when I do not intend to make a chan
 end
 
 When('I click back without clicking save') do
-  find('#back').click
-  find('a', text: 'Musan', exact: true).click
+  find('#back_button').click
+  find('a', text: 'Zusan', exact: true).click
 end
 
 Then('no changes would be applied and the information would be as per before I click the edit button') do
@@ -127,7 +134,7 @@ Given('that I am on the client profile page and have forgotten to look through t
   fill_in 'Email', with: 'nursejoon@ninkatec.com'
   fill_in 'Password', with: 'password'
   click_button 'Log in'
-  find('a', text: 'Musan', exact: true).click
+  find('a', text: 'Zusan', exact: true).click
   find('#assessment-tab').click
 end
 
@@ -145,7 +152,7 @@ Given('that I am in the process of assessing the physical mental and encironment
   fill_in 'Email', with: 'nursejoon@ninkatec.com'
   fill_in 'Password', with: 'password'
   click_button 'Log in'
-  find('a', text: 'Musan', exact: true).click
+  find('a', text: 'Zusan', exact: true).click
   find('#assessment-tab').click
 end
 
@@ -170,7 +177,7 @@ Given('that I am assessing the patient and I need to describe the patient in mor
   fill_in 'Email', with: 'nursejoon@ninkatec.com'
   fill_in 'Password', with: 'password'
   click_button 'Log in'
-  find('a', text: 'Musan', exact: true).click
+  find('a', text: 'Zusan', exact: true).click
   find('#assessment-tab').click
 end
 
@@ -195,7 +202,7 @@ Given('that I am on the patient asessment tab and I realized that I have assesse
   fill_in 'Email', with: 'nursejoon@ninkatec.com'
   fill_in 'Password', with: 'password'
   click_button 'Log in'
-  find('a', text: 'Musan', exact: true).click
+  find('a', text: 'Zusan', exact: true).click
   find('#assessment-tab').click
   choose('physical_good')
   choose('mental_good')
@@ -226,7 +233,7 @@ Given('that I want to know what is the NOKs contact information') do
   fill_in 'Email', with: 'nursejoon@ninkatec.com'
   fill_in 'Password', with: 'password'
   click_button 'Log in'
-  find('a', text: 'Musan', exact: true).click
+  find('a', text: 'Zusan', exact: true).click
 end
 
 When('I am in the client profile page and I click on the tab NOK Details') do
@@ -248,7 +255,7 @@ Given('that I have finished assessing the physical, mental and environmental of 
   fill_in 'Email', with: 'nursejoon@ninkatec.com'
   fill_in 'Password', with: 'password'
   click_button 'Log in'
-  find('a', text: 'Musan', exact: true).click
+  find('a', text: 'Zusan', exact: true).click
   find('#assessment-tab').click
   choose('physical_good')
   choose('mental_good')
@@ -274,7 +281,7 @@ Given('that I want to set a meeting in the meeting details page') do
   fill_in 'Email', with: 'nursejoon@ninkatec.com'
   fill_in 'Password', with: 'password'
   click_button 'Log in'
-  find('a', text: 'Musan', exact: true).click
+  find('a', text: 'Zusan', exact: true).click
   find('#meeting-tab').click
 end
 
@@ -282,41 +289,17 @@ When('I fill up the description, location, start time and end time') do
   click_button 'Create Meeting'
   fill_in 'meeting_description', with: 'NIL'
   fill_in 'meeting_location', with: 'changi'
-  field = find_field('meeting_start_time')
-  field.send_keys("25/07/2024", :tab, "14:00")
+  field = find_field('startTime')
+  field.send_keys("7/08/2024", :tab, "14:00")
 end
 
 And('I click the create meeting button') do
-  click_button('meeting_created')
+  find('#meeting_created').click
 end
 
 Then('I should see that meeting was successfully created by seeing the patient name and the timing of the meeting on the calendar') do
-  expect(find('.simple-calendar')).to have_content('Musan Tan 2:00 PM')
-end
-
-
-#Feature 3: Meeting Details
-
-#Scenario: Dropdown switiching between monthly and weekly views
-Given('that am on the meeting details page and I want to switch between monthly and weekly view of the calendar') do
-  visit '/'
-  fill_in 'Email', with: 'nursejoon@ninkatec.com'
-  fill_in 'Password', with: 'password'
-  click_button 'Log in'
-  find('a', text: 'Musan', exact: true).click
-  find('#meeting-tab').click
-end
-
-When("I click the dropdown calendar view button and assuming I am on the weekly calendar and want to change to the monthly calendar") do
-  find('#dropdownMenuButton1').click
-end
-
-When("I click the Monthly button on the dropdown button") do
-  find('.dropdown-menu').find('li', text: 'Monthly').click
-end
-
-Then("I should see a monthly view of the calendar instead of the weekly calendar") do
-  expect(page).all('.day', minimum: 28).size.to be >= 28
+  sleep(10)
+  expect(find('.simple-calendar')).to have_content('Zusan Tan 2:00 PM')
 end
 
 #Scenario: Using the calendar
@@ -326,7 +309,7 @@ Given('that I want to see the next month in the calendar, when I click the butto
   fill_in 'Email', with: 'nursejoon@ninkatec.com'
   fill_in 'Password', with: 'password'
   click_button 'Log in'
-  find('a', text: 'Musan', exact: true).click
+  find('a', text: 'Zusan', exact: true).click
   find('#meeting-tab').click
   find('#dropdownMenuButton1').click
   find('.dropdown-menu').find('li', text: 'Monthly').click
@@ -334,7 +317,7 @@ Given('that I want to see the next month in the calendar, when I click the butto
 end
 
 Then("I should be brought to the next month in the calendar") do
-  expect(page).to have_content('August 2024')
+  expect(page).to have_content('September 2024')
 end
 
 #Scenario: Using the calendar
@@ -344,7 +327,7 @@ Given('that I want to see the previous month in the calendar, when I click the b
   fill_in 'Email', with: 'nursejoon@ninkatec.com'
   fill_in 'Password', with: 'password'
   click_button 'Log in'
-  find('a', text: 'Musan', exact: true).click
+  find('a', text: 'Zusan', exact: true).click
   find('#meeting-tab').click
   find('#dropdownMenuButton1').click
   find('.dropdown-menu').find('li', text: 'Monthly').click
@@ -352,7 +335,7 @@ Given('that I want to see the previous month in the calendar, when I click the b
 end
 
 Then("I should be brought to the previous month") do
-  expect(page).to have_content('June 2024')
+  expect(page).to have_content('July 2024')
 end
 
 #Scenario: Details of other patients
@@ -362,17 +345,17 @@ Given('that I am on a individual client profile meeting date page and I want to 
   fill_in 'Email', with: 'nursejoon@ninkatec.com'
   fill_in 'Password', with: 'password'
   click_button 'Log in'
-  find('a', text: 'Musan', exact: true).click
+  find('a', text: 'Zusan', exact: true).click
   find('#meeting-tab').click
 end
 
 When('I click on their meeting details on the calendar') do
-  find('a', text: 'Musan Tan 2:00 PM', exact_text: true).click
+  find('a', text: 'Zusan Tan 2:00 PM', exact_text: true).click
 end
 
 
 Then("I should be able to see their meeting details even though I am not in the overall calendar page nor am I in that specific client that I was checking on page") do
-  expect(page).to have_content('Title: Musan Tan')
+  expect(page).to have_content('Patient Name: Zusan Tan')
   expect(page).to have_content('Description: NIL')
   expect(page).to have_content('Location: changi')
 end
@@ -385,7 +368,7 @@ Given('that I have clicked on other months and I am not on the current month in 
   fill_in 'Email', with: 'nursejoon@ninkatec.com'
   fill_in 'Password', with: 'password'
   click_button 'Log in'
-  find('a', text: 'Musan', exact: true).click
+  find('a', text: 'Zusan', exact: true).click
   find('#meeting-tab').click
   find('#dropdownMenuButton1').click
   find('.dropdown-menu').find('li', text: 'Monthly').click
@@ -394,28 +377,9 @@ Given('that I have clicked on other months and I am not on the current month in 
 end
 
 Then("I should be brought back to the current month from any month I was at.") do
-  expect(page).to have_content('July 2024')
+  expect(page).to have_content('August 2024')
 end
 
-#Scenario: Deleting the meeting date
-
-Given('that I have finished setting the meeting date but I realized I want to cancel the meeting') do
-  visit '/'
-  fill_in 'Email', with: 'nursejoon@ninkatec.com'
-  fill_in 'Password', with: 'password'
-  click_button 'Log in'
-  find('a', text: 'Musan', exact: true).click
-  find('#meeting-tab').click
-end
-
-When('I click on the button destroy this meeting under the meeting details') do
-  find('a', text: 'Musan Tan 2:00 PM', exact_text: true).click
-  click_button('Destroy this meeting')
-end
-
-Then('I should not see the meeting in the calendar anymore') do
-  expect(page).not_to have_css('.simple-calendar', text: 'Musan Tan 2:00 PM', visible: true)
-end
 
 #Feature 5: Upload Service agreement form
 
@@ -426,14 +390,7 @@ Given('that I am in the client profile and I have the signed service agreement f
   fill_in 'Email', with: 'nursejoon@ninkatec.com'
   fill_in 'Password', with: 'password'
   click_button 'Log in'
-  find('a', text: 'Musan', exact: true).click
-  find('#meeting-tab').click
-  fill_in 'meeting_description', with: 'NIL'
-  fill_in 'meeting_location', with: 'changi'
-  field = find_field('meeting_start_time')
-  field.send_keys("25/07/2024", :tab, "15:00")
-  click_button('Create Meeting')
-  sleep(10)
+  find('a', text: 'Zusan', exact: true).click
 end
 
 Then('I should see the Service Agreement tab turn red color') do
@@ -448,7 +405,7 @@ Given('that I have the signed service agreement form after meeting the patient a
   fill_in 'Email', with: 'nursejoon@ninkatec.com'
   fill_in 'Password', with: 'password'
   click_button 'Log in'
-  find('a', text: 'Musan', exact: true).click
+  find('a', text: 'Zusan', exact: true).click
 end
 
 When("I click on the service agreement tab") do

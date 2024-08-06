@@ -239,13 +239,13 @@
 
       <div class="d-flex justify-content-between">
         <% if current_user.admin? %>
-          <%= link_to "Back", admin_root_path, class: "btn btn-lg btn-outline-black rounded-pill" %>
+          <%= link_to "Back", admin_root_path, class: "btn btn-lg btn-outline-black rounded-pill", id:"back_button" %>
         <% else %>
           <%= link_to "Back", user_root_path, class: "btn btn-lg btn-outline-black rounded-pill" %>
         <% end %>
         <div>
-          <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green me-2" %>
-          <%= form.submit "Next", class: "btn btn-lg btn-blue rounded-pill" %>
+          <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green me-2", id:"save_button" %>
+          <%= form.submit "Next", class: "btn btn-lg btn-blue rounded-pill", id:"next_button" %>
         </div>
       </div>
     <% end %>

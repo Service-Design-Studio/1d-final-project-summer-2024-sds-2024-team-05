@@ -15,4 +15,4 @@ require 'rails_helper'
 #       }.to raise_error(StandardError, "Simulated email sending failure")
 #     end
 #   end
-end
+# end

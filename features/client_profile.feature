@@ -1,4 +1,5 @@
 @use_selenium
+
 Feature: Individual Client Profile Page 
 
 #Feature 1: Client info page 

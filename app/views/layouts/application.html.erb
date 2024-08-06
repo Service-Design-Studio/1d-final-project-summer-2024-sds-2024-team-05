@@ -114,6 +114,7 @@
     document.addEventListener("DOMContentLoaded", function() {
       const flashMessage = document.querySelector('.flash-message');
       const flashDanger = document.querySelector('.flash-danger');
+      const flashNotice = document.querySelector('.flash-notice');
 
       if (flashMessage) {
         // Show flash message and then fade it out
@@ -124,6 +125,18 @@
           // Remove the element from the DOM after the fade-out transition
           setTimeout(() => {
             flashMessage.remove();
+          }, 500); // Match this duration with the opacity transition
+        }, 3000); // Time before fading out (3 seconds)
+      }
+
+      if (flashNotice) {
+        flashNotice.style.display = 'block';
+        setTimeout(() => {
+          flashNotice.style.transition = 'opacity 0.5s ease-in-out';
+          flashNotice.style.opacity = '0';
+          // Remove the element from the DOM after the fade-out transition
+          setTimeout(() => {
+            flashNotice.remove();
           }, 500); // Match this duration with the opacity transition
         }, 3000); // Time before fading out (3 seconds)
       }

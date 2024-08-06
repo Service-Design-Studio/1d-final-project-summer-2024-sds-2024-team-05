@@ -35,7 +35,20 @@
 <body>
     <div class="container">
         <div class="header-container mb-1 justify-content-between">
-            <h1>Meeting Details</h1>
+            <% if params[:origin] == 'edit' %>
+                <%= link_to admin_root_path, class: "btn", id: "back_btn" do %>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+                    </svg>
+                <% end %>
+            <% else %>
+                <%= link_to :back, class: "btn", id: "back_btn" do %>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+                    </svg>
+                <% end %>
+            <% end %>
+            <h1 style="margin-left: 1em">Meeting Details</h1>
             <div class="d-flex justify-content-end">
                 <%= link_to edit_meeting_path(@meeting), class: "icon-link btn btn-outline-primary" do %>
                     <i class="fas fa-edit"></i> Edit
@@ -71,5 +84,5 @@
       </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
+    </body>
 </html>

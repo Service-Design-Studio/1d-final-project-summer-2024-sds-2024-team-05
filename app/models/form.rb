@@ -89,7 +89,6 @@ class Form < ApplicationRecord
 
     def submittable
         pg1_valid && pg2_valid && pg3_valid && pg4_valid && pg5_valid
-        true
     end
 
 

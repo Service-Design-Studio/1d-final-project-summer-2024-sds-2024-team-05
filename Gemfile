@@ -43,11 +43,16 @@ gem 'faker'
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 #able to use .env file or smth
-gem 'dotenv-rails', groups: [:development, :test]
+gem 'dotenv-rails'
 
 gem 'devise', '~> 4.9', '>= 4.9.3'
 gem 'devise-jwt'
 gem 'jwt'
+
+gem 'google-cloud-storage'
+
+#make http req
+gem 'httparty'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -57,7 +62,6 @@ gem "bootsnap", require: false
 
 group :production do
   gem 'pg', '~> 1.5.6' # for gcloud deployment
-  gem 'google-cloud-storage'
 end
 
 group :development, :test do

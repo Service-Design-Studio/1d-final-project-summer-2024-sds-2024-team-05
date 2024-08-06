@@ -80,7 +80,7 @@
     <%= form_with(model: @form, url: @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :patch, local: true) do |form| %>
       <div class="mb-3">
         <fieldset>
-          <p>What Services are Required?</p>
+          <p>What Services are Required?<span style="color: red;"> *</span></p>
           <div class="form-check form-check-inline">
             <%= check_box_tag 'form[services][]', 'Showering', checked_services('Showering'), id: 'services_showering', class: 'form-check-input' %>
             <%= label_tag 'services_showering', 'Showering', class: 'form-check-label' %>
@@ -105,15 +105,22 @@
         <%= form.text_field :services_other, class: "form-control", id: "services_other"%>
       </div>
 
-      <div class="mb-3">
-        <%= form.label :start_date %>
-        <%= form.date_field :start_date, class: "form-control", id: "start_date" %>
+      <div class="row mb-3">
+        <div class="col-6">
+          <%= form.label :start_date do %>
+            Requested Service Start Date <span style="color: red;">*</span> 
+          <% end %>
+          <%= form.date_field :start_date, class: "form-control", id: "start_date" %>
+        </div>
+        <div class="col-6">
+          <%= form.label :end_date do %>
+            Requested Service End Date <span style="color: red;">*</span> 
+          <% end %>
+          <%= form.date_field :end_date, class: "form-control", id: "end_date" %>
+        </div>
       </div>
 
-      <div class="mb-3">
-        <%= form.label :end_date %>
-        <%= form.date_field :end_date, class: "form-control", id: "end_date" %>
-      </div>
+     
 
       <div class="d-flex justify-content-between mt-4">
         <%= link_to "Back", @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, class:"btn btn-lg btn-outline-black rounded-pill" %>

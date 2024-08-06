@@ -80,8 +80,10 @@ class PatientsController < ApplicationController
         redirect_to edit_1_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
       end
     when 'Next'
-      if @form.update(form_params_step1)
-        redirect_to edit_2_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
+      if params[:form].present? && params[:form].except(:autofill_address).values.any?(&:present?)
+        if @form.update(form_params_step1)
+          redirect_to edit_2_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
+        end
       end
     else
       render :edit_1
@@ -126,8 +128,10 @@ class PatientsController < ApplicationController
         redirect_to edit_2_form_path(@form), notice: 'Form 2 was successfully updated.'
       end
     when 'Next'
-      if @form.update(form_params_step2)
-        redirect_to edit_3_form_path(@form), notice: 'Form 2 was successfully updated.'
+      if params[:form].present? && params[:form].values.any?(&:present?)
+        if @form.update(form_params_step2)
+          redirect_to edit_3_form_path(@form), notice: 'Form 2 was successfully updated.'
+        end
       end
     else
       render :edit_2
@@ -208,55 +212,47 @@ class PatientsController < ApplicationController
   # GET /forms/1/edit_4
   def edit_4
     @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
-
   end
 
   # PATCH /forms/1/update_4
   def update_4
+    form_id = params[:form_id]
     @form = Form.find(params[:id])
     Rails.logger.debug "Update 4 action triggered for form ##{@form.id}"
-    case params[:commit]
+    Rails.logger.debug "Full params: #{params.inspect}"
+    changes = params[:patient][:changes].to_s.strip if params[:patient].present?
+    case changes
     when 'Upload Physical Video'
-      if params[:form].present? && params[:form][:physical_video].present?
-        @form.physical_video.attach(params[:form][:physical_video])
-        Rails.logger.debug "Physical video attached: #{@form.physical_video.attached?}"
-        redirect_to edit_4_form_path(@form)
+      @form.physical_video_file_name = "#{params[:patient][:filename]}.mp4"
+      if @form.save
+        Rails.logger.debug "Physical video file name updated: #{@form.physical_video_file_name}"
+        render json: { success: true, message: 'Physical video uploaded successfully' }
+      else
+        render json: { error: 'Failed to save physical video' }, status: :unprocessable_entity
       end
     when 'Upload Mental Video'
-      if params[:form].present? && params[:form][:mental_video].present?
-        @form.mental_video.attach(params[:form][:mental_video])
-        if @form.save
-          Rails.logger.debug "Mental video attached: #{@form.mental_video.attached?}"
-          Rails.logger.debug "Calling transcribe_video_and_update_form method"
-          @form.transcribe_video_and_update_form
-        end
-        redirect_to edit_4_form_path(@form)
+      @form.mental_video_file_name = "#{params[:patient][:filename]}.mp4"
+      if @form.save
+        Rails.logger.debug "Mental video file name updated: #{@form.mental_video_file_name}"
+        render json: { success: true, message: 'Mental video uploaded successfully' }
+      else
+        render json: { error: 'Failed to save mental video' }, status: :unprocessable_entity
       end
     when 'Save'
       if params[:form].present?
-        @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
-        @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
-        if @form.update(form_params_step4) # Use update with strong params
-          Rails.logger.debug "Form saved: #{@form.persisted?}"
-          Rails.logger.debug "Checking if mental_video is attached: #{@form.mental_video.attached?}"
-          @form.transcribe_video_and_update_form if @form.mental_video.attached?
-        end
-        redirect_to edit_4_form_path(@form)
+        # upload_physical_video(@form, params[:form][:physical_video]) if params[:form][:physical_video].present?
+        # upload_mental_video(@form, params[:form][:mental_video]) if params[:form][:mental_video].present?
+        # redirect_to edit_4_form_path(@form)
       end
       
     when 'Next'
       if params[:form].present?
-        @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
-        @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
-        if @form.update(form_params_step4) # Use update with strong params
-          Rails.logger.debug "Form saved: #{@form.persisted?}"
-          Rails.logger.debug "Checking if mental_video is attached: #{@form.mental_video.attached?}"
-          @form.transcribe_video_and_update_form if @form.mental_video.attached?
-        end
+        # upload_physical_video(@form, params[:form][:physical_video]) if params[:form][:physical_video].present?
+        # upload_mental_video(@form, params[:form][:mental_video]) if params[:form][:mental_video].present?
       end
-      redirect_to edit_5_form_path(@form)
+      # redirect_to edit_5_form_path(@form)
     else
-      redirect_to edit_4_form_path(@form), alert: 'Invalid action.'
+      # redirect_to edit_4_form_path(@form), alert: 'Invalid action.'
     end
   end
 
@@ -264,55 +260,17 @@ class PatientsController < ApplicationController
 
   #collection update 1
   def update_4_collection
-    case params[:commit]
-    when 'Upload Physical Video'
-      if params[:form].present? && params[:form][:physical_video].present?
-        @form = current_user.forms.build(form_params_step4)
-        if @form.save
-          @form.physical_video.attach(params[:form][:physical_video])
-        end
-        redirect_to edit_4_form_path(@form)
-      end
-    when 'Upload Mental Video'
-      if params[:form].present? && params[:form][:mental_video].present?
-        @form = current_user.forms.build(form_params_step4)
-        if @form.save
-          @form.mental_video.attach(params[:form][:mental_video])
-          transcribe_video_and_update_form(@form, :mental_video) if @form.mental_video.attached?
-        end
-        redirect_to edit_4_form_path(@form)
-      end
-    when 'Save'
-      if params[:form].present?
-        @form = current_user.forms.build(form_params_step4)
-        if @form.save
-          @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
-          @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
-          transcribe_video_and_update_form(@form, :mental_video) if @form.mental_video.attached?
-        end
-        redirect_to edit_4_form_path(@form)
-      end
-    when 'Next'
-      if params[:form].present?
-        @form = current_user.forms.build(form_params_step4)
-        if @form.save
-          @form.mental_video.attach(params[:form][:mental_video]) if params[:form][:mental_video].present?
-          @form.physical_video.attach(params[:form][:physical_video]) if params[:form][:physical_video].present?
-          transcribe_video_and_update_form(@form, :mental_video) if @form.mental_video.attached?
-        end
-        redirect_to edit_5_form_path(@form)
-      else
-        redirect_to edit_5_forms_path
-      end
+    @form = current_user.forms.create
+    if @form.persisted?
+      render json: { success: true, formId: @form.id }
     else
-      render :edit_4
+      render json: { success: false, message: "Failed to create new form" }, status: :unprocessable_entity
     end
   end
 
   # GET /forms/1/edit_5
   def edit_5
     @form_origin_text = determine_form_origin_text # Changes my header based on my origin new or edit
-
   end
 
   # PATCH /forms/1/update_5
@@ -320,75 +278,54 @@ class PatientsController < ApplicationController
     Rails.logger.debug "params[:commit]: #{params[:commit]}"
     Rails.logger.debug "params[:form]: #{params[:form]}"
 
-    case params[:commit]
-    when 'Upload Environment Video', 'Save'
-      if params[:form].present? && params[:form][:environment_video].present?
-        @form.environment_video.attach(params[:form][:environment_video])
-        if @form.update(form_params_step5)
-          redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
-        else
-          redirect_to edit_5_form_path(@form), notice: 'Video upload unsuccessful.'
-        end
+    form_id = params[:form_id]
+    @form = Form.find(params[:id])
+    Rails.logger.debug "Update 4 action triggered for form ##{@form.id}"
+    Rails.logger.debug "Full params: #{params.inspect}"
+    changes = params[:patient][:changes].to_s.strip if params[:patient].present?
+    case changes
+    when 'Upload Environment Video'
+      @form.environment_video_file_name = "#{params[:patient][:filename]}.mp4"
+      if @form.save
+        Rails.logger.debug "Environment video file name updated: #{@form.physical_video_file_name}"
+        render json: { success: true, message: 'Physical video uploaded successfully' }
+      else
+        render json: { error: 'Failed to save physical video' }, status: :unprocessable_entity
       end
-    # when 'Save'
-    #   if params[:form].present? && params[:form][:environment_video].present?
-    #     @form.environment_video.attach(params[:form][:environment_video])
-    #     if @form.update(form_params_step5)
-    #       redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
-    #     else
-    #       redirect_to edit_5_form_path(@form), notice: 'Video upload unsuccessful.'
-    #     end
-    #   end
-    when 'Next' #hubert
-      if params[:form].present?
-        @form.environment_video.attach(params[:form][:environment_video]) if params[:form][:environment_video].present?
-        if form_params_step5.present?
-          @form.update(form_params_step5)
-        end
-      end
-      redirect_to @form
+    when 'Next' 
+      # if params[:form].present?
+      #   upload_environment_video(@form, params[:form][:environment_video]) if params[:form][:environment_video].present?
+      # end
+      # redirect_to @form
     else
-      # Handle unexpected values for params[:commit]
-      redirect_to edit_5_form_path(@form), alert: 'Invalid action.'
+      # # Handle unexpected values for params[:commit]
+      # redirect_to edit_5_form_path(@form), alert: 'Invalid action.'
     end
   end
 
   #collection update 1
   def update_5_collection
-    case params[:commit]
-    when 'Upload Environment Video'
-      if params[:form].present? && params[:form][:environment_video].present?
-        @form = current_user.forms.build(form_params_step5)
-        @form.save
-        @form.environment_video.attach(params[:form][:environment_video])
-        redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
-      end
-    when 'Save'
-      if params[:form].present? && params[:form][:environment_video].present?
-        @form = current_user.forms.build(form_params_step5)
-        @form.save
-        @form.environment_video.attach(params[:form][:environment_video])
-        redirect_to edit_5_form_path(@form), notice: 'Environment video uploaded successfully.'
-      end
-    when 'Next'
-      if params[:form].present?
-        @form = current_user.forms.build(form_params_step5)
-        @form.save
-        @form.environment_video.attach(params[:form][:environment_video]) if params[:form][:environment_video].present?
-        redirect_to @form
-      else
-        redirect_to show_error_forms_path
-      end
+    @form = current_user.forms.create
+    if @form.persisted?
+      render json: { success: true, formId: @form.id }
     else
-      # Handle unexpected values for params[:commit]
-      render :edit_5
+      render json: { success: false, message: "Failed to create new form" }, status: :unprocessable_entity
     end
   end
 
   def update_submission_status
     @form = Form.find(params[:id]) # Find your form
+    cv_assessment(@form)
 
     if @form.update(submitted: true)
+      if @form.mental_video_file_name.present?
+        @form.transcribe_video_and_update_form(@form.mental_video_file_name)
+      end
+
+      if @form.mental_transcription.present?
+        @form.update_animal_count
+      end
+      
       if current_user.admin?
         redirect_to admin_root_path, notice: 'Form submitted successfully.'
       else
@@ -397,10 +334,72 @@ class PatientsController < ApplicationController
     end
   end
 
+  def cv_assessment(form)
+    url = "https://ninkatec-cv-oreggozlqa-as.a.run.app/process_video" # Replace with http://127.0.0.1:3002 if development without deployed microservice
+    headers = { 'Content-Type' => 'application/json' }
+    body = { "file_name": form.physical_video_file_name}.to_json
+
+    response = HTTParty.post(url, headers: headers, body: body, timeout: 600)
+    if response.success?
+      parsed_response = JSON.parse(response.body)
+      result = parsed_response['result']
+      if result == true
+        form.physical_primary_assessment = "Passed"
+      else
+        form.physical_primary_assessment = "Failed"
+      end
+    else
+      # Handle error response
+      puts "Error: #{response.code} - #{response.message}"
+    end
+  end
+
   def show_error
     render 'show_error'
   end
 
+  def generate_signed_url
+    filename = params[:filename]
+    content_type = params[:content_type]
+    form_id = params[:form_id]
+
+    if filename.blank? || content_type.blank?
+      render json: { error: "Filename and content type are required" }, status: :unprocessable_entity
+      return
+    end
+    # Generate the new filename for the signed url
+    new_filename = "#{filename}.mp4"
+
+    # Initialize Google Cloud Storage service to execute signed url method
+    gcs_service = GoogleCloudStorageService.new
+    signed_url = gcs_service.generate_signed_url_for_uploading(new_filename)
+
+    render json: { url: signed_url }
+  end
+
+  def upload_physical_video(form, file)
+    gcs_service = GoogleCloudStorageService.new
+    filename = "form_#{form.id}_physical_video.mp4"
+    gcs_service.upload_file(file, filename)
+    form.physical_video_file_name = filename
+    form.save
+  end
+
+  def upload_mental_video(form, file)
+    gcs_service = GoogleCloudStorageService.new
+    filename = "form_#{form.id}_mental_video.mp4"
+    gcs_service.upload_file(file, filename)
+    form.mental_video_file_name = filename
+    form.save
+  end
+
+  def upload_environment_video(form, file)
+    gcs_service = GoogleCloudStorageService.new
+    filename = "form_#{form.id}_environment_video.mp4"
+    gcs_service.upload_file(file, filename)
+    form.environment_video_file_name = filename
+    form.save
+  end
 
   def determine_form_origin_text
     if session[:form_origin] == 'new'
@@ -421,7 +420,6 @@ class PatientsController < ApplicationController
     else
       redirect_to forms_path
     end
-
   end
 
   private
@@ -510,9 +508,5 @@ class PatientsController < ApplicationController
   def form_params_step5
     permitted_params = params.require(:form).permit(:environment_video)
   end
-
-  # def page_valid?(form_parameters, required_values)
-  #   required_values.all? { |key| form_parameters.key?(key) && form_parameters[key].present? }
-  # end
 
 end

@@ -52,6 +52,7 @@ Rails.application.routes.draw do
       get 'physical_assessment', to: 'assessments#physical', as: 'physical_assessment'
 
       patch 'update_submission_status', to: 'patients#update_submission_status'
+      post 'generate_signed_url', to: 'patients#generate_signed_url'
     end
 
     collection do

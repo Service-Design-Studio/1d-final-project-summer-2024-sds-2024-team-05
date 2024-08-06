@@ -37,6 +37,23 @@
   .custom:hover svg {
     fill: grey; /* Change this to your desired hover color */
   }
+  
+  .flash-message {
+  position: fixed;
+  top: 20px; /* Adjust as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+  z-index: 1000; /* Ensure it's on top */
+}
+
   </style>
 </head>
 
@@ -66,6 +83,16 @@
   <% end %>
   </nav>
 
+    <% if flash[:message] %>
+    <div class="flash-message" style="display: none;">
+      <%= flash[:message] %>
+    </div>
+    <% elsif flash[:danger] %>
+      <div class="flash-danger" style="display: none;">
+        <%= flash[:danger] %>
+      </div>
+    <% end %>
+
   <%= yield %>
 
   <script>
@@ -82,6 +109,41 @@
           dropdownMenu.classList.remove("show");
         }
       });
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const flashMessage = document.querySelector('.flash-message');
+      const flashDanger = document.querySelector('.flash-danger');
+      const flashNotice = document.querySelector('.flash-notice');
+
+      if (flashMessage) {
+        // Show flash message and then fade it out
+        flashMessage.style.display = 'block'; // Ensure it's visible
+        setTimeout(() => {
+          flashMessage.style.transition = 'opacity 0.5s ease-in-out';
+          flashMessage.style.opacity = '0';
+          // Remove the element from the DOM after the fade-out transition
+          setTimeout(() => {
+            flashMessage.remove();
+          }, 500); // Match this duration with the opacity transition
+        }, 3000); // Time before fading out (3 seconds)
+      }
+
+      if (flashNotice) {
+        flashNotice.style.display = 'block';
+        setTimeout(() => {
+          flashNotice.style.transition = 'opacity 0.5s ease-in-out';
+          flashNotice.style.opacity = '0';
+          // Remove the element from the DOM after the fade-out transition
+          setTimeout(() => {
+            flashNotice.remove();
+          }, 500); // Match this duration with the opacity transition
+        }, 3000); // Time before fading out (3 seconds)
+      }
+
+      if (flashDanger) {
+        alert(flashDanger.textContent);
+      }
     });
   </script>
 </body>

@@ -59,6 +59,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_01_190036) do
     t.date "end_date"
     t.string "languages"
     t.text "languages_other"
+    t.string "physical_video_file_name"
+    t.string "mental_video_file_name"
+    t.string "environment_video_file_name"
     t.text "mental_primary_assessment"
     t.text "physical_primary_assessment"
     t.text "environment_primary_assessment"
@@ -93,7 +96,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_01_190036) do
     t.text "description"
     t.text "location"
     t.datetime "start_time"
-    t.datetime "end_time"
     t.integer "form_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

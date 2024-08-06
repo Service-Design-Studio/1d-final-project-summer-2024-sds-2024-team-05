@@ -6,6 +6,23 @@ Rails.application.configure do
   # Code is not reloaded between requests.
   config.enable_reloading = false
 
+  # Mailer settings
+  config.action_mailer.default_url_options = { host: 'ninkatec-2-7tifx5rv7q-as.a.run.app', port: 443 }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              'smtp.gmail.com',
+    port:                 587,
+    domain:               'ninkatec-2-7tifx5rv7q-as.a.run.app',
+    user_name:            '<insert email here>',
+    password:             '<insert password here>',
+    authentication:       'login',
+    enable_starttls_auto: true
+  }
+
+  # Ensure email delivery
+  config.action_mailer.perform_deliveries = false
+  config.action_mailer.raise_delivery_errors = true
+
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers
   # and those relying on copy on write to perform better.

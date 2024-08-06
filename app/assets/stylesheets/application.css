@@ -208,7 +208,7 @@ h1 {
     border: none;
     outline: none;
     justify-content: space-between;
-    width: 70vh;
+    width: 110vh;
     margin-top: 5%;
 }
 
@@ -484,8 +484,10 @@ h1 {
     -webkit-line-clamp: 2; /* Limit text to 2 lines */
     -webkit-box-orient: vertical; /* Vertical box layout */
     max-width: 200px; /* Set your desired maximum width */
+  }
 
-    
+  .custom-divider {
+    border-right: 1px solid #868181;
   }
 
   

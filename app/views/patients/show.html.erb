@@ -45,6 +45,58 @@
       margin-top: 0.5rem;
       font-size: 18px;
     }
+    /* Container for centering the loader */
+    #loadingIndicator_show {
+      position: fixed; /* Fixed position to stay in place while scrolling */
+      top: 50%; /* Center vertically */
+      left: 50%; /* Center horizontally */
+      transform: translate(-50%, -50%); /* Adjust for exact center */
+      z-index: 1000; /* Ensure it appears above other content */
+    }
+
+    /* Content wrapper to center the dot */
+    .loading-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Pulsing dot loader */
+    .pulsing-dot {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background-color: #3498db;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Loading text */
+    .loading-text {
+      color: #000000; /* Set text color for contrast */
+      font-size: 30px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    /* Pulse animation */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
   </style>
 </head>
 <body>
@@ -109,7 +161,7 @@
         <p class="card-text"><strong>Other Conditions:</strong> <%= @form.conditions_other %></p>
         <p class="card-text"><strong>Medication:</strong> <%= @form.medication %></p>
         <p class="card-text"><strong>Hospitalised recently:</strong> <%= @form.hospital.nil? ? "" : (@form.hospital ? "Yes" : "No") %></p>
-        
+
         <% if @form.discharge_summary.attached? %>
           <div class="mt-3">
             <p class="card-text"><strong>Discharge Summary Preview:</strong></p>
@@ -126,12 +178,16 @@
         <p class="card-text"><strong>End Date:</strong> <%= @form.end_date %></p>
       </div>
       <!-- Row for Videos -->
-      <div class="row mt-3">
+      <div class="row mt-3 align-content-center" height: 50em;>
         <div class="col-md-4">
           <div class="video-container text-center">
             <p>Physical Video:</p>
-            <% if @form.physical_video.attached? %>
-              <%= video_tag rails_blob_path(@form.physical_video, disposition: "attachment"), controls: true, class: "img-thumbnail video-preview rounded-video" %>
+            <% if @form.physical_video_file_name.present? %>
+              <% gcs_service = GoogleCloudStorageService.new %>
+              <% signed_url = gcs_service.generate_signed_url_for_viewing(@form.physical_video_file_name) %>
+                <div class="video-container text-center mt-3">
+                  <%= video_tag signed_url, controls: true, class: "img-thumbnail video-preview rounded-video" %>
+                </div>
               <% if @form.submitted %>
                 <p class="card-text"><strong>Primary Physical Assessment:</strong> <%= @form.physical_primary_assessment %></p>
                 <p class="card-text"><strong>Final Physical Assessment:</strong> <%= @form.physical_assessment %></p>
@@ -144,8 +200,12 @@
         <div class="col-md-4">
           <div class="video-container text-center">
             <p>Mental Video:</p>
-            <% if @form.mental_video.attached? %>
-              <%= video_tag rails_blob_path(@form.mental_video, disposition: "attachment"), controls: true, class: "img-thumbnail" %>
+            <% if @form.mental_video_file_name.present? %>
+              <% gcs_service = GoogleCloudStorageService.new %>
+              <% signed_url = gcs_service.generate_signed_url_for_viewing(@form.mental_video_file_name) %>
+                <div class="video-container text-center mt-3">
+                  <%= video_tag signed_url, controls: true, class: "img-thumbnail video-preview rounded-video" %>
+                </div>
               <% if @form.submitted %>
                 <p class="card-text"><strong>Primary Mental Assessment:</strong> <%= @form.mental_primary_assessment %></p>
                 <p class="card-text"><strong>Final Mental Assessment:</strong> <%= @form.mental_assessment %></p>
@@ -158,8 +218,12 @@
         <div class="col-md-4">
           <div class="video-container text-center">
             <p>Environment Video:</p>
-            <% if @form.environment_video.attached? %>
-              <%= video_tag rails_blob_path(@form.environment_video, disposition: "attachment"), controls: true, class: "img-thumbnail" %>
+            <% if @form.environment_video_file_name.present? %>
+              <% gcs_service = GoogleCloudStorageService.new %>
+              <% signed_url = gcs_service.generate_signed_url_for_viewing(@form.environment_video_file_name) %>
+                <div class="video-container text-center mt-3">
+                  <%= video_tag signed_url, controls: true, class: "img-thumbnail video-preview rounded-video" %>
+                </div>
               <% if @form.submitted %>
                 <p class="card-text"><strong>Primary Environment Assessment:</strong> <%= @form.environment_primary_assessment %></p>
                 <p class="card-text"><strong>Final Environment Assessment:</strong> <%= @form.environment_assessment %></p>
@@ -174,18 +238,10 @@
       <div class="d-flex  justify-content-center mt-5 mb-5">
         <%= link_to "Back", edit_5_form_path(@form), class: "btn btn-lg btn-outline-black rounded-pill me-2" %>
         <%= form_tag(update_submission_status_form_path(@form), method: :patch) do %>
-          <% if @form.submittable %>
-            <% if @form.submitted? %>
-              <%= submit_tag 'Update', class: "btn btn-lg rounded-pill btn-green me-2" %>
-            <% else %>
-              <%= submit_tag 'Submit', class: "btn btn-lg rounded-pill btn-green me-2" %>
-            <% end %>
+          <% if @form.submitted? %>
+            <%= submit_tag 'Update', class: "btn btn-lg rounded-pill btn-green me-2", disabled: !@form.submittable, id: "submitButton" %>
           <% else %>
-            <% if @form.submitted? %>
-              <%= submit_tag 'Update', class: "btn btn-lg rounded-pill btn-outline-green me-2", disabled: !@form.submittable %>
-            <% else %>
-              <%= submit_tag 'Submit', class: "btn btn-lg rounded-pill btn-outline-green me-2", disabled: !@form.submittable %>
-            <% end %>
+            <%= submit_tag 'Submit', class: "btn btn-lg rounded-pill btn-green me-2", disabled: !@form.submittable, id: "submitButton" %>
           <% end %>
         <% end %>
         <% if current_user.admin? %>
@@ -195,10 +251,27 @@
         <% end %>
       </div>
     </div>
+    <div id="loadingIndicator_show" class="loading-container" style="display: None;">
+      <div class="loading-content">
+        <div class="pulsing-dot"></div>
+        <div class="loading-text">Processing...</div>
+      </div>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@hotwired/stimulus/dist/stimulus.umd.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var form = document.querySelector('form'); 
+      var loadingIndicator = document.getElementById('loadingIndicator_show');
+      
+        document.getElementById('submitButton').addEventListener('click', function(event) {
+          // Show the loading indicator
+          loadingIndicator.style.display = 'block';
+        });
+      });
+  </script>
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
 </body>
 </html>

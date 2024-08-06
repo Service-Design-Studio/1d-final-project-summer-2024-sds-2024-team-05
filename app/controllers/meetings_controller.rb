@@ -24,13 +24,17 @@ class MeetingsController < ApplicationController
   # POST /meetings or /meetings.json
   def create
     @meeting = Meeting.new(meeting_params)
-
-
-
     respond_to do |format|
       if @meeting.save
-        if meeting_params[:form_id]
+        if @meeting.form_id.present?
+          start_time = @meeting.start_time
           @form = Form.find(meeting_params[:form_id])
+          begin
+            MeetingMailer.schedule_meeting_email(@form, start_time).deliver_now
+            flash[:message] = "Meeting scheduled and email sent successfully."
+          rescue => e
+            flash[:danger] = "There was an error sending the email: #{e.message}"
+          end
           format.html { redirect_to client_profile_form_path(@form, status: 'Meeting Date Pending'), notice: "Meeting was successfully created." }
           format.json { render :show, status: :created, location: @meeting }
         elsif current_user.admin?
@@ -50,7 +54,19 @@ class MeetingsController < ApplicationController
   # PATCH/PUT /meetings/1 or /meetings/1.json
   def update
     respond_to do |format|
+      old_start_time = @meeting.start_time
       if @meeting.update(meeting_params)
+        if @meeting.form_id.present? &&@meeting.start_time != old_start_time
+          new_start_time = @meeting.start_time
+          @form = Form.find(@meeting.form_id)
+          begin
+            MeetingMailer.reschedule_meeting_email(@form, old_start_time, new_start_time).deliver_now
+            flash[:message] = "Meeting rescheduled and Meeting Rescheduled email sent successfully."
+          rescue => e
+            flash[:danger] = "There was an error sending the email: #{e.message}"
+          end
+          
+        end
         format.html { redirect_to meeting_url(@meeting), notice: "Meeting was successfully updated." }
         format.json { render :show, status: :ok, location: @meeting }
       else
@@ -64,6 +80,12 @@ class MeetingsController < ApplicationController
   def destroy
     if @meeting.form
       @form = @meeting.form
+      begin
+        MeetingMailer.cancel_meeting_email(@form).deliver_now
+        flash[:message] = "Meeting deleted and Meeting Cancellation email sent successfully."
+      rescue => e
+        flash[:danger] = "There was an error sending the email: #{e.message}"
+      end
     end
     @meeting.destroy!
 

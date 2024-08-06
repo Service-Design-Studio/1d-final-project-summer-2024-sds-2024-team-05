@@ -80,8 +80,10 @@ class PatientsController < ApplicationController
         redirect_to edit_1_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
       end
     when 'Next'
-      if @form.update(form_params_step1)
-        redirect_to edit_2_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
+      if params[:form].present? && params[:form].except(:autofill_address).values.any?(&:present?)
+        if @form.update(form_params_step1)
+          redirect_to edit_2_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
+        end
       end
     else
       render :edit_1
@@ -126,8 +128,10 @@ class PatientsController < ApplicationController
         redirect_to edit_2_form_path(@form), notice: 'Form 2 was successfully updated.'
       end
     when 'Next'
-      if @form.update(form_params_step2)
-        redirect_to edit_3_form_path(@form), notice: 'Form 2 was successfully updated.'
+      if params[:form].present? && params[:form].values.any?(&:present?)
+        if @form.update(form_params_step2)
+          redirect_to edit_3_form_path(@form), notice: 'Form 2 was successfully updated.'
+        end
       end
     else
       render :edit_2

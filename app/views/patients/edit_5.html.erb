@@ -155,13 +155,10 @@
 
         <!-- Step 1: Environment Video -->
         <div class="box-video g-5">
+          <hr/>
+          <h2>Upload Environmental Video<span style="color: red;"> *</span></h2>
+            Film a video from your house doorstep including the Living Room, Bedroom, and Toilet.
 
-          <%# <h2 style="text-align: center">Environmental Video</h2> %>
-          
- 
-          <p style="text-align: center">
-            Take a video from your house doorstep including the Living Room, Bedroom, and Toilet. The video should show the patient moving around the house as they would daily.
-          </p>
           <div class="video-preview" style="margin-top: 20px;">
               <iframe class="rounded-video" width="70%" height="300" 
                       src="https://www.youtube.com/embed/BbqtjDekrWc" 
@@ -169,6 +166,9 @@
                       allowfullscreen>
               </iframe>
           </div>
+          <p class="mt-3", style="text-align: center">
+            The video should show the patient moving around the house as they would daily.
+          </p>
           <%= form.file_field :environment_video, accept: 'video/*', class: 'form-control mb-3', id: 'environment_video'%>
           <%= form.submit 'Upload', name: 'commit', value: 'Upload Environment Video', class: 'btn btn-primary', id: 'uploadEnvironmentVideoButton' %>
           <div class=" text-center">

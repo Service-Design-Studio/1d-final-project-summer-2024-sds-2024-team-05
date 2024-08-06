@@ -40,7 +40,7 @@
     }
     .step-label {
       margin-top: 0.5rem;
-      font-size: 14px;
+      font-size: 18px;
     }
   </style>
 </head>
@@ -112,67 +112,89 @@
       <% if current_user.admin? %>
         <div class="row mb-3">
           <div class="col-6">
-            <%= form.label :nok_first_name, "NOK's First Name" %>
+            <%= form.label :first_name do %>
+              NOK's First Name <span style="color: red;">*</span> 
+            <% end %>
             <%= form.text_field :nok_first_name, class: "form-control", id: "nok_first_name" %>
           </div>
           <div class="col-6">
-            <%= form.label :nok_last_name, "NOK's Last Name" %>
+            <%= form.label :nok_last_name do %>
+              NOK's Last Name <span style="color: red;">*</span> 
+            <% end %>
             <%= form.text_field :nok_last_name, class: "form-control", id: "nok_last_name" %>
           </div>
         </div>
 
         <div class="mb-3">
-          <%= form.label :nok_address, "NOK's Address" %>
+          <%= form.label :nok_address do %>
+            NOK's Address <span style="color: red;">*</span> 
+          <% end %>
           <%= form.text_field :nok_address, class: "form-control", id: "nok_address" %>
         </div>
 
-        <div class="mb-3">
-          <%= form.label :nok_postal, "NOK's Postal Code" %>
-          <%= form.text_field :nok_postal, class: "form-control", id: "nok_postal" %>
+        <div class="row mb-3">
+          <div class = "col-6">
+            <%= form.label :nok_postal do %>
+              NOK's Postal Code <span style="color: red;">*</span> 
+            <% end %>
+            <%= form.number_field :nok_postal, class: "form-control", id: "nok_postal" %>
+          </div>
+          <div class="col-6">
+            <%= form.label :nok_contact_no do %>
+              NOK's Contact No. <span style="color: red;">*</span> 
+            <% end %>
+            <%= form.text_field :nok_contact_no, class: "form-control", id: "nok_contact_no" %>
+          </div>
         </div>
 
-        <div class="mb-3">
-          <%= form.label :nok_contact_no, "NOK's Contact No." %>
-          <%= form.text_field :nok_contact_no, class: "form-control", id: "nok_contact_no" %>
-        </div>
+
 
         <div class="mb-3">
-          <%= form.label :nok_email, "NOK's Email" %>
+          <%= form.label :nok_email do %>
+            NOK's Email Address <span style="color: red;">*</span> 
+          <% end %>
           <%= form.text_field :nok_email, class: "form-control", id: "nok_email" %>
         </div>
       <% end %>
 
       <div class="row mb-3">
         <div class="col-6">
-          <%= form.label :first_name, "Patient's First Name" %>
+          <%= form.label :first_name do %>
+            Patient's First Name <span style="color: red;">*</span> 
+          <% end %>
           <%= form.text_field :first_name, class: "form-control", id: "first_name" %>
         </div>
         <div class="col-6">
-          <%= form.label :last_name, "Patient's Last Name" %>
+        <%= form.label :last_name do %>
+          Patient's Last Name <span style="color: red;">*</span> 
+        <% end %>
           <%= form.text_field :last_name, class: "form-control", id: "last_name" %>
         </div>
       </div>
 
-      <div class="mb-3">
-        <p>Gender</p>
-        <div class="form-check form-check-inline">
-          <%= form.radio_button :gender, "Male", class: "form-check-input", id: "male", checked: @form.gender == "Male" %>
-          <%= form.label "male", class: "form-check-label", for: "male" do %>Male<% end %>
+      <div class="row mb-3">
+        <div class="col-6">
+          <%= form.label :date_of_birth do %>
+            Patient's Date of Birth <span style="color: red;">*</span> 
+          <% end %>
+          <%= form.date_field :date_of_birth, class: "form-control", id: "date_of_birth" %>
         </div>
-        <div class="form-check form-check-inline">
-          <%= form.radio_button :gender, "Female", class: "form-check-input", id: "female", checked: @form.gender == "Female" %>
-          <%= form.label "female", class: "form-check-label", for: "female" do %>Female<% end %>
+        <div class="col-6">
+          <p>Gender<span style="color: red;"> *</span></p>
+          <div class="form-check form-check-inline">
+            <%= form.radio_button :gender, "Male", class: "form-check-input", id: "male", checked: @form.gender == "Male" %>
+            <%= form.label "male", class: "form-check-label", for: "male" do %>Male<% end %>
+          </div>
+          <div class="form-check form-check-inline">
+            <%= form.radio_button :gender, "Female", class: "form-check-input", id: "female", checked: @form.gender == "Female" %>
+            <%= form.label "female", class: "form-check-label", for: "female" do %>Female<% end %>
+          </div>
         </div>
-      </div>
-
-      <div class="mb-3">
-        <%= form.label :date_of_birth, "Date of Birth" %>
-        <%= form.date_field :date_of_birth, class: "form-control", id: "date_of_birth" %>
       </div>
 
       <div class="mb-3">
         <fieldset>
-          <p>Languages Spoken</p>
+          <p>Languages Spoken<span style="color: red;"> *</span></p>
           <div class="form-check form-check-inline">
             <%= check_box_tag 'form[languages][]', 'English', checked_services('English'), id: 'languages_english', class: 'form-check-input' %>
             <%= label_tag 'languages_english', 'English', class: 'form-check-label' %>
@@ -202,12 +224,16 @@
       </div>
 
       <div class="mb-3">
-        <%= form.label :address, "Address" %>
+        <%= form.label :address do %>
+          Patient's Address <span style="color: red;">*</span> 
+        <% end %>
         <%= form.text_field :address, class: "form-control", id: "address" %>
       </div>
 
       <div class="mb-3">
-        <%= form.label :postal, "Postal Code" %>
+        <%= form.label :postal do %>
+          Patient's Postal Code <span style="color: red;">*</span> 
+        <% end %>
         <%= form.text_field :postal, class: "form-control", id: "postal" %>
       </div>
 
@@ -218,7 +244,7 @@
 
       <div class="mb-3">
         <fieldset>
-          <p>Relationship to Account Holder</p>
+          <p>Relationship to Account Holder<span style="color: red;"> *</span></p>
           <div class="form-check form-check-inline">
             <%= form.radio_button :relationship, "Direct Family member", class: "form-check-input", id: "family", checked: @form.relationship == "Direct Family member" %>
             <%= form.label "family", class: "form-check-label", for: "family" do %>Direct Family member<% end %>
@@ -234,9 +260,7 @@
           <div class="form-check form-check-inline">
             <%= form.radio_button :relationship, nil, class: "form-check-input", id: "others", checked: @form.relationship == "Others" %>
             <%= form.label "others", class: "form-check-label", for: "others" do %>Others:<% end %>
-          </div>
-          <div class="form-check form-check-inline">
-            <%= form.text_field :others_text, class: "form-control", id: "others_text", placeholder: "Please Fill", style: "font-style: italic; width: 150px;" %>
+            <%= form.text_field :others_text, class: "form-control-inline", id: "others_text", placeholder: "Please Fill", style: "font-style: italic; width: 135px;" %>
           </div>
         </fieldset>
       </div>
@@ -269,12 +293,21 @@
     const nokPostal = document.getElementById('nok_postal');
     const patientAddress = document.getElementById('address');
     const patientPostal = document.getElementById('postal');
+    const dobInput = document.getElementById('date_of_birth');
+
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const year = today.getFullYear();
+
+    const maxDate = `${year}-${month}-${day}`;
+
+    dobInput.setAttribute("max", maxDate);
     
     autofillCheckbox.addEventListener('change', function() {
       if (this.checked) {
         patientAddress.value = nokAddress.value;
         patientPostal.value = nokPostal.value;
-        alert("The address will be taken from Next-of-Kin's details.");
       } else {
         patientAddress.value = '';
         patientPostal.value = '';

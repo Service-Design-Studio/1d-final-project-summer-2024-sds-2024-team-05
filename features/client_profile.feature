@@ -36,24 +36,19 @@ Scenario: Forgetting to fill in the patient assessment form
 #Happy Path 
 
 Scenario: Deciding on the outcome of the assessment
-    Given that I am in the process of assessing the physical assessment of the patient  
+    Given that I am in the process of assessing the physical mental and encironmental assessment of the patient
     When I click on either good fair or poor
     And I clicks the button save
-    Then I should see that the Physical Assessment should state either good fair or poor depending on the button I chose earlier
+    Then I should see that the assessment I made earlier should be saved
  
 Scenario: Needing to describe the patient in more words other than just simply good fair or poor
     Given that I am assessing the patient and I need to describe the patient in more words other than just simply good fair or poor
-    When I click the detailed assessment button
-    And I write the information I want to write
+    When I write the information I want to write in the Physical Mental or Environment Assessment Detail box
     When I clicked the save button
     Then I should be able to see that the Physical Assessment states the information I wrote
 
 #Sad path
 
-Scenario: Accidentally making edits without saving 
-    Given that I am on the patient asessment tab and have made previous edits to the physical assessment
-    And I have accidentally typed something unintentional that I did not mean but did not click the save button
-    Then my changes should not be saved and my previous edits should still be there
 
 Scenario: Writing the wrong information 
     Given that I am on the patient asessment tab and I realized that I have assessed the patients physical,mental or environment wrong and need to change my assessment 
@@ -78,21 +73,19 @@ Scenario: Looking for NOKs contact information
 Scenario: Being able to access the Meeting Details page
     Given that I have finished assessing the physical, mental and environmental of the patient
     And when I click on the meeting details page
-    Then I should see a calendar and blanks for me to fill in the description, location and start time and end time
+    Then I should see a calendar
 
 Scenario: Setting a meeting in the meeting details page
     Given that I want to set a meeting in the meeting details page
     When I fill up the description, location, start time and end time
     And I click the create meeting button
-    Then I should see the words meeting was successfully created to let me know that the meeting was successfully created
- 
-Scenario: After setting the meeting date
-    Given that I have finish setting the meeting date
-    Then I should see the patient name and the timing of the meeting on the calendar
- 
-Scenario: After setting the meeting date
-    Given that I have finished setting the meeting date
-    Then I should be able to see the meeting details in a card below the calendar along with two buttons show this meeting and destroy this meeting
+    Then I should see that meeting was successfully created by seeing the patient name and the timing of the meeting on the calendar
+
+Scenario: Dropdown switiching between monthly and weekly views
+    Given that am on the meeting details page and I want to switch between monthly and weekly view of the calendar
+    When I click the dropdown calendar view button and assuming I am on the weekly calendar and want to change to the monthly calendar
+    When I click the Monthly button on the dropdown button
+    Then I should see a monthly view of the calendar instead of the weekly calendar
 
 Scenario: Using the calendar
     Given that I want to see the next month in the calendar, when I click the button Next

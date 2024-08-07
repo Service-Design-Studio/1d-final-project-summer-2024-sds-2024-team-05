@@ -9,7 +9,7 @@ class PatientsController < ApplicationController
     @form = Form.includes(:user).find(params[:id])
     respond_to do |format|
       format.html
-      format.json { render json: @form.to_json(include: :user, methods: [:application_status, :status_colour]) }
+      format.json { render json: @form.to_json(include: :user) }
     end
   end
 
@@ -412,7 +412,13 @@ class PatientsController < ApplicationController
 
   def destroy
     @form = Form.find(params[:id])
-    @form.destroy
+    if current_user.admin?
+      @form.destroy
+    else
+      if !@form.submitted
+        @form.destroy
+      end
+    end
     flash[:notice] = "Form for '#{@form.first_name}' deleted."
 
     if current_user.admin?

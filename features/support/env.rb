@@ -24,7 +24,7 @@ Capybara.default_max_wait_time = 20
 Capybara.register_driver :selenium_chrome do |app|
   options = Selenium::WebDriver::Chrome::Options.new
   # Set the path to the ChromeDriver
-  Selenium::WebDriver::Chrome::Service.driver_path = "C:/Users/charm/Downloads/chromedriver-win64/chromedriver-win64/chromedriver.exe"
+  Selenium::WebDriver::Chrome::Service.driver_path = "C:/Users/royce/Downloads/chromedriver-win64/chromedriver-win64/chromedriver.exe"
 
   options.add_argument('headless') if ENV['HEADLESS']
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)

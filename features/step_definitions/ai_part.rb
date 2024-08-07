@@ -5,7 +5,7 @@
 Given('that I would like to see the patients AI generated assessment results') do
   visit '/users/sign_up'
   sleep(10)
-  fill_in 'Email', with: 'user23@example.com'
+  fill_in 'Email', with: 'nok1@example.com'
   fill_in 'Password', with: 'password'
   fill_in 'Password confirmation', with: 'password'
   fill_in 'User first name', with: 'John'
@@ -15,7 +15,7 @@ Given('that I would like to see the patients AI generated assessment results') d
   fill_in 'User postal', with: '544277'
   click_button 'Sign Up'
   visit '/forms/new'
-  fill_in 'first_name', with: 'Karen'
+  fill_in 'first_name', with: 'Mandy'
   fill_in 'last_name', with: 'Tan'
   choose('Female')
   fill_in 'date_of_birth', with: '12101960'
@@ -63,7 +63,7 @@ Given('that I would like to see the patients AI generated assessment results') d
 end
 
 When('I click on the patient assessment tab') do
-  find('a', text: 'Karen', exact: true).click
+  find('a', text: 'Mandy', exact: true).click
   find('#assessment-tab').click
 end
 
@@ -82,7 +82,7 @@ Given('that I would like to see a transcription of the mental video assessment t
 end
 
 When('I clicked on the patient assessment tab') do
-  find('a', text: 'Karen', exact: true).click
+  find('a', text: 'Mandy', exact: true).click
   find('#assessment-tab').click
 end
 
@@ -101,7 +101,7 @@ Given('that I would like to find out the mental state of the patient without wat
 end
 
 When('I clicks on the patient assessment tab') do
-  find('a', text: 'Karen', exact: true).click
+  find('a', text: 'Mandy', exact: true).click
   find('#assessment-tab').click
 end
 
@@ -122,7 +122,7 @@ Given('that the AI asssessment results are preliminary and may be incorrect') do
 end
 
 When('I am on the patient assessment tab') do
-  find('a', text: 'Karen', exact: true).click
+  find('a', text: 'Mandy', exact: true).click
   find('#assessment-tab').click
 end
 
@@ -155,7 +155,7 @@ Given('that the AI assessment results might be incorrect') do
 end
 
 When('I am on the patients assessment tab') do
-  find('a', text: 'Karen', exact: true).click
+  find('a', text: 'Mandy', exact: true).click
   find('#assessment-tab').click
 end
 

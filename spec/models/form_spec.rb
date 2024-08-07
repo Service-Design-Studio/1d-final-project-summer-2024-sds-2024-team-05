@@ -36,14 +36,12 @@ RSpec.describe Form, type: :model do
   #     expect(form.submittable).to be_truthy
   #   end
 
-    it 'returns false if page 1 is not valid' do
-      form.first_name = ''
-      expect(form.submittable).to be_falsey
+    it 'returns false if there is user but it is the same user' do
+      expect(form.transfer_to_new_user(user.email)).to be_falsey
     end
 
-    it 'returns false if page 2 is not valid' do
-      form.height = nil
-      expect(form.submittable).to be_falsey
+    it 'returns true if there is user but it is the same user' do
+      expect(form.transfer_to_new_user(user.email)).to be_falsey
     end
 
     it 'returns false if page 3 is not valid' do
@@ -51,6 +49,27 @@ RSpec.describe Form, type: :model do
       expect(form.submittable).to be_falsey
     end
   end
+
+  describe 'Transfer to new user method' do
+    #   it 'returns true if all pages are valid' do
+    #     expect(form.submittable).to be_truthy
+    #   end
+  
+      it 'returns false if page 1 is not valid' do
+        form.first_name = ''
+        expect(form.submittable).to be_falsey
+      end
+  
+      it 'returns false if page 2 is not valid' do
+        form.height = nil
+        expect(form.submittable).to be_falsey
+      end
+  
+      it 'returns false if page 3 is not valid' do
+        form.start_date = nil
+        expect(form.submittable).to be_falsey
+      end
+    end
 
   describe '#transcribe_video_and_update_form' do
   let(:form) { create(:form) }

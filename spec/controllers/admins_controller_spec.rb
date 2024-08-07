@@ -83,6 +83,13 @@ RSpec.describe AdminsController, type: :controller do
         expect(assigns(:all_submitted_forms)).to eq([form1, form2])
       end
     end
+
+    context 'when sorting with application status' do
+      it 'returns forms without sorting' do
+        get :index, params: { sort: 'application_status', direction: 'asc' }
+        expect(assigns(:all_submitted_forms)).to eq([form1, form2])
+      end
+    end
   end
 
   describe 'GET #client_profile' do
@@ -126,52 +133,70 @@ RSpec.describe AdminsController, type: :controller do
     end
   end
 
-  describe 'PATCH #update_physical_assessment' do
+    describe 'PATCH #update_patient_assessment' do
     context 'when Save is clicked' do
       it 'updates the physical assessment and redirects with a notice' do
-        patch :update_physical_assessment, params: { id: form.id, commit: 'Save', form: { physical_assessment: 'Updated' } }
+        patch :update_patient_assessment, params: { id: form.id, commit: 'Save', form: { physical_assessment: 'Good' } }
         expect(response).to redirect_to(client_profile_form_path(form, status: 'Pending Assessment'))
+        form.reload
+        expect(form.physical_assessment).to eq("Good")
       end
     end
 
     context 'when Back is clicked' do
       it 'redirects to the form' do
-        patch :update_physical_assessment, params: { id: form.id, commit: 'Back' }
+        patch :update_patient_assessment, params: { id: form.id, commit: 'Back' }
         expect(response).to redirect_to(form_path(form))
       end
     end
   end
 
-  describe 'PATCH #update_mental_assessment' do
-    context 'when Save is clicked' do
-      it 'updates the mental assessment and redirects with a notice' do
-        patch :update_mental_assessment, params: { id: form.id, commit: 'Save', form: { mental_assessment: 'Updated' } }
-        expect(response).to redirect_to(client_profile_form_path(form, status: 'Pending Assessment'))
-      end
-    end
+  # describe 'PATCH #update_physical_assessment' do
+  #   context 'when Save is clicked' do
+  #     it 'updates the physical assessment and redirects with a notice' do
+  #       patch :update_physical_assessment, params: { id: form.id, commit: 'Save', form: { physical_assessment: 'Updated' } }
+  #       expect(response).to redirect_to(client_profile_form_path(form, status: 'Pending Assessment'))
+  #     end
+  #   end
 
-    context 'when Back is clicked' do
-      it 'redirects to the form' do
-        patch :update_mental_assessment, params: { id: form.id, commit: 'Back' }
-        expect(response).to redirect_to(form_path(form))
-      end
-    end
-  end
+  #   context 'when Back is clicked' do
+  #     it 'redirects to the form' do
+  #       patch :update_physical_assessment, params: { id: form.id, commit: 'Back' }
+  #       expect(response).to redirect_to(form_path(form))
+  #     end
+  #   end
+  # end
 
-  describe 'PATCH #update_environment_assessment' do
-    context 'when Save is clicked' do
-      it 'updates the environment assessment and redirects with a notice' do
-        patch :update_environment_assessment, params: { id: form.id, commit: 'Save', form: { environment_assessment: 'Updated' } }
-        expect(response).to redirect_to(client_profile_form_path(form, status: 'Pending Assessment'))
-      end
-    end
+  # describe 'PATCH #update_mental_assessment' do
+  #   context 'when Save is clicked' do
+  #     it 'updates the mental assessment and redirects with a notice' do
+  #       patch :update_mental_assessment, params: { id: form.id, commit: 'Save', form: { mental_assessment: 'Updated' } }
+  #       expect(response).to redirect_to(client_profile_form_path(form, status: 'Pending Assessment'))
+  #     end
+  #   end
 
-    context 'when Back is clicked' do
-      it 'redirects to the form' do
-        patch :update_environment_assessment, params: { id: form.id, commit: 'Back' }
-        expect(response).to redirect_to(form_path(form))
-      end
-    end
-  end
+  #   context 'when Back is clicked' do
+  #     it 'redirects to the form' do
+  #       patch :update_mental_assessment, params: { id: form.id, commit: 'Back' }
+  #       expect(response).to redirect_to(form_path(form))
+  #     end
+  #   end
+  # end
+
+  # describe 'PATCH #update_environment_assessment' do
+  #   context 'when Save is clicked' do
+  #     it 'updates the environment assessment and redirects with a notice' do
+  #       patch :update_environment_assessment, params: { id: form.id, commit: 'Save', form: { environment_assessment: 'Updated' } }
+  #       expect(response).to redirect_to(client_profile_form_path(form, status: 'Pending Assessment'))
+  #     end
+  #   end
+
+  #   context 'when Back is clicked' do
+  #     it 'redirects to the form' do
+  #       patch :update_environment_assessment, params: { id: form.id, commit: 'Back' }
+  #       expect(response).to redirect_to(form_path(form))
+  #     end
+  #   end
+  # end
 
 end

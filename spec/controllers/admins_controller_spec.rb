@@ -107,6 +107,81 @@ RSpec.describe AdminsController, type: :controller do
 
 #-----------------------------------------------------------------------#
 
+  describe "GET /search" do
+  let(:usertest2) { create(:user, email:"testing5555@gmail.com") }
+  let!(:form4) { create(:form, user: usertest2, first_name: 'Alice', last_name: 'Smith', gender: 'Female', address: '123 Main St', start_date: Date.today, end_date: Date.tomorrow, submitted: true) }
+  let!(:form5) { create(:form, user: usertest2, first_name: 'Bob', last_name: 'Johnson', gender: 'Male', address: '456 Elm St', start_date: Date.yesterday, end_date: Date.today, submitted: true) }
+  let!(:form6) { create(:form, user: usertest2, first_name: 'Charlie', last_name: 'Williams', gender: 'Male', address: '789 Oak St', start_date: Date.tomorrow, end_date: Date.tomorrow+1, submitted: false) }
+    context "with search query" do
+      it "returns forms matching the query" do
+        get :search, params: { query: 'Alice' }
+
+        expect(response).to have_http_status(:ok)
+        expect(assigns(:forms)).to include(form4)
+        expect(assigns(:forms)).not_to include(form5, form6)
+      end
+
+      it "returns forms sorted by name" do
+        get :search, params: { query: '', sort: 'name', direction: 'asc' }
+
+        expect(response).to have_http_status(:ok)
+        expect(assigns(:forms)).to include(form4, form5, form6)
+      end
+
+      it "returns forms sorted by gender" do
+        get :search, params: { query: '', sort: 'gender', direction: 'asc' }
+
+        expect(response).to have_http_status(:ok)
+        expect(assigns(:forms)).to include(form4, form5, form6)
+      end
+
+      # Add more sorting test cases as needed
+    end
+
+    context "without search query" do
+      it "returns all forms" do
+        get :search
+
+        expect(response).to have_http_status(:ok)
+        expect(assigns(:forms)).to include(form4, form5, form6)
+      end
+    end
+
+    context "with submitted and incomplete forms" do
+      it "returns new forms" do
+        form4.update(last_viewed: nil)
+        form5.update(last_viewed: nil)
+        form4.update(last_edit: Date.tomorrow + 1)
+        form5.update(last_edit: Date.tomorrow + 1)
+        get :search, params: { query: '' }
+
+        expect(response).to have_http_status(:ok)
+        expect(assigns(:newforms)).to include(form4, form5)
+        expect(assigns(:newforms)).not_to include(form6)
+      end
+
+      it "returns changed forms" do
+        form4.update(last_viewed: Date.yesterday)
+        form5.update(last_viewed: Date.yesterday)
+        form4.update(last_edit: Date.today)
+        form5.update(last_edit: Date.today)
+        get :search, params: { query: '' }
+
+        expect(response).to have_http_status(:ok)
+        expect(assigns(:changedforms)).to include(form4, form5)
+        expect(assigns(:changedforms)).not_to include(form6)
+      end
+
+      it "returns incomplete forms" do
+        get :search, params: { query: '' }
+
+        expect(response).to have_http_status(:ok)
+        expect(assigns(:incompleteforms)).to include(form6)
+      end
+    end
+  end
+
+  #-----------------------------------------------------------------------#
 
   describe 'GET #client_profile' do
     it 'assigns the requested form and meetings' do

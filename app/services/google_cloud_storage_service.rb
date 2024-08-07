@@ -11,10 +11,10 @@ class GoogleCloudStorageService
     @bucket = storage_client.bucket(bucket_name)
   end
 
-  def upload_file(file, filename)
-    file_obj = @bucket.create_file(file.path, filename, content_type: 'video/mp4')
-    file_obj
-  end
+  # def upload_file(file, filename)
+  #   file_obj = @bucket.create_file(file.path, filename, content_type: 'video/mp4')
+  #   file_obj
+  # end
 
   def generate_signed_url_for_viewing(filename)
     # Rails.logger.debug "Generating signed URL for: #{filename}"

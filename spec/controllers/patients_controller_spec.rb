@@ -290,123 +290,52 @@ RSpec.describe PatientsController, type: :controller do
   end
 
   describe 'PATCH #update_4' do
-  # before do 
-  #   form = create(:form)
-  # end
     context 'when uploading a physical video' do
-      it 'successfully uploads and redirects' do
-        video = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm2.mp4'), 'video/mp4')
-        patch :update_4, params: { id: form.id, form: { physical_video: video }, commit: 'Upload Physical Video' }
+      it 'updates the physical video file name and returns success (Needs connection to google cloud bucket with the file present)' do
+        patch :update_4, params: {id: form.id, patient: {changes: 'Upload Physical Video', filename: 'sit_stand_2'}}
         form.reload
-        expect(form.physical_video).to be_attached
-        expect(response).to redirect_to(edit_4_form_path(form))
+        expect(form.physical_video_file_name).to eq('sit_stand_2.mp4')
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)['success']).to be true
+        expect(JSON.parse(response.body)['message']).to eq('Physical video uploaded successfully')
       end
-      # specify 'if no video param, redirects back to same page without saving' do
-      #   patch :update_4, params: { id: form.id, form: {}, commit: 'Upload Physical Video' }
-      #   form.reload
-      #   expect(form.physical_video).to_not be_attached
-      #   expect(response).to redirect_to(edit_4_form_path(form))
-      # end
     end
 
     context 'when uploading a mental video' do
-      it 'successfully uploads and redirects' do
-        video = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm2.mp4'), 'video/mp4')
-        patch :update_4, params: { id: form.id, form: { mental_video: video }, commit: 'Upload Mental Video' }
+      it 'updates the mental video file name and returns success (Needs connection to google cloud bucket with the file present)' do
+        patch :update_4, params: {id: form.id, patient: {changes: 'Upload Mental Video', filename: 'sit_stand_2'}}
         form.reload
-        expect(form.mental_video).to be_attached
-        expect(response).to redirect_to(edit_4_form_path(form))
+        expect(form.mental_video_file_name).to eq('sit_stand_2.mp4')
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)['success']).to be true
+        expect(JSON.parse(response.body)['message']).to eq('Mental video uploaded successfully')
       end
     end
 
-    context 'when Save' do
-      it 'successfully uploads any params and redirects' do
-        video = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm2.mp4'), 'video/mp4')
-        patch :update_4, params: { id: form.id, form: { physical_video: video, mental_video: video }, commit: 'Save' }
-        form.reload
-        expect(form.mental_video).to be_attached
-        expect(form.physical_video).to be_attached
-        expect(response).to redirect_to(edit_4_form_path(form))
-      end
-    end
-
-    context 'when Next' do
-      it 'successfully uploads any params and redirects' do
-        video = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm1.mp4'), 'video/mp4')
-        video2 = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm2.mp4'), 'video/mp4')
-        patch :update_4, params: { id: form.id, form: { physical_video: video, mental_video: video2 }, commit: 'Next' }
-        form.reload
-        expect(form.mental_video).to be_attached
-        expect(form.physical_video).to be_attached
-        expect(response).to redirect_to(edit_5_form_path(form))
-      end
-    end
-    # context 'when invalid action' do
-    #   it 'redirects to edit_4 page' do
-    #     video = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm2.mp4'), 'video/mp4')
-    #     patch :update_4, params: { id: form.id, form: { physical_video: video, mental_video: video }, commit: '' }
-    #     form.reload
-    #     expect(form.mental_video).to_not be_attached
-    #     expect(form.physical_video).to_not be_attached
-    #     expect(response).to redirect_to(edit_4_form_path(form))
-    #   end
-    # end
   end
 
   describe 'PATCH #update_4_collection' do
-    context 'when upload video button' do
-      xit 'creates and saves a new form, upload physical video and redirects to edit_4' do
-        video = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm1.mp4'), 'video/mp4')
-        patch :update_4_collection, params: { id: form.id, form: { physical_video: video }, commit: 'Upload Physical Video' }
-        expect(Form.count).to eq(1)
-        expect(form.physical_video).to be_attached
-        expect(response).to redirect_to(edit_4_form_path(Form.last))
-      end
-
-      xit 'creates and saves a new form, upload mental video and redirects to edit_4' do
-        video = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm1.mp4'), 'video/mp4')
-        patch :update_4_collection, params: { id: form.id, form: { mental_video: video }, commit: 'Upload Mental Video' }
-        expect(Form.count).to eq(1)
-        expect(form.mental_video).to be_attached
-        expect(response).to redirect_to(edit_4_form_path(Form.last))
-      end
-    end
-    context 'when saving' do
-      xit 'creates and saves a new form, and redirects to edit_4' do
-        video = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm1.mp4'), 'video/mp4')
-        video2 = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm2.mp4'), 'video/mp4')
-        patch :update_4_collection, params: { id: form.id, form: { physical_video: video, mental_video: video2 }, commit: 'Save' }
-        expect(Form.count).to eq(1)
-        expect(form.physical_video).to be_attached
-        expect(form.mental_video).to be_attached
-        expect(response).to redirect_to(edit_4_form_path(Form.last))
+    context 'when form is successfully created' do
+      it 'returns success: true and the form ID' do
+        post :update_4_collection
+        expect(response).to have_http_status(:ok)
+        json_response = JSON.parse(response.body)
+        expect(json_response['success']).to be true
+        expect(json_response['formId']).to eq(Form.last.id)
       end
     end
 
-    context 'when moving to next step' do
-      xit 'creates and saves a new form, and redirects to edit_5' do
-        video = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm1.mp4'), 'video/mp4')
-        video2 = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm2.mp4'), 'video/mp4')
-        patch :update_4_collection, params: { id: form.id, form: { physical_video: video, mental_video: video2 }, commit: 'Next' }
-        expect(Form.count).to eq(1)
-        expect(form.physical_video).to be_attached
-        expect(form.mental_video).to be_attached
-        expect(response).to redirect_to(edit_5_form_path(Form.last))
+    context 'when form creation fails' do
+      before do
+        allow_any_instance_of(User).to receive_message_chain(:forms, :create).and_return(Form.new)
       end
 
-      xspecify 'if no params, redirect to edit_5_forms_path without saving form' do 
-        patch :update_4_collection, params: { id: form.id, form: {}, commit: 'Save' }
-        expect(Form.count).to eq(0)
-        expect(response).to redirect_to(edit_5_forms_path)
-      end
-    end
-
-    context 'when no valid action' do
-      xit 'renders to edit_4' do
-        video = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm2.mp4'), 'video/mp4')
-        patch :update_4_collection, params: { id: form.id, form: { physical_video: video }, commit: '' }
-        expect(Form.count).to eq(0)
-        expect(response).to render_template(:edit_4)
+      it 'returns success: false and an error message' do
+        post :update_4_collection
+        expect(response).to have_http_status(:unprocessable_entity)
+        json_response = JSON.parse(response.body)
+        expect(json_response['success']).to be false
+        expect(json_response['message']).to eq("Failed to create new form")
       end
     end
   end
@@ -425,75 +354,39 @@ RSpec.describe PatientsController, type: :controller do
 
   describe 'PATCH #update_5' do
     context 'when uploading an environment video' do
-      it 'successfully uploads and redirects' do
-        video = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm2.mp4'), 'video/mp4')
-        patch :update_5, params: { id: form.id, form: { environment_video: video }, commit: 'Upload Environment Video' }
+      it 'updates the physical video file name and returns success (Needs connection to google cloud bucket with the file present)' do
+        patch :update_5, params: {id: form.id, patient: {changes: 'Upload Environment Video', filename: 'sit_stand_2'}}
         form.reload
-        expect(form.environment_video).to be_attached
-        expect(response).to redirect_to(edit_5_form_path(form))
-      end
-    end
-
-    context 'when Save' do
-      it 'successfully uploads any params and redirects' do
-        video = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm2.mp4'), 'video/mp4')
-        patch :update_5, params: { id: form.id, form: { environment_video: video}, commit: 'Save' }
-        form.reload
-        expect(form.environment_video).to be_attached
-        expect(response).to redirect_to(edit_5_form_path(form))
-      end
-    end
-
-    context 'when Next' do
-      it 'successfully uploads any params and redirects' do
-        video = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm1.mp4'), 'video/mp4')
-        patch :update_5, params: { id: form.id, form: { environment_video: video}, commit: 'Next' }
-        form.reload
-        expect(form.environment_video).to be_attached
-        expect(response).to redirect_to("/forms/#{form.id}")
+        expect(form.environment_video_file_name).to eq('sit_stand_2.mp4')
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)['success']).to be true
+        expect(JSON.parse(response.body)['message']).to eq('Environment video uploaded successfully')
       end
     end
   end
 
   describe 'PATCH #update_5_collection' do
-    context 'when upload video button' do
-      xit 'creates and saves a new form, and redirects to edit_4' do
-        video = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm2.mp4'), 'video/mp4')
-        patch :update_4_collection, params: { id: form.id, form: { environment_video: video }, commit: 'Upload Environment Video' }
-        expect(Form.count).to eq(1)
-        expect(response).to redirect_to(edit_4_form_path(Form.last))
-      end
-    end
-    context 'when saving' do
-      xit 'creates and saves a new form, and redirects to edit_4' do
-        video = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm2.mp4'), 'video/mp4')
-        patch :update_4_collection, params: { id: form.id, form: { environment_video: video }, commit: 'Save' }
-        expect(Form.count).to eq(1)
-        expect(response).to redirect_to(edit_4_form_path(Form.last))
+    context 'when form is successfully created' do
+      it 'returns success: true and the form ID' do
+        post :update_5_collection
+        expect(response).to have_http_status(:ok)
+        json_response = JSON.parse(response.body)
+        expect(json_response['success']).to be true
+        expect(json_response['formId']).to eq(Form.last.id)
       end
     end
 
-    context 'when moving to next step' do
-      xit 'creates and saves a new form, and redirects to edit_5' do
-        video = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm2.mp4'), 'video/mp4')
-        patch :update_4_collection, params: { id: form.id, form: { environment_video: video }, commit: 'Save' }
-        expect(Form.count).to eq(1)
-        expect(response).to redirect_to(edit_5_form_path(Form.last))
+    context 'when form creation fails' do
+      before do
+        allow_any_instance_of(User).to receive_message_chain(:forms, :create).and_return(Form.new)
       end
 
-      xspecify 'if no params, redirect to edit_5_forms_path without saving form' do 
-        patch :update_4_collection, params: { id: form.id, form: {}, commit: 'Save' }
-        expect(Form.count).to eq(0)
-        expect(response).to redirect_to(edit_5_forms_path)
-      end
-    end
-
-    context 'when no valid action' do
-      xit 'renders to edit_4' do
-        video = fixture_file_upload(Rails.root.join('spec/fixtures/files/videoUploadForm2.mp4'), 'video/mp4')
-        patch :update_4_collection, params: { id: form.id, form: { environment_video: video }, commit: '' }
-        expect(Form.count).to eq(0)
-        expect(response).to render_template(:edit_4)
+      it 'returns success: false and an error message' do
+        post :update_5_collection
+        expect(response).to have_http_status(:unprocessable_entity)
+        json_response = JSON.parse(response.body)
+        expect(json_response['success']).to be false
+        expect(json_response['message']).to eq("Failed to create new form")
       end
     end
   end
@@ -547,6 +440,70 @@ RSpec.describe PatientsController, type: :controller do
       it 'deletes the form' do
         patch :update_submission_status, params: { id: form.id}
         expect(response).to redirect_to(admin_root_path)
+      end
+    end
+  end
+
+  describe 'GET #show_error' do
+    context 'when requesting HTML format' do
+      it 'renders the :show template' do
+        get :show_error
+        expect(response).to render_template(:show_error)
+      end
+    end
+  end
+
+  describe 'POST #generate_signed_url' do
+    let(:filename) { 'test_video' }
+    let(:content_type) { 'video/mp4' }
+    let(:form_id) { 1 }
+    let(:signed_url) { 'https://example.com/signed_url' }
+
+    before do
+      allow(GoogleCloudStorageService).to receive_message_chain(:new, :generate_signed_url_for_uploading).and_return(signed_url)
+    end
+
+    context 'when filename and content_type are provided' do
+      it 'returns a signed URL' do
+        post :generate_signed_url, params: { filename: filename, content_type: content_type, id: form_id }
+
+        expect(response).to have_http_status(:success)
+        expect(response.content_type).to eq('application/json; charset=utf-8')
+        json_response = JSON.parse(response.body)
+        expect(json_response['url']).to eq(signed_url)
+      end
+    end
+
+    context 'when filename is missing' do
+      it 'returns an error message' do
+        post :generate_signed_url, params: { content_type: content_type, id: form_id }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.content_type).to eq('application/json; charset=utf-8')
+        json_response = JSON.parse(response.body)
+        expect(json_response['error']).to eq('Filename and content type are required')
+      end
+    end
+
+    context 'when content_type is missing' do
+      it 'returns an error message' do
+        post :generate_signed_url, params: { filename: filename, id: form_id }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.content_type).to eq('application/json; charset=utf-8')
+        json_response = JSON.parse(response.body)
+        expect(json_response['error']).to eq('Filename and content type are required')
+      end
+    end
+
+    context 'when both filename and content_type are missing' do
+      it 'returns an error message' do
+        post :generate_signed_url, params: { id: form_id }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.content_type).to eq('application/json; charset=utf-8')
+        json_response = JSON.parse(response.body)
+        expect(json_response['error']).to eq('Filename and content type are required')
       end
     end
   end

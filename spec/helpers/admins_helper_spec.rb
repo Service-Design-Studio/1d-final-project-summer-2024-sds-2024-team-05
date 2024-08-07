@@ -18,6 +18,18 @@ RSpec.describe AdminsHelper, type: :helper do
       form.update(physical_assessment: 'good', mental_assessment: 'good', environment_assessment: 'good')
       expect(helper.status_colour(form)).to eq('color: #fd7e14')
     end
+    
+    # it 'returns the correct color for Upload Service Agreement' do
+    #   #meeting is past, time to sign agreement
+    #   meeting = create(:meeting, start_time: DateTime.now - 2.days)
+    #   form.meeting = meeting
+    #   expect(helper.status_colour(form)).to eq('color: #c99b0e')
+    # end
+
+    it 'returns the correct color for Onboarded' do
+      allow(form).to receive_message_chain(:service_agreement_form, :attached?).and_return(true)
+      expect(helper.status_colour(form)).to eq('color: #41ba5d')
+    end
   end
 
   describe '#application_status' do

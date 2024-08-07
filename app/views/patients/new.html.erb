@@ -53,15 +53,15 @@
           <p class="step-label">Patient Details</p>
         </div>
         <div class="step">
-          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue", id: "medical-conditions-button" %>
           <p class="step-label">Medical Conditions</p>
         </div>
         <div class="step">
-          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue", id: "service-required-button" %>
           <p class="step-label">Service Required</p>
         </div>
         <div class="step">
-          <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: "btn btn-primary circular-button btn-outline-blue", id: "patient-assessment-button" %>
           <p class="step-label">Patient Assessment</p>
         </div>
         <div class="step">
@@ -274,7 +274,7 @@
         <% if current_user.admin? %>
           <%= link_to "Back", admin_root_path, class: "btn btn-lg btn-outline-black rounded-pill mb-5" %>
         <% else %>
-          <%= link_to "Back", user_root_path, class: "btn btn-lg btn-outline-black rounded-pill mb-5" %>
+          <%= link_to "Back", user_root_path, class: "btn btn-lg btn-outline-black rounded-pill mb-5", id: "go_back" %>
         <% end %>
         <div>
           <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green me-2 mb-5" %>

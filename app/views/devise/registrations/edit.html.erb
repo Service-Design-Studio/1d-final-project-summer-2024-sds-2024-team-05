@@ -20,11 +20,20 @@
 <body>
     <div class="container">
         <div class="header-container">
-            <%= link_to :back, class: "btn" do %>
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
-  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
-</svg>
-<%end%>
+            <% if current_user.admin? %>
+                <%= link_to admin_root_path, class: "btn" do %>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+                    </svg>
+                <% end %>
+            <% else %>
+                <%= link_to user_root_path, class: "btn" do %>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+                    </svg>
+                <% end %>
+            <% end %>
+                
             <h2 style = "margin-left: 1em">Edit <%= resource_name.to_s.humanize %></h2>
         </div>
 
@@ -32,7 +41,9 @@
             <%= render "devise/shared/error_messages", resource: resource %>
 
             <div class="mb-3">
-                <%= f.label :email %>
+                <%= f.label :email do %>
+                    Email <span style="color: red;">*</span> 
+                <% end %>
                 <%= f.email_field :email, class: "form-control", autofocus: true, autocomplete: "email" %>
             </div>
 
@@ -54,32 +65,44 @@
             </div>
 
             <div class="mb-3">
-                <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i>
-                <%= f.password_field :current_password, class: "form-control", autocomplete: "current-password" %>
+                <%= f.label :current_password do %> 
+                        Current Password <span style="color: red;">*</span> <i>(we need your current password to confirm your changes)</i>
+                <% end %>
+                <%= f.password_field :current_password, class: "form-control", autocomplete: "current-password", required: true%>
             </div>
 
             <div class="mb-3">
-                <%= f.label :user_first_name %>
+                <%= f.label :user_first_name do %>
+                    User First Name <span style="color: red;">*</span>
+                <% end %>
                 <%= f.text_field :user_first_name, class: "form-control", autocomplete: "user-first-name", value: resource.user_first_name %>
             </div>
 
             <div class="mb-3">
-                <%= f.label :user_last_name %>
+                <%= f.label :user_last_name do %>
+                    User Last Name <span style="color: red;">*</span>
+                <% end %>
                 <%= f.text_field :user_last_name, class: "form-control", autocomplete: "user-last-name", value: resource.user_last_name %>
             </div>
 
             <div class="mb-3">
-                <%= f.label :user_contact_number %>
+                <%= f.label :user_contact_number do %>
+                    User Contact No. <span style="color: red;">*</span>
+                <% end %>
                 <%= f.text_field :user_contact_number, class: "form-control", autocomplete: "user-contact-no", value: resource.user_contact_number %>
             </div>
 
             <div class="mb-3">
-                <%= f.label :user_address %>
+                <%= f.label :user_address do %>
+                    User Address <span style="color: red;">*</span>
+                <% end %>
                 <%= f.text_field :user_address, class: "form-control", autocomplete: "user-address", value: resource.user_address %>
             </div>
 
             <div class="mb-3">
-                <%= f.label :user_postal %>
+                <%= f.label :user_postal do %>
+                    User Postal Code <span style="color: red;">*</span>
+                <% end %>
                 <%= f.number_field :user_postal, class: "form-control", autocomplete: "user-postal", value: resource.user_postal %>
             </div>
 

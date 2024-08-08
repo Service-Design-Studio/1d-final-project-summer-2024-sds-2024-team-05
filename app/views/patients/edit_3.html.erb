@@ -146,7 +146,24 @@
       const minDate = `${year}-${month}-${day}`;
 
       startDateInput.setAttribute("min", minDate);
-      endDateInput.setAttribute("min", minDate);
+      
+      function updateEndTimeMin() {
+        if (startDateInput && endDateInput) {
+          const startTimeValue = startDateInput.value;
+          
+          if (startTimeValue) {
+            endDateInput.setAttribute('min', startTimeValue);
+          } else {
+            endDateInput.setAttribute("min", minDate);
+          }
+        }
+      }
+
+      updateEndTimeMin();
+
+      startDateInput.addEventListener('change', updateEndTimeMin);
+      
+      console.log(startDateInput.value)
     });
   </script>
 </body>

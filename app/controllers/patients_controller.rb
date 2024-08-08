@@ -5,11 +5,11 @@ class PatientsController < ApplicationController
    before_action :check_valid_params, only: [:show]
    before_action :authenticate_user!
 
-   def show
-    @form = Form.includes(:user).find(params[:id])
+  def show
+    @form = Form.includes(:user, :meeting).find(params[:id])
     respond_to do |format|
-      format.html
-      format.json { render json: @form.to_json(include: :user, methods: [:application_status, :status_colour]) }
+        format.html
+        format.json { render json: @form.to_json(include: :user)}
     end
   end
 

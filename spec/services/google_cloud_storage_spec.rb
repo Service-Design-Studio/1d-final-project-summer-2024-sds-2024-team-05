@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'google/cloud/storage'
 
 RSpec.describe GoogleCloudStorageService, type: :service do
-  let(:credentials_path) { 'config/ninkatec-2-d2112f9ef735.json' }
+  let(:credentials_path) { 'config/ninkatec-2-223b74173d7a.json' }
   let(:storage_client) { instance_double(Google::Cloud::Storage::Project) }
   let(:bucket) { instance_double(Google::Cloud::Storage::Bucket) }
   let(:file) { instance_double(Google::Cloud::Storage::File) }

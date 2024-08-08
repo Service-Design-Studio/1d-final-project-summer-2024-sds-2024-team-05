@@ -9,7 +9,7 @@ class PatientsController < ApplicationController
     @form = Form.includes(:user).find(params[:id])
     respond_to do |format|
       format.html
-      format.json { render json: @form.to_json(include: :user, methods: [:application_status, :status_colour]) }
+      format.json { render json: @form.to_json(include: :user) }
     end
   end
 
@@ -18,13 +18,13 @@ class PatientsController < ApplicationController
     @forms = current_user.forms.select(:id, :first_name, :last_name, :start_date, :submitted)
     @form = current_user.forms.build
     @user = current_user
-    session[:form_origin] = 'index'
+    # session[:form_origin] = 'index'
   end
 
   # Step 1 of form creation
   def new
     @form = current_user.forms.build
-    session[:form_origin] = 'new'
+    # session[:form_origin] = 'new'
 
   end
 
@@ -38,9 +38,9 @@ class PatientsController < ApplicationController
           session[:form_origin] = 'new'
           if current_user.admin? && params[:form][:nok_email].present?
             if @form.transfer_to_new_user(:nok_email)
-              puts 'WOWW'
+              # puts 'WOWW'
             else
-              puts ':(('
+              # puts ':(('
             end
           end
           redirect_to edit_1_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
@@ -52,9 +52,9 @@ class PatientsController < ApplicationController
         if @form.save
           if current_user.admin?
             if @form.transfer_to_new_user(:nok_email)
-              puts 'WOWW'
+              # puts 'WOWW'
             else
-              puts ':(('
+              # puts ':(('
             end
           end
           redirect_to edit_2_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
@@ -69,7 +69,7 @@ class PatientsController < ApplicationController
 
   # GET /forms/1/edit_1
   def edit_1
-    @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
+
   end
 
   # PATCH /forms/1/update_1
@@ -117,7 +117,7 @@ class PatientsController < ApplicationController
 
   # GET /forms/1/edit_2
   def edit_2
-    @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
+
   end
 
   # PATCH /forms/1/update_2
@@ -165,7 +165,7 @@ class PatientsController < ApplicationController
 
   # GET /forms/1/edit_3
   def edit_3
-    @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
+
   end
 
   # PATCH /forms/1/update_3
@@ -211,7 +211,7 @@ class PatientsController < ApplicationController
 
   # GET /forms/1/edit_4
   def edit_4
-    @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
+
   end
 
   # PATCH /forms/1/update_4
@@ -239,17 +239,17 @@ class PatientsController < ApplicationController
         render json: { error: 'Failed to save mental video' }, status: :unprocessable_entity
       end
     when 'Save'
-      if params[:form].present?
+      # if params[:form].present?
         # upload_physical_video(@form, params[:form][:physical_video]) if params[:form][:physical_video].present?
         # upload_mental_video(@form, params[:form][:mental_video]) if params[:form][:mental_video].present?
         # redirect_to edit_4_form_path(@form)
-      end
+      # end
       
     when 'Next'
-      if params[:form].present?
+      # if params[:form].present?
         # upload_physical_video(@form, params[:form][:physical_video]) if params[:form][:physical_video].present?
         # upload_mental_video(@form, params[:form][:mental_video]) if params[:form][:mental_video].present?
-      end
+      # end
       # redirect_to edit_5_form_path(@form)
     else
       # redirect_to edit_4_form_path(@form), alert: 'Invalid action.'
@@ -270,7 +270,7 @@ class PatientsController < ApplicationController
 
   # GET /forms/1/edit_5
   def edit_5
-    @form_origin_text = determine_form_origin_text # Changes my header based on my origin new or edit
+
   end
 
   # PATCH /forms/1/update_5
@@ -288,9 +288,9 @@ class PatientsController < ApplicationController
       @form.environment_video_file_name = "#{params[:patient][:filename]}.mp4"
       if @form.save
         Rails.logger.debug "Environment video file name updated: #{@form.physical_video_file_name}"
-        render json: { success: true, message: 'Physical video uploaded successfully' }
+        render json: { success: true, message: 'Environment video uploaded successfully' }
       else
-        render json: { error: 'Failed to save physical video' }, status: :unprocessable_entity
+        render json: { error: 'Failed to save Environment video' }, status: :unprocessable_entity
       end
     when 'Next' 
       # if params[:form].present?
@@ -377,42 +377,48 @@ class PatientsController < ApplicationController
     render json: { url: signed_url }
   end
 
-  def upload_physical_video(form, file)
-    gcs_service = GoogleCloudStorageService.new
-    filename = "form_#{form.id}_physical_video.mp4"
-    gcs_service.upload_file(file, filename)
-    form.physical_video_file_name = filename
-    form.save
-  end
+  # def upload_physical_video(form, file)
+  #   gcs_service = GoogleCloudStorageService.new
+  #   filename = "form_#{form.id}_physical_video.mp4"
+  #   gcs_service.upload_file(file, filename)
+  #   form.physical_video_file_name = filename
+  #   form.save
+  # end
 
-  def upload_mental_video(form, file)
-    gcs_service = GoogleCloudStorageService.new
-    filename = "form_#{form.id}_mental_video.mp4"
-    gcs_service.upload_file(file, filename)
-    form.mental_video_file_name = filename
-    form.save
-  end
+  # def upload_mental_video(form, file)
+  #   gcs_service = GoogleCloudStorageService.new
+  #   filename = "form_#{form.id}_mental_video.mp4"
+  #   gcs_service.upload_file(file, filename)
+  #   form.mental_video_file_name = filename
+  #   form.save
+  # end
 
-  def upload_environment_video(form, file)
-    gcs_service = GoogleCloudStorageService.new
-    filename = "form_#{form.id}_environment_video.mp4"
-    gcs_service.upload_file(file, filename)
-    form.environment_video_file_name = filename
-    form.save
-  end
+  # def upload_environment_video(form, file)
+  #   gcs_service = GoogleCloudStorageService.new
+  #   filename = "form_#{form.id}_environment_video.mp4"
+  #   gcs_service.upload_file(file, filename)
+  #   form.environment_video_file_name = filename
+  #   form.save
+  # end
 
-  def determine_form_origin_text
-    if session[:form_origin] == 'new'
-      'New Form'
-    elsif session[:form_origin] == 'index'
-      'Edit Form'
-    end
-  end
+  # def determine_form_origin_text
+  #   if session[:form_origin] == 'new'
+  #     'New Form'
+  #   elsif session[:form_origin] == 'index'
+  #     'Edit Form'
+  #   end
+  # end
 
 
   def destroy
     @form = Form.find(params[:id])
-    @form.destroy
+    if current_user.admin?
+      @form.destroy
+    else
+      if !@form.submitted
+        @form.destroy
+      end
+    end
     flash[:notice] = "Form for '#{@form.first_name}' deleted."
 
     if current_user.admin?

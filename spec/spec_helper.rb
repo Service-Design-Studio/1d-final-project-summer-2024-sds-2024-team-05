@@ -19,7 +19,6 @@ SimpleCov.start 'rails' do
   add_filter '/db/'
   add_filter '/spec/'
   add_filter '/config/'
-  add_filter '/app/mailers/'  # Exclude application_mailer.rb files
   add_filter '/app/channels/'  # Exclude application_mailer.rb files
   add_filter '/app/jobs/'  # Exclude application_mailer.rb files
   add_filter 'app/services/transcription_service.rb'

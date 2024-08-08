@@ -11,8 +11,65 @@ application up and running.
 Things you may want to cover:
 
 * Ruby version
+- **Ruby** (`3.3.2`)
 
 * System dependencies
+## Ruby Gems
+- **Rails** (`7.1.3.4`)
+  - A web application framework for Ruby, providing default structures for a database, a web service, and web pages.
+
+- **Puma** (`~> 5.0`)
+  - A high-performance web server for Ruby/Rails applications.
+
+- **Devise** (`~> 4.9.3`)
+  - Flexible authentication solution for Rails with support for various features like password recovery and account locking.
+
+- **RSpec-Rails** 
+  - RSpec's Rails-specific testing tools, used for writing and running tests for Rails applications.
+
+- **google-cloud-storage** 
+  - Client library for Google Cloud Storage, used for interacting with Google Cloud buckets.
+
+## JavaScript Libraries
+
+- **Stimulus-Rails** 
+  - A modest JavaScript framework for enhancing the behavior of HTML.
+
+- **Turbo-Rails** 
+  - Framework for building modern, fast, and reliable web applications by leveraging techniques like partial page updates.
+
+## Database
+
+This application uses different databases for various purposes:
+
+- **PostgreSQL**
+  - A powerful, open-source relational database management system used for storing and managing application data in production. It provides robust support for complex queries and data integrity.
+
+- **SQLite3**
+  - A lightweight, file-based relational database used for development and testing. It is included with Ruby on Rails by default for local development and testing environments due to its simplicity and ease of setup.
+  - 
+## Python Packages
+
+- **Flask**
+  - A micro web framework for Python, used for creating web applications.
+
+- **mediapipe** 
+  - A library for building cross-platform, customizable ML solutions for live and streaming media.
+
+- **google-cloud-storage** 
+  - Client library for Google Cloud Storage, used for interacting with Google Cloud buckets.
+
+- **python-dotenv** 
+  - A tool for loading environment variables from a `.env` file into the Python environment.
+
+- **numpy**
+  - A fundamental package for scientific computing with Python, providing support for large, multi-dimensional arrays and matrices.
+
+- **waitress** 
+  - A production-quality pure-Python WSGI server for running Python web applications.
+
+- **imageio[ffmpeg]** 
+  - A library for reading and writing image data in various formats, with optional support for video processing via FFmpeg.
 
 * Configuration
 
@@ -47,6 +104,7 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
 3. **Setup PostgreSQL Instance**
 
 4. **Create a Google Cloud Storage Bucket**
+
    Before deploying or even testing the app locally, you will need to set up a Google Cloud Storage bucket. This bucket will be used to store files and videos.
    
    You might ask: why do I even need the Google Cloud Storage Bucket when I am testing locally, especially when using sqlite3 for local development and testing (easier to manage, set up and use but not as scalable and ideal for production).
@@ -56,10 +114,15 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
    Cons of using Google Cloud Storage Bucket when developing locally - Cost incurred rather than totally free, although probably not as expensive as running a PGSQL instance for production.
    Hence, we decided to code it this way from the get-go.
 
-5. **Ensure CORS setup**
-   It should be something like this. This allows you to PUT a video directly to Google Cloud Bucket via a generated signed URL. I believe the domains refer to where the request can be sent from.
-   [{"maxAgeSeconds": 3600, "method": ["GET", "HEAD", "PUT", "POST"], "origin": ["http://localhost:3000", "https://ninkatec-2-7tifx5rv7q-as.a.run.app", "http://127.0.0.1:3000"], "responseHeader": ["*"]}]
+6. **Ensure CORS setup**
 
-6. **Create a service account for bucket management and ensure it has the role permissions**
+   It should be something like this. This allows you to PUT a video directly to Google Cloud Bucket via a generated signed URL. I believe the domains refer to where the request can be sent from.
+   Command to find out what your CORS set up is ```gsutil cors get gs://<YOUR-BUCKET-NAME```
+   [{"maxAgeSeconds": 3600, "method": ["GET", "HEAD", "PUT", "POST"], "origin": ["http://localhost:3000", "https://ninkatec-2-7tifx5rv7q-as.a.run.app", "http://127.0.0.1:3000"], "responseHeader": ["*"]}]
+   To set your CORS setup, create a JSON file named cors-config.json (or any name you prefer) with the CORS settings.
+   Command to set your CORS set up is ```gsutil cors set cors-config.json gs://YOUR_BUCKET_NAME```
+
+8. **Create a service account for bucket management and ensure it has the role permissions**
+
    We gave it a Storage Admin such that it has full access to the bucket generate a JSON key from the bucket as you will need it in your app to give it credentials (under app/services/google_cloud_storage_service) to generate URLs and so on. For the flask microservice, it can either use the same JSON key or if using a separate project, create a new service account with its respective key but I believe you will need to give that service account permission in the original project.
 

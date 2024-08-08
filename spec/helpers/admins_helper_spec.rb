@@ -18,6 +18,18 @@ RSpec.describe AdminsHelper, type: :helper do
       form.update(physical_assessment: 'good', mental_assessment: 'good', environment_assessment: 'good')
       expect(helper.status_colour(form)).to eq('color: #fd7e14')
     end
+    
+    # it 'returns the correct color for Upload Service Agreement' do
+    #   #meeting is past, time to sign agreement
+    #   meeting = create(:meeting, start_time: DateTime.now - 2.days)
+    #   form.meeting = meeting
+    #   expect(helper.status_colour(form)).to eq('color: #c99b0e')
+    # end
+
+    it 'returns the correct color for Onboarded' do
+      allow(form).to receive_message_chain(:service_agreement_form, :attached?).and_return(true)
+      expect(helper.status_colour(form)).to eq('color: #41ba5d')
+    end
   end
 
   describe '#application_status' do
@@ -38,6 +50,8 @@ RSpec.describe AdminsHelper, type: :helper do
     end
   end
 
+#----------------------------------------------------------------------------------------------------------------#
+
   describe '#pending_assessment?' do
   let(:form) { create(:form) }
     it 'returns true for a form pending assessment' do
@@ -54,6 +68,45 @@ RSpec.describe AdminsHelper, type: :helper do
     end
   end
 
+  describe '#pending_service_agreement?' do
+  let(:form) { create(:form) }
+    it 'returns false for a form just submitted, need to go through other steps' do
+      form.update(submitted: true)
+      expect(pending_service_agreement?(form)).to eq(false)
+    end
+  end
+
+  describe '#meeting_tab_class' do
+  let(:form) { create(:form) }
+    it 'returns "text-danger" for a form pending meeting date' do
+      form.update(physical_assessment: 'good', mental_assessment: 'good', environment_assessment: 'good', submitted: true)
+      expect(meeting_tab_class(form)).to eq("text-danger")
+    end
+  end
+
+  describe '#agreement_tab_class' do
+  let(:form) { create(:form) }
+    it 'returns "" for a form not pending assessment' do
+      form.update(submitted: true)
+      expect(agreement_tab_class(form)).to eq("")
+    end
+  end
+
+  describe '#meeting_tab_disabled?' do
+  let(:form) { create(:form) }
+    it 'returns "disabled" for a form not pending meeting date' do
+      form.update(submitted: true)
+      expect(meeting_tab_disabled?(form)).to eq("disabled")
+    end
+  end
+
+  describe '#agreement_tab_disabled?' do
+  let(:form) { create(:form) }
+    it 'returns "disabled" for a form pending meeting date' do
+      form.update(physical_assessment: 'good', mental_assessment: 'good', environment_assessment: 'good', submitted: true)
+      expect(agreement_tab_disabled?(form)).to eq("disabled")
+    end
+  end
 
   #----------------------------------------------------------------------------------------------------------------#
 

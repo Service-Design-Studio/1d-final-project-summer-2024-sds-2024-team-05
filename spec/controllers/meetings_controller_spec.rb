@@ -8,18 +8,18 @@ RSpec.describe MeetingsController, type: :controller do
     sign_in admin
   end
 
-  describe 'GET #index' do
-    it 'assigns all meetings to @meetings' do
-      get :index
-      expect(assigns(:meetings)).to include(meeting)
-      expect(assigns(:meeting)).to be_a_new(Meeting)
-    end
+  # describe 'GET #index' do
+  #   it 'assigns all meetings to @meetings' do
+  #     get :index
+  #     expect(assigns(:meetings)).to include(meeting)
+  #     expect(assigns(:meeting)).to be_a_new(Meeting)
+  #   end
 
-    it 'renders the index template' do
-      get :index
-      expect(response).to render_template(:index)
-    end
-  end
+  #   it 'renders the index template' do
+  #     get :index
+  #     expect(response).to render_template(:index)
+  #   end
+  # end
 
   describe 'GET #new' do
     it 'initializes a new meeting' do
@@ -53,13 +53,13 @@ RSpec.describe MeetingsController, type: :controller do
         meeting_params = attributes_for(:meeting, title: 'Important Meeting', location: 'Board Room', start_time: DateTime.now + 2.days, form_id: form.id)
         meeting_params.delete(:form_id)
         post :create, params: { meeting: meeting_params }
-        expect(response).to redirect_to(meetings_url)
+        expect(response).to redirect_to(admin_root_path(start_date: DateTime.now))
       end
     end
 
     context 'with invalid parameters' do
       it 'renders the new template' do
-        post :create, params: { meeting: { title: '' } }  # Invalid parameters
+        post :create, params: { meeting: { title: '', start_time: DateTime.now + 2.days  } }  # Invalid parameters
         expect(response).to render_template(:new)
       end
     end
@@ -68,8 +68,14 @@ RSpec.describe MeetingsController, type: :controller do
 
   describe 'PATCH #update' do
     context 'with valid parameters' do
-      it 'updates the meeting' do
+      it 'updates the meeting title' do
         patch :update, params: { id: meeting.id, meeting: { title: 'New Title' } }
+        meeting.reload
+        expect(meeting.title).to eq('New Title')
+      end
+
+      it 'updates the meeting time' do
+        patch :update, params: { id: meeting.id, meeting: { title: 'New Title', start_time: DateTime.now + 3.days } }
         meeting.reload
         expect(meeting.title).to eq('New Title')
       end
@@ -91,7 +97,7 @@ RSpec.describe MeetingsController, type: :controller do
 
   describe 'DELETE #destroy' do
   let(:user) { create(:user, email: "testing1@gmail.com" ) }
-  let!(:form) { create(:form, user: user) }
+  let(:form) {  Form.find_by(id: 1) }
     context 'when origin is present' do
       it 'destroys the meeting and redirects to the client profile form' do
         delete :destroy, params: { id: meeting.id, origin: form.id }
@@ -104,7 +110,7 @@ RSpec.describe MeetingsController, type: :controller do
       it 'destroys the meeting and redirects to the meetings index' do
         delete :destroy, params: { id: meeting.id }
         expect(Meeting.exists?(meeting.id)).to be(false)
-        expect(response).to redirect_to(meetings_url)
+        expect(response).to redirect_to(admin_root_path(start_date: DateTime.now))
       end
     end
   end

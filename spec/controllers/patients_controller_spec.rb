@@ -129,7 +129,7 @@ RSpec.describe PatientsController, type: :controller do
     context 'when saving' do
       it 'creates and saves a new form, and redirects to edit_1' do
         form_params = attributes_for(:form, first_name: 'John', last_name: 'Doe')
-        patch :update_1_collection, params: { form: form_params, commit: 'Save' }
+        post :update_1_collection, params: { form: form_params, commit: 'Save' }
         expect(Form.count).to eq(1)
         expect(response).to redirect_to(edit_1_form_path(Form.last))
       end
@@ -138,13 +138,13 @@ RSpec.describe PatientsController, type: :controller do
     context 'when moving to next step' do
       it 'creates and saves a new form, and redirects to edit_2' do
         form_params = attributes_for(:form, first_name: 'John', last_name: 'Doe')
-        patch :update_1_collection, params: { form: form_params, commit: 'Next' }
+        post :update_1_collection, params: { form: form_params, commit: 'Next' }
         expect(Form.count).to eq(1)
         expect(response).to redirect_to(edit_2_form_path(Form.last))
       end
 
       specify 'if no params, redirect to edit_2_forms_path without saving form' do 
-        patch :update_1_collection, params: { form: {}, commit: 'Next' }
+        post :update_1_collection, params: { form: {}, commit: 'Next' }
         expect(Form.count).to eq(0)
         expect(response).to redirect_to(edit_2_forms_path)
       end
@@ -153,7 +153,7 @@ RSpec.describe PatientsController, type: :controller do
     context 'when no valid action' do
       it 'renders to edit_1' do
         form_params = attributes_for(:form, first_name: 'John', last_name: 'Doe')
-        patch :update_1_collection, params: { form: form_params, commit: '' }
+        post :update_1_collection, params: { form: form_params, commit: '' }
         expect(Form.count).to eq(0)
         expect(response).to render_template(:edit_1)
       end
@@ -207,7 +207,7 @@ RSpec.describe PatientsController, type: :controller do
     context 'when saving' do
       it 'creates and saves a new form, and redirects to edit_2' do
         form_params = attributes_for(:form, height: 180, weight: 50)
-        patch :update_2_collection, params: { form: form_params, commit: 'Save' }
+        post :update_2_collection, params: { form: form_params, commit: 'Save' }
         expect(Form.count).to eq(1)
         expect(response).to redirect_to(edit_2_form_path(Form.last))
       end
@@ -216,13 +216,13 @@ RSpec.describe PatientsController, type: :controller do
     context 'when moving to next step' do
       it 'creates and saves a new form, and redirects to edit_3' do
         form_params = attributes_for(:form, height: 180, weight: 50)
-        patch :update_2_collection, params: { form: form_params, commit: 'Next' }
+        post :update_2_collection, params: { form: form_params, commit: 'Next' }
         expect(Form.count).to eq(1)
         expect(response).to redirect_to(edit_3_form_path(Form.last))
       end
 
       specify 'if no params, redirect to edit_3_forms_path without saving form' do 
-        patch :update_2_collection, params: { form: {}, commit: 'Next' }
+        post :update_2_collection, params: { form: {}, commit: 'Next' }
         expect(Form.count).to eq(0)
         expect(response).to redirect_to(edit_3_forms_path)
       end
@@ -231,7 +231,7 @@ RSpec.describe PatientsController, type: :controller do
     context 'when no valid action' do
       it 'renders to edit_2' do
         form_params = attributes_for(:form, height: 180, weight: 50)
-        patch :update_2_collection, params: { form: form_params, commit: '' }
+        post :update_2_collection, params: { form: form_params, commit: '' }
         expect(Form.count).to eq(0)
         expect(response).to render_template(:edit_2)
       end
@@ -284,7 +284,7 @@ RSpec.describe PatientsController, type: :controller do
     context 'when saving' do
       it 'creates and saves a new form, and redirects to edit_3' do
         form_params = attributes_for(:form, services: ["toileting"], start_date: Date.today)
-        patch :update_3_collection, params: { form: form_params, commit: 'Save' }
+        post :update_3_collection, params: { form: form_params, commit: 'Save' }
         expect(Form.count).to eq(1)
         expect(response).to redirect_to(edit_3_form_path(Form.last))
       end
@@ -293,13 +293,13 @@ RSpec.describe PatientsController, type: :controller do
     context 'when moving to next step' do
       it 'creates and saves a new form, and redirects to edit_4' do
         form_params = attributes_for(:form, services: ["toileting"], start_date: Date.today)
-        patch :update_3_collection, params: { form: form_params, commit: 'Next' }
+        post :update_3_collection, params: { form: form_params, commit: 'Next' }
         expect(Form.count).to eq(1)
         expect(response).to redirect_to(edit_4_form_path(Form.last))
       end
 
       specify 'if no params, redirect to edit_4_forms_path without saving form' do 
-        patch :update_3_collection, params: { form: {}, commit: 'Next' }
+        post :update_3_collection, params: { form: {}, commit: 'Next' }
         expect(Form.count).to eq(0)
         expect(response).to redirect_to(edit_4_forms_path)
       end
@@ -308,7 +308,7 @@ RSpec.describe PatientsController, type: :controller do
     context 'when no valid action' do
       it 'renders to edit_3' do
         form_params = attributes_for(:form, services: ["toileting"], start_date: Date.today)
-        patch :update_3_collection, params: { form: form_params, commit: '' }
+        post :update_3_collection, params: { form: form_params, commit: '' }
         expect(Form.count).to eq(0)
         expect(response).to render_template(:edit_3)
       end

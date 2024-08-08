@@ -2,19 +2,26 @@ require 'rails_helper'
 
 RSpec.describe Form, type: :model do
   let(:user) { FactoryBot.create(:user) }
-  let(:form) { FactoryBot.create(:form, user: user) }
 
+  describe 'valid form' do
     it 'is valid with valid attributes' do
       form = FactoryBot.build(:form)
       expect(form).to be_valid
+    end
+
+    it 'default factory bot pg 1 is valid' do
+      form = FactoryBot.build(:form)
+      expect(form.pg1_valid).to be_falsey
     end
 
     it 'is invalid with invalid attributes' do
       form = FactoryBot.build(:form, first_name: "")
       expect(form.pg1_valid).to be_falsey
     end
+  end
 
     describe 'update_last_edit' do
+    let!(:form) { create(:form, user: user) }
     it 'updates last_edit if there are changes' do
       form.first_name = 'NewName'
       expect { form.save }.to change { form.last_edit }
@@ -31,11 +38,8 @@ RSpec.describe Form, type: :model do
     end
   end
 
-  describe 'submittable' do
-  #   it 'returns true if all pages are valid' do
-  #     expect(form.submittable).to be_truthy
-  #   end
-
+  describe 'Transfer to new user method' do
+  let!(:form) { create(:form, user: user) }
     it 'returns false if there is user but it is the same user' do
       expect(form.transfer_to_new_user(user.email)).to be_falsey
     end
@@ -43,31 +47,44 @@ RSpec.describe Form, type: :model do
     it 'returns true if there is user but it is the same user' do
       expect(form.transfer_to_new_user(user.email)).to be_falsey
     end
-
-    it 'returns false if page 3 is not valid' do
-      form.start_date = nil
-      expect(form.submittable).to be_falsey
-    end
   end
 
-  describe 'Transfer to new user method' do
+  describe 'Submittable' do
+  let!(:form) { create(:form, user: user) }
     #   it 'returns true if all pages are valid' do
     #     expect(form.submittable).to be_truthy
     #   end
-  
-      it 'returns false if page 1 is not valid' do
+
+      it 'returns true if page 1 is valid' do
         form.first_name = ''
-        expect(form.submittable).to be_falsey
+        expect(form.pg1_valid).to be_falsey
       end
   
       it 'returns false if page 2 is not valid' do
+        expect(form.pg2_valid).to be_truthy
+      end
+
+      it 'returns false if page 2 is not valid' do
         form.height = nil
-        expect(form.submittable).to be_falsey
+        expect(form.pg2_valid).to be_falsey
       end
   
       it 'returns false if page 3 is not valid' do
+        expect(form.pg3_valid).to be_truthy
+      end
+
+      it 'returns false if page 3 is not valid' do
         form.start_date = nil
-        expect(form.submittable).to be_falsey
+        expect(form.pg3_valid).to be_falsey
+      end
+
+      it 'returns true if page 4 is not valid' do
+        expect(form.pg3_valid).to be_truthy
+      end
+      it 'returns true if page 4 is not valid' do
+        form.physical_video_file_name = "Hello.mp4"
+        form.mental_video_file_name = "Hello.mp4"
+        expect(form.pg3_valid).to be_truthy
       end
     end
 

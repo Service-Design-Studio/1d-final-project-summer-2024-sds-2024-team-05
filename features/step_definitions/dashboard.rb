@@ -37,14 +37,14 @@ Given('that a NOK has successfully submitted a form') do
   fill_in 'end_date', with: '15122024'
   click_button 'Save'
   click_button 'Next'
-  attach_file('physical_video', 'C:\\Users\\charm\\Downloads\\sds.mp4')
-  attach_file('mental_video', 'C:\\Users\\charm\\Downloads\\sds.mp4')
+  attach_file('physical_video', 'C:\\Users\\royce\\Downloads\\darrel_physical.mp4')
+  attach_file('mental_video', 'c:\\Users\\royce\\Downloads\\Farm_animals_for_kids_Vocabulary_fo_kids_online_video_cutter_com.mp4')
   sleep(10)
   click_button 'Save'
   sleep(10)
   click_button 'Next'
   sleep(10)
-  attach_file('environment_video', 'C:\\Users\\charm\\Downloads\\HCI Task 2 .mp4')
+  attach_file('environment_video', 'C:\\Users\\royce\\Downloads\\environment_video.mp4')
   sleep(10)
   click_button 'Save'
   sleep(10)
@@ -132,14 +132,14 @@ Given('that multiple NOKs has submitted forms') do
   fill_in 'end_date', with: '15122024'
   click_button 'Save'
   click_button 'Next'
-  attach_file('physical_video', 'C:\\Users\\charm\\Downloads\\sds.mp4')
-  attach_file('mental_video', 'C:\\Users\\charm\\Downloads\\sds.mp4')
+  attach_file('physical_video', 'C:\\Users\\royce\\Downloads\\darrel_physical.mp4')
+  attach_file('mental_video', 'c:\\Users\\royce\\Downloads\\Farm_animals_for_kids_Vocabulary_fo_kids_online_video_cutter_com.mp4')
   sleep(10)
   click_button 'Save'
   sleep(10)
   click_button 'Next'
   sleep(10)
-  attach_file('environment_video', 'C:\\Users\\charm\\Downloads\\HCI Task 2 .mp4')
+  attach_file('environment_video', 'C:\\Users\\royce\\Downloads\\environment_video.mp4')
   sleep(10)
   click_button 'Save'
   sleep(10)
@@ -270,14 +270,14 @@ Given('that I am a staff and I cannot differentiate between the new forms that h
   fill_in 'end_date', with: '15122024'
   click_button 'Save'
   click_button 'Next'
-  attach_file('physical_video', 'C:\\Users\\charm\\Downloads\\sds.mp4')
-  attach_file('mental_video', 'C:\\Users\\charm\\Downloads\\sds.mp4')
+  attach_file('physical_video', 'C:\\Users\\royce\\Downloads\\darrel_physical.mp4')
+  attach_file('mental_video', 'c:\\Users\\royce\\Downloads\\Farm_animals_for_kids_Vocabulary_fo_kids_online_video_cutter_com.mp4')
   sleep(10)
   click_button 'Save'
   sleep(10)
   click_button 'Next'
   sleep(10)
-  attach_file('environment_video', 'C:\\Users\\charm\\Downloads\\HCI Task 2 .mp4')
+  attach_file('environment_video', 'C:\\Users\\royce\\Downloads\\environment_video.mp4')
   sleep(10)
   click_button 'Save'
   sleep(10)

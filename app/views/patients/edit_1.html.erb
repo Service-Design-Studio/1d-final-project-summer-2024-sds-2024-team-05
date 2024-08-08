@@ -77,7 +77,7 @@
 
     <h1 class="text-center mb-4">Page 1 - Patient Details</h1>
     
-    <%= form_with(model: @form, url: @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: :patch, local: true, class: "mb-4") do |form| %>
+    <%= form_with(model: @form, url: @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: @form.persisted? ? :patch : :post, local: true, class: "mb-4") do |form| %>
       <% if current_user.admin? %>
         <div class="row mb-3">
           <div class="col-6">

@@ -6,7 +6,7 @@
 Given('that I would like to view a specific client information') do
   visit '/users/sign_up'
   sleep(10)
-  fill_in 'Email', with: 'nok2@example.com'
+  fill_in 'Email', with: 'nok21@example.com'
   fill_in 'Password', with: 'password'
   fill_in 'Password confirmation', with: 'password'
   fill_in 'User first name', with: 'John'
@@ -42,14 +42,14 @@ Given('that I would like to view a specific client information') do
   fill_in 'end_date', with: '15122024'
   click_button 'Save'
   click_button 'Next'
-  attach_file('physical_video', 'C:\\Users\\charm\\Downloads\\sds.mp4')
-  attach_file('mental_video', 'C:\\Users\\charm\\Downloads\\sds.mp4')
+  attach_file('physical_video', 'C:\\Users\\royce\\Downloads\\darrel_physical.mp4')
+  attach_file('mental_video', 'c:\\Users\\royce\\Downloads\\Farm_animals_for_kids_Vocabulary_fo_kids_online_video_cutter_com.mp4')
   sleep(10)
   click_button 'Save'
   sleep(10)
   click_button 'Next'
   sleep(10)
-  attach_file('environment_video', 'C:\\Users\\charm\\Downloads\\HCI Task 2 .mp4')
+  attach_file('environment_video', 'C:\\Users\\royce\\Downloads\\environment_video.mp4')
   sleep(10)
   click_button 'Save'
   sleep(10)
@@ -413,7 +413,7 @@ When("I click on the service agreement tab") do
 end
 
 And("I click choose file on the tab and upload the service agreement form") do
-  attach_file('svs_agreement', 'C:\\Users\\charm\\Downloads\\slides.pdf')
+  attach_file('svs_agreement', 'C:\\Users\\royce\\Downloads\\slides.pdf')
 end
 
 And("I click save") do

@@ -10,6 +10,7 @@ FactoryBot.define do
       hobbies { "Reading, Traveling" }
       height { 160 }
       weight { 75 }
+      postal {100000}
       conditions { "Cancer" }
       conditions_other { "N/A" }
       medication { "None" }

@@ -145,7 +145,7 @@
   </div>
 
     <!-- Video Upload Section -->
-    <%= form_with(model: @form, url: @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :patch, local: true, html: { multipart: true }) do |form| %>
+    <%= form_with(model: @form, url: @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: @form.persisted? ? :patch : :post, local: true, html: { multipart: true }) do |form| %>
       <input type="hidden" name="form[id]" value="<%= @form.id %>">
       <div class="row">
         <!-- Step 1: Physical Video -->

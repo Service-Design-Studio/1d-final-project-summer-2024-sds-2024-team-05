@@ -3,12 +3,42 @@
 
 [Design Workbook](https://docs.google.com/document/d/1SXpq8aStl2y5TK2OTNNwD2Nqwt8G41vPAxLpP77D05s/edit?pli=1)
 
-# README
+# Patient Onboarding WebApp
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Table of Contents
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+- [Developer Team](#developer-team)
+<!-- - [Usage](#usage)
+- [Configuration](#configuration)
+- [Contributing](#contributing)
+- [License](#license) -->
 
-Things you may want to cover:
+
+## Introduction
+**Patient Onboarding WebApp** is a web application that streamlines and digitalises the tedious client onboarding process and create a more efficient solution which captures holistic and accurate client profiles, so as to reduce the workload of the staff and next-of-kin.
+
+[Check out our Google Site Here for a more detailed context regarding the problem and solution](https://sites.google.com/view/team-delta-sds/home)
+
+## Features
+### User (Patient's Next of Kin)
+- User Sign-Up and User Login
+- Creation and Submission of Patient Application Forms (CRUD operations)
+
+### Admin
+- Admin Login
+- Creation and Submission of Patient Application Forms (CRUD operations)
+- Preliminary AI Asessment of Patient's uploaded physical and mental assessment videos
+- Manual input for assessing Patients uploaded videos
+- Admin Dashboard Management System (Sorting, Searching functionalities, Actions Required)
+- Creation of Meetings (house visit appointments) with Patient and Users (Patient's Next of Kin)
+- Automated Email Notifications sent to User for Meeting Management (upon creating, rescheduling and cancelling meetings)
+
+## Installation
+### Prerequisites
+- Ruby on Rails
+- Python
 
 ## Ruby version
 - **Ruby** (`3.3.2`)
@@ -159,7 +189,7 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
     - For Choose how to control access to objects, select Uniform for an Access control option. Make sure you uncheck public access prevention.
     - Click Create.
 
-  At the end of this step, you would have a Cloud SQL Instance Name, Database Name, Database_User Name, dbpassword and Bucket Name 
+    At the end of this step, you would have a Cloud SQL Instance Name, Database Name, Database_User Name, dbpassword and Bucket Name 
 
 7. **Grant Cloud Build access to Cloud SQL**
 
@@ -176,7 +206,7 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
 
 8. **Generate Secret Key Base**
 
-  Command: ```bundle exec rake secret``` or ```rails secret``` and store it in a .env or somewhere first.
+    Command: ```bundle exec rake secret``` or ```rails secret``` and store it in a .env or somewhere first.
    
 9. **Ensure CORS setup**
 
@@ -187,7 +217,7 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
    Expected Response of the CORS set up should be like:
    ```[{"maxAgeSeconds": 3600, "method": ["GET", "HEAD", "PUT", "POST"], "origin": ["http://localhost:3000", "https://ninkatec-2-7tifx5rv7q-as.a.run.app", "http://127.0.0.1:3000"], "responseHeader": ["*"]}]```
 
-  Under "origin", you will see the local host urls and the actual domain url. Swap that for your own deployed app url. Also, you can consider removing the local host urls so you will not accidentally upload any videos etc from local testing by accident.
+  
 
    To set your CORS setup, create a JSON file named cors-config.json (or any name you prefer) with the CORS settings.
    Command to set your CORS set up is ```gsutil cors set cors-config.json gs://YOUR_BUCKET_NAME```
@@ -200,11 +230,13 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
     - Add this key into your project (```config/```) but under gitignore (not recommended for actual production and do not push to github or it will be disabled after a week) or use a Google's secret manager. Need this for both the Ruby app and CV Flask app if using the same key.
 
 11. **Deploying Flask Microservice**
+
     - You will need to do Steps 1, 2, 7 and 8 again if deploying the CV Flask Microservice on a separate project. It essentially just needs to run separately but does not need its own Cloud SQL and Bucket as it does not require a database and uploads the processed video back to the original bucket.
     - Deploying it as a microservice helps as if there is a need to update the CV model to refine it etc. it can be done by reploying the microservice and not the entire Ruby app again.
     - Deploying the microservice before the Ruby app is necessary because you will need to replace the url in the Ruby app (```app/controllers/patients_controllers```) cv_assessment(form) method as it makes a http request to the microservice specified.
 
-11. **Using the previous credentials**
+12. **Using the previous credentials**
+
     - As we attained many names / credentials in our previous steps, we need to use them in order to actually connect to them on Google Cloud. Either add them in just before and push them with your container (probably not recommended) or use Google Cloud Secret Manager but remember not to push them to github
     - Example credentials path if placed under config would be ```'config/<name_of_key>.json'```
     
@@ -212,7 +244,7 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
     - need to replace database, username, password and host in ```database.yml```. Host refers to ```'/cloudsql/<your_cloudsql_connection_name>'``` found under your SQL instance on Google Cloud
     - need to replace credentials path and bucket name in ```storage.yml```
     - need to replace the secret key base in the dockerfile
-    - need to replace GOOGLE API KEY under ```app/views/admins/client_profile.html.erb```, ```search for iframe.src = `https://www.google.com/maps/embed/v1/place?key='```
+    - need to replace GOOGLE MAP API KEY under ```app/views/admins/client_profile.html.erb```, ```search for iframe.src = `https://www.google.com/maps/embed/v1/place?key='```. If you have not created the API Key, simply go to API & Services, search up Google Map and generate a key.
     - need to replace the credentials annd bucket name in google_cloud_storage_service.rb
     - add email credentials in ```config/environments/production.rb``` (email in gmail and password requires a 16 digit password set in your gmail account, [instructions for password](https://support.google.com/mail/answer/185833?hl=en))
     - In the same file, set config.action_mailer.perform_deliveries = true to actually send emails via the Ruby app. False will not perform mail deliveries. 
@@ -222,7 +254,20 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
 
   **Reminder not to push the above credentials onto Github or risk being compromised or having the keys disabled**
 
-  12. **Last Step**
+13. **Last Step**
+
     - if deploying for the first time, you might have to change ```bundle exec rake db:migrate``` to ```bundle exec rake db:create db:migrate db:seed``` in the apply migrations step under Cloud Build.
     - This is because the schema and seeded data on Google Cloud has not been created for the first time. Subsequently, just db:migrate is fine for any required migrations.
     - Finally, run gcloud init (if you have not done so), authenticate yourself (if required), select your project, set your region (if required), and run gcloud builds submit.
+
+## Developer Team
+
+Meet the amazing team behind this project.
+1. Charmaine Hong [Github@charmaineyhong](https://github.com/charmaineyhong)
+2. Celine Goh [Github@celine-goh](https://github.com/celine-goh)
+3. Hubert Koh [Github@sneakiestofbeaks](https://github.com/sneakiestofbeaks)
+4. Darrel liew [Github@DarrelLiew](https://github.com/DarrelLiew)
+5. Royce Lim [Github@spyabi](https://github.com/spyabi)
+6. Austin Isaac [Github@Omega1424](https://github.com/Omega1424)
+
+

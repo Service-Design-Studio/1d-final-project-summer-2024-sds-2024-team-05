@@ -3,7 +3,7 @@
 
 [Design Workbook](https://docs.google.com/document/d/1SXpq8aStl2y5TK2OTNNwD2Nqwt8G41vPAxLpP77D05s/edit?pli=1)
 
-# Ninktac Patient Onboarding WebApp
+# Ninkatec Patient Onboarding WebApp
 
 ## Table of Contents
 - [Introduction](#introduction)

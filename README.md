@@ -3,7 +3,7 @@
 
 [Design Workbook](https://docs.google.com/document/d/1SXpq8aStl2y5TK2OTNNwD2Nqwt8G41vPAxLpP77D05s/edit?pli=1)
 
-# Patient Onboarding WebApp
+# Ninktac Patient Onboarding WebApp
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -18,23 +18,31 @@
 
 
 ## Introduction
-**Patient Onboarding WebApp** is a web application that streamlines and digitalises the tedious client onboarding process and create a more efficient solution which captures holistic and accurate client profiles, so as to reduce the workload of the staff and next-of-kin.
+**Ninkatec Patient Onboarding WebApp** is a web application that streamlines and digitalises the tedious client onboarding process and create a more efficient solution which captures holistic and accurate client profiles, so as to reduce the workload of the staff and next-of-kin.
 
 [Check out our Google Site Here for a more detailed context regarding the problem and solution](https://sites.google.com/view/team-delta-sds/home)
 
 ## Features
 ### User (Patient's Next of Kin)
 - User Sign-Up and User Login
-- Creation and Submission of Patient Application Forms (CRUD operations)
+- Creation, Submission, Editing, Deleting of Patient Application Forms (CRUD operations)
+- Dashboard of all ongoing/submitted patient applications
 
-### Admin
-- Admin Login
-- Creation and Submission of Patient Application Forms (CRUD operations)
-- Preliminary AI Asessment of Patient's uploaded physical and mental assessment videos
+### Staff
+- Admin Login for Staff
+- Creation, Submission, Editing, Deleting of Patient Application Forms (CRUD operations)
+- Preliminary AI Assessment of Patient's uploaded physical and mental assessment videos
+  - Transcription of Patient and NOK Conversation
+  - Count of unique animals listed by patient
+  - Sit-stand Test Computer Vision assessment
+- Detailed Client Profile when clicking in from dashboard
 - Manual input for assessing Patients uploaded videos
-- Admin Dashboard Management System (Sorting, Searching functionalities, Actions Required)
-- Creation of Meetings (house visit appointments) with Patient and Users (Patient's Next of Kin)
-- Automated Email Notifications sent to User for Meeting Management (upon creating, rescheduling and cancelling meetings)
+- Admin Dashboard Management System
+  - Sorting based on different columns
+  - Search functionality for patient name
+  -  Colour coded statuses for next action required
+- Self-built calendar for creation of Meetings (house visit appointments) with Patient and Users (Patient's Next of Kin)
+- Automated Email Notifications sent to User for Meeting Management (upon creating, rescheduling, and cancelling meetings)
 
 ## Installation
 ### Prerequisites
@@ -70,7 +78,7 @@
 ### JavaScript Libraries
 
 - **Stimulus-Rails** 
-  - A modest JavaScript framework for enhancing the behavior of HTML.
+  - A modest JavaScript framework for enhancing HTML behavior.
 
 - **Turbo-Rails** 
   - Framework for building modern, fast, and reliable web applications by leveraging techniques like partial page updates.
@@ -88,7 +96,7 @@ This application uses different databases for various purposes:
 ### Python Packages
 
 - **Flask**
-  - A micro web framework for Python, used for creating web applications.
+  - A micro web framework for Python used to create web applications.
 
 - **mediapipe** 
   - A library for building cross-platform, customizable ML solutions for live and streaming media.
@@ -122,7 +130,7 @@ This application uses different databases for various purposes:
 
 * ...
 
-This project was deployed using Google Cloud Run, with a Cloud SQL instance for PostgreSQL managing general data and metadata. Google Cloud Storage is used for storing files (such as images and PDFs) and videos.
+This project was deployed using Google Cloud Run, with a Cloud SQL instance for PostgreSQL managing general data and metadata. Google Cloud Storage is used to store files (such as images and PDFs) and videos.
 
 ## Cloud Run Deployment
 
@@ -132,7 +140,7 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
 
 1. **Google Cloud Account**:
 
-   Ensure you have a Google Cloud account with billing enabled.
+   Ensure you have a Google Cloud account with a billing account enabled.
 
 ### Setup Steps
 1. **Create a project on Google Cloud**

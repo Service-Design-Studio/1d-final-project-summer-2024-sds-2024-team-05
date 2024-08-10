@@ -62,7 +62,7 @@
   - Client library for Google Cloud Storage, used for interacting with Google Cloud buckets.
 - **google-cloud-speech** (`~> 1.7.0`)
   - Allows you to communicate with the Google Cloud Speech-to-Text API.
-- **grpc** (`1.64.0`)
+- **grpc** (`~> 1.64.0`)
   - Handles the efficient, low-latency communication between your application and Google's API.
 - **streamio-ffmpeg** (`>= 3.0.2`)
   - Extracts and processes the audio from a video file, making it ready for transcription by the Speech To Text API.

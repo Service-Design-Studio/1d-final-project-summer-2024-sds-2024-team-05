@@ -1,4 +1,4 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/QpCtzJAE)
+[![Review Assignment Due Date](https://github.com/Service-Design-Studio/1d-final-project-summer-2024-sds-2024-team-05/blob/main/public/review-assignment-button.svg)](https://classroom.github.com/a/QpCtzJAE)
 [![Open in Visual Studio Code](https://github.com/Service-Design-Studio/1d-final-project-summer-2024-sds-2024-team-05/blob/main/public/open-in-vscode.svg)](https://classroom.github.com/online_ide?assignment_repo_id=15055754&assignment_repo_type=AssignmentRepo)
 
 [Design Workbook](https://docs.google.com/document/d/1SXpq8aStl2y5TK2OTNNwD2Nqwt8G41vPAxLpP77D05s/edit?pli=1)

@@ -10,11 +10,11 @@ application up and running.
 
 Things you may want to cover:
 
-* Ruby version
+## Ruby version
 - **Ruby** (`3.3.2`)
 
-* System dependencies
-## Ruby Gems
+## System dependencies
+### Ruby Gems
 - **Rails** (`7.1.3.4`)
   - A web application framework for Ruby, providing default structures for a database, a web service, and web pages.
 
@@ -30,7 +30,7 @@ Things you may want to cover:
 - **google-cloud-storage** 
   - Client library for Google Cloud Storage, used for interacting with Google Cloud buckets.
 
-## JavaScript Libraries
+### JavaScript Libraries
 
 - **Stimulus-Rails** 
   - A modest JavaScript framework for enhancing the behavior of HTML.
@@ -38,17 +38,17 @@ Things you may want to cover:
 - **Turbo-Rails** 
   - Framework for building modern, fast, and reliable web applications by leveraging techniques like partial page updates.
 
-## Database
+### Database
 
 This application uses different databases for various purposes:
 
-- **PostgreSQL**
+- **PostgreSQL (Production)** 
   - A powerful, open-source relational database management system used for storing and managing application data in production. It provides robust support for complex queries and data integrity.
 
-- **SQLite3**
+- **SQLite3 (Deployment)**
   - A lightweight, file-based relational database used for development and testing. It is included with Ruby on Rails by default for local development and testing environments due to its simplicity and ease of setup.
   - 
-## Python Packages
+### Python Packages
 
 - **Flask**
   - A micro web framework for Python, used for creating web applications.
@@ -93,19 +93,55 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
 
 ### Prerequisites
 
-1. **Google Cloud Account**: Ensure you have a Google Cloud account with billing enabled.
-<!--2. **Google Cloud SDK**: Install the Google Cloud SDK and authenticate with your account.-->
+1. **Google Cloud Account**:
+
+   Ensure you have a Google Cloud account with billing enabled.
 
 ### Setup Steps
 1. **Create a project on Google Cloud**
 
+   Create a project and project ID on Google Cloud Console or via terminal. Make sure that billing is enabled for your Cloud project.
+
 2. **Enable Cloud Run API**
    
+   Enable the Cloud Run, Cloud SQL, Cloud Build, Secret Manager, and Compute Engine APIs. [Enable Cloud Run APIs](https://console.cloud.google.com/flows/enableapi?apiid=run.googleapis.com,sql-component.googleapis.com,sqladmin.googleapis.com,compute.googleapis.com,cloudbuild.googleapis.com,secretmanager.googleapis.com) or search in Google Cloud Console for Enable Cloud Run APIs
+   
 3. **Setup PostgreSQL Instance**
+   
+    - In the Cloud Console, go to the Cloud SQL Instances page. [CloudSQL Instance page](https://console.cloud.google.com/sql/instances?)
+    - Click Create Instance.
+    - Click Choose PostgreSQL.
+    - In the Instance ID field, enter a name for the instance (INSTANCE_NAME).
+    - In the Password field, enter a password for the postgres user or click generate password. Save it somewhere for emergency purposes.
+    - Choose Singapore for region and “Single Zone” for Zone availability.
+    - Use the default values for the other fields.
+    - Click Create Instance.
 
-4. **Create a Google Cloud Storage Bucket**
+4. **Create a Database for your PostgreSQL Instance**
+   
+    - In the Cloud Console, go to the Cloud SQL Instances page. Go to the [CloudSQL Instance page](https://console.cloud.google.com/sql/instances?).
+    - Select the INSTANCE_NAME instance. (Same instance you just created in previous step)
+    - Go to the Databases tab.
+    - Click Create database.
+    - In the Database name dialog, enter DATABASE_NAME.
+    - Click Create.
+     
+5. **Create a User for your Database**
+   
+    - In the Cloud Console, go to the Cloud SQL Instances page. Go to the Cloud SQL Instances page.
+    - Select the INSTANCE_NAME instance.
+    - Go to the Users tab.
+    - Click Add User Account.
+    - **Before the following steps: you need to generate a random password and write it into a file called dbpassword**
+    - Command to do so is ```cat /dev/urandom | LC_ALL=C tr -dc '[:alpha:]'| fold -w 50 | head -n1 > dbpassword``` or equivalent command
+    - Under the Built-in Authentication dialog:
+    - Enter the user name DATABASE_USERNAME. (Can be different from the previous DATABASE_NAME as they are separate things)
+    - Enter the content of the dbpassword file as the password PASSWORD.
+    - Click Add.
+   
+6. **Create a Google Cloud Storage Bucket**
 
-   Before deploying or even testing the app locally, you will need to set up a Google Cloud Storage bucket. This bucket will be used to store files and videos.
+   Before deploying or even testing the app locally, you will need to set up a Google Cloud Storage bucket (Recommended by us to set up one for development and one for actual production, probably best to have different project - development without all the cloud run & SQL instances to avoid confusion). This bucket will be used to store files and videos.
    
    You might ask: why do I even need the Google Cloud Storage Bucket when I am testing locally, especially when using sqlite3 for local development and testing (easier to manage, set up and use but not as scalable and ideal for production).
    Two reasons:
@@ -114,15 +150,79 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
    Cons of using Google Cloud Storage Bucket when developing locally - Cost incurred rather than totally free, although probably not as expensive as running a PGSQL instance for production.
    Hence, we decided to code it this way from the get-go.
 
-6. **Ensure CORS setup**
+    - In the Cloud Console, go to the Cloud Storage Browser page. Go to [Browser](https://console.cloud.google.com/storage/browser).
+    - Click Create bucket.
+    - On the Create a bucket page, enter your bucket information. To go to the next step, click Continue.
+    - For Name your bucket, enter a name that meets the bucket naming requirements.
+    - Select “Region” for Location Type, and choose "asia-southeast1". 
+    - For Choose a default storage class for your data, select the following: Standard.
+    - For Choose how to control access to objects, select Uniform for an Access control option. Make sure you uncheck public access prevention.
+    - Click Create.
 
-   It should be something like this. This allows you to PUT a video directly to Google Cloud Bucket via a generated signed URL. I believe the domains refer to where the request can be sent from.
+  At the end of this step, you would have a Cloud SQL Instance Name, Database Name, Database_User Name, dbpassword and Bucket Name 
+
+7. **Grant Cloud Build access to Cloud SQL**
+
+    - In the Cloud Console, go to the Identity and Access Management page. Go to the Identity and Access Management page.
+    - To edit the entry for PROJECTNUM@cloudbuild.gserviceaccount.com member, click create Edit Member.
+    - Click Add **another** role (Do not overwrite existing role)
+    - In the Select a role dialog, select Cloud SQL Client.
+    - Click Save
+    
+    - In the Cloud Console, go to the Cloud Build Settings page.
+    - Open the Settings page
+    - Locate the row with the Cloud Run Admin role and set its Status to ENABLED.
+    - In the Additional steps may be required pop-up, click GRANT ACCESS TO ALL SERVICE ACCOUNTS.
+
+8. **Generate Secret Key Base**
+
+  Command: ```bundle exec rake secret``` or ```rails secret``` and store it in a .env or somewhere first.
+   
+9. **Ensure CORS setup**
+
+   When you use a PUT request to upload a video to a signed URL, the browser recognizes this as a cross-origin request. By default, the browser will block this request unless the server explicitly allows it through CORS headers.
+   
    Command to find out what your CORS set up is ```gsutil cors get gs://<YOUR-BUCKET-NAME```
-   [{"maxAgeSeconds": 3600, "method": ["GET", "HEAD", "PUT", "POST"], "origin": ["http://localhost:3000", "https://ninkatec-2-7tifx5rv7q-as.a.run.app", "http://127.0.0.1:3000"], "responseHeader": ["*"]}]
+
+   Expected Response of the CORS set up should be like:
+   ```[{"maxAgeSeconds": 3600, "method": ["GET", "HEAD", "PUT", "POST"], "origin": ["http://localhost:3000", "https://ninkatec-2-7tifx5rv7q-as.a.run.app", "http://127.0.0.1:3000"], "responseHeader": ["*"]}]```
+
+  Under "origin", you will see the local host urls and the actual domain url. Swap that for your own deployed app url. Also, you can consider removing the local host urls so you will not accidentally upload any videos etc from local testing by accident.
+
    To set your CORS setup, create a JSON file named cors-config.json (or any name you prefer) with the CORS settings.
    Command to set your CORS set up is ```gsutil cors set cors-config.json gs://YOUR_BUCKET_NAME```
 
-8. **Create a service account for bucket management and ensure it has the role permissions**
+10. **Create a service account for bucket management and ensure it has the role permissions**
 
-   We gave it a Storage Admin such that it has full access to the bucket generate a JSON key from the bucket as you will need it in your app to give it credentials (under app/services/google_cloud_storage_service) to generate URLs and so on. For the flask microservice, it can either use the same JSON key or if using a separate project, create a new service account with its respective key but I believe you will need to give that service account permission in the original project.
+    - Create a service account for bucket management under IAM & Admins.
+    - We gave it a Storage Admin role such that it has full access to the bucket.
+    - Generate a JSON key from the bucket as you will need it in your app to give it credentials (under ```app/services/google_cloud_storage_service```) to generate URLs and so on. Active storage will also require the credentials JSON key (under ```app/services/storage.yml```) to handle the uploading of files that were not explicitly handled by direct upload for you. For the flask microservice, it can either use the same JSON key or if using a separate project, create a new service account with its respective key but I believe you will need to give that service account permission in the original project (under IAM & Admin).
+    - Add this key into your project (```config/```) but under gitignore (not recommended for actual production and do not push to github or it will be disabled after a week) or use a Google's secret manager. Need this for both the Ruby app and CV Flask app if using the same key.
 
+11. **Deploying Flask Microservice**
+    - You will need to do Steps 1, 2, 7 and 8 again if deploying the CV Flask Microservice on a separate project. It essentially just needs to run separately but does not need its own Cloud SQL and Bucket as it does not require a database and uploads the processed video back to the original bucket.
+    - Deploying it as a microservice helps as if there is a need to update the CV model to refine it etc. it can be done by reploying the microservice and not the entire Ruby app again.
+    - Deploying the microservice before the Ruby app is necessary because you will need to replace the url in the Ruby app (```app/controllers/patients_controllers```) cv_assessment(form) method as it makes a http request to the microservice specified.
+
+11. **Using the previous credentials**
+    - As we attained many names / credentials in our previous steps, we need to use them in order to actually connect to them on Google Cloud. Either add them in just before and push them with your container (probably not recommended) or use Google Cloud Secret Manager but remember not to push them to github
+    - Example credentials path if placed under config would be ```'config/<name_of_key>.json'```
+    
+    General things to replace
+    - need to replace database, username, password and host in ```database.yml```. Host refers to ```'/cloudsql/<your_cloudsql_connection_name>'``` found under your SQL instance on Google Cloud
+    - need to replace credentials path and bucket name in ```storage.yml```
+    - need to replace the secret key base in the dockerfile
+    - need to replace GOOGLE API KEY under ```app/views/admins/client_profile.html.erb```, ```search for iframe.src = `https://www.google.com/maps/embed/v1/place?key='```
+    - need to replace the credentials annd bucket name in google_cloud_storage_service.rb
+    - add email credentials in ```config/environments/production.rb``` (email in gmail and password requires a 16 digit password set in your gmail account, [instructions for password](https://support.google.com/mail/answer/185833?hl=en))
+    - In the same file, set config.action_mailer.perform_deliveries = true to actually send emails via the Ruby app. False will not perform mail deliveries. 
+    - need to comment out the gitignore in the credentials.json file if pushing with container as the container will not be able to find files under gitignore
+    - need to comment out the entire ffmpeg file in ```config/initializers/ffmpeg```. This is because this file is needed for local use but does not work in linux environment on Cloud. For Cloud, we are installing it on the container itself.
+    - In cloudbuild.yaml, change the values under substitutions: to be your own values for region, project name and service name
+
+  **Reminder not to push the above credentials onto Github or risk being compromised or having the keys disabled**
+
+  12. **Last Step**
+    - if deploying for the first time, you might have to change ```bundle exec rake db:migrate``` to ```bundle exec rake db:create db:migrate db:seed``` in the apply migrations step under Cloud Build.
+    - This is because the schema and seeded data on Google Cloud has not been created for the first time. Subsequently, just db:migrate is fine for any required migrations.
+    - Finally, run gcloud init (if you have not done so), authenticate yourself (if required), select your project, set your region (if required), and run gcloud builds submit.

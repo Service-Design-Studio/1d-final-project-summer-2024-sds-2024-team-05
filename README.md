@@ -58,8 +58,14 @@
 - **RSpec-Rails** 
   - RSpec's Rails-specific testing tools, used for writing and running tests for Rails applications.
 
-- **google-cloud-storage** 
+- **google-cloud-storage**
   - Client library for Google Cloud Storage, used for interacting with Google Cloud buckets.
+- **google-cloud-speech** (`~> 1.7.0`)
+  - Allows you to communicate with the Google Cloud Speech-to-Text API.
+- **grpc** (`1.64.0`)
+  - Handles the efficient, low-latency communication between your application and Google's API.
+**streamio-ffmpeg** (`>= 3.0.2`)
+  - Extracts and processes the audio from a video file, making it ready for transcription by the Speech To Text API.
 
 ### JavaScript Libraries
 
@@ -136,8 +142,16 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
 2. **Enable Cloud Run API**
    
    Enable the Cloud Run, Cloud SQL, Cloud Build, Secret Manager, and Compute Engine APIs. [Enable Cloud Run APIs](https://console.cloud.google.com/flows/enableapi?apiid=run.googleapis.com,sql-component.googleapis.com,sqladmin.googleapis.com,compute.googleapis.com,cloudbuild.googleapis.com,secretmanager.googleapis.com) or search in Google Cloud Console for Enable Cloud Run APIs
+
+3. **Enable Cloud Speech To Text API**
+    - [Enable Cloud Speech To Text API](https://console.cloud.google.com/marketplace/product/google/speech.googleapis.com)
+    - Go to API's and Services tab on Google Cloud Console
+    - Select Credentials
+    - + Create Credentials -> API Key
+    - Copy API Key
+    - Go to `Rails-App-Directory/app/services/transcription_service.rb` and replace `<key>` in `GOOGLE_SPEECH_API_URL = "https://speech.googleapis.com/v1/speech:recognize?key=<key>"`
    
-3. **Setup PostgreSQL Instance**
+4. **Setup PostgreSQL Instance**
    
     - In the Cloud Console, go to the Cloud SQL Instances page. [CloudSQL Instance page](https://console.cloud.google.com/sql/instances?)
     - Click Create Instance.
@@ -148,7 +162,7 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
     - Use the default values for the other fields.
     - Click Create Instance.
 
-4. **Create a Database for your PostgreSQL Instance**
+5. **Create a Database for your PostgreSQL Instance**
    
     - In the Cloud Console, go to the Cloud SQL Instances page. Go to the [CloudSQL Instance page](https://console.cloud.google.com/sql/instances?).
     - Select the INSTANCE_NAME instance. (Same instance you just created in previous step)
@@ -157,7 +171,7 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
     - In the Database name dialog, enter DATABASE_NAME.
     - Click Create.
      
-5. **Create a User for your Database**
+6. **Create a User for your Database**
    
     - In the Cloud Console, go to the Cloud SQL Instances page. Go to the Cloud SQL Instances page.
     - Select the INSTANCE_NAME instance.
@@ -170,7 +184,7 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
     - Enter the content of the dbpassword file as the password PASSWORD.
     - Click Add.
    
-6. **Create a Google Cloud Storage Bucket**
+7. **Create a Google Cloud Storage Bucket**
 
    Before deploying or even testing the app locally, you will need to set up a Google Cloud Storage bucket (Recommended by us to set up one for development and one for actual production, probably best to have different project - development without all the cloud run & SQL instances to avoid confusion). This bucket will be used to store files and videos.
    
@@ -192,7 +206,7 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
 
     At the end of this step, you would have a Cloud SQL Instance Name, Database Name, Database_User Name, dbpassword and Bucket Name 
 
-7. **Grant Cloud Build access to Cloud SQL**
+8. **Grant Cloud Build access to Cloud SQL**
 
     - In the Cloud Console, go to the Identity and Access Management page. Go to the Identity and Access Management page.
     - To edit the entry for ```PROJECTNUM@cloudbuild.gserviceaccount.com``` member, click create Edit Member.
@@ -205,11 +219,11 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
     - Locate the row with the Cloud Run Admin role and set its Status to ENABLED.
     - In the Additional steps may be required pop-up, click GRANT ACCESS TO ALL SERVICE ACCOUNTS.
 
-8. **Generate Secret Key Base**
+9. **Generate Secret Key Base**
 
     Command: ```bundle exec rake secret``` or ```rails secret``` and store it in a .env or somewhere first.
    
-9. **Ensure CORS setup**
+10. **Ensure CORS setup**
 
    When you use a PUT request to upload a video to a signed URL, the browser recognizes this as a cross-origin request. By default, the browser will block this request unless the server explicitly allows it through CORS headers.
    
@@ -223,20 +237,20 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
    To set your CORS setup, create a JSON file named cors-config.json (or any name you prefer) with the CORS settings.
    Command to set your CORS set up is ```gsutil cors set cors-config.json gs://YOUR_BUCKET_NAME```
 
-10. **Create a service account for bucket management and ensure it has the role permissions**
+11. **Create a service account for bucket management and ensure it has the role permissions**
 
     - Create a service account for bucket management under IAM & Admins.
     - We gave it a Storage Admin role such that it has full access to the bucket.
     - Generate a JSON key from the bucket as you will need it in your app to give it credentials (under ```app/services/google_cloud_storage_service```) to generate URLs and so on. Active storage will also require the credentials JSON key (under ```app/services/storage.yml```) to handle the uploading of files that were not explicitly handled by direct upload for you. For the flask microservice, it can either use the same JSON key or if using a separate project, create a new service account with its respective key but I believe you will need to give that service account permission in the original project (under IAM & Admin).
     - Add this key into your project (```config/```) but under gitignore (not recommended for actual production and do not push to github or it will be disabled after a week) or use a Google's secret manager. Need this for both the Ruby app and CV Flask app if using the same key.
 
-11. **Deploying Flask Microservice**
+12. **Deploying Flask Microservice**
 
     - **You will need to do Steps 1, 2, 7 and 8 again if deploying the CV Flask Microservice on a separate project.** It essentially just needs to run separately but does not need its own Cloud SQL and Bucket as it does not require a database and uploads the processed video back to the original bucket.
     - Deploying it as a microservice helps as if there is a need to update the CV model to refine it etc. it can be done by reploying the microservice and not the entire Ruby app again.
     - Deploying the microservice before the Ruby app is necessary because you will need to replace the url in the Ruby app (```app/controllers/patients_controllers```) cv_assessment(form) method as it makes a http request to the microservice specified.
 
-12. **Using the previous credentials**
+13. **Using the previous credentials**
 
     - As we attained many names / credentials in our previous steps, we need to use them in order to actually connect to them on Google Cloud. Either add them in just before and push them with your container (probably not recommended) or use Google Cloud Secret Manager but remember not to push them to github
     - Example credentials path if placed under config would be ```'config/<name_of_key>.json'```

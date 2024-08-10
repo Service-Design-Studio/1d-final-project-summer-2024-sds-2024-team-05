@@ -110,8 +110,16 @@
                     </td>
                     <td><%= form.address %></td>
                     <td><%= form.postal %></td>
-                    <td><%= readable_date(form.start_date) %></td>
-                    <td><%= readable_date(form.end_date) %></td>
+                    <td>
+                    <% if form.start_date %>
+                      <%= readable_date(form.start_date) %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% if form.end_date %>
+                      <%= readable_date(form.end_date) %>
+                    <% end %>
+                  </td>
                   
                   <td class="text-center">
                     <div class="d-flex justify-content-center align-items-center style="position: relative; z-index: 10;">

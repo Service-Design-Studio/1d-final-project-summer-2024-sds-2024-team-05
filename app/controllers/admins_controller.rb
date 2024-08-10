@@ -17,7 +17,13 @@ class AdminsController < ApplicationController
 
     respond_to do |format|
       format.html { render partial: 'meetings/calendar', locals: { meetings: @meetings } if request.xhr? }
-      format.json { render json: @meetings }
+      format.json { render json: {
+        meetings: @meetings.as_json(only: [:id, :title, :location, :start_time]),
+        submitted_forms: @submittedforms.as_json(only: [:id, :first_name, :last_name, :address, :nok_first_name, :nok_last_name, :nok_contact_no, :nok_email], include: { user: { only: [:id, :user_first_name, :user_last_name, :user_address] }}),
+        incomplete_forms: @incompleteforms.as_json(only: [:id, :first_name, :last_name, :address, :nok_first_name, :nok_last_name, :nok_contact_no, :nok_email], include: { user: { only: [:id, :user_first_name, :user_last_name, :user_address] }})
+      }
+    }
+
     end
 
     sort_field = params[:sort]
@@ -89,13 +95,22 @@ class AdminsController < ApplicationController
     @incompleteforms = @forms.where(submitted: [false, nil])
     @no_results = @forms.empty?
 
-    render :index
+    
+    respond_to do |format|
+      format.html { render :index }
+      format.json { render json: @forms.to_json(include: { user: { only: [:id, :user_first_name, :user_last_name, :user_contact_number, :email] }})}
+    end
   end
 
   def client_profile
     @form = Form.find(params[:id])
     @meetings = Meeting.all
     @attached_meetings = Meeting.where(form_id: params[:id])
+
+    respond_to do |format|
+      format.html { render :client_profile }
+      format.json { render json: @form.to_json(include: :user)}
+    end
   end
 
   def update_client_profile
@@ -104,8 +119,6 @@ class AdminsController < ApplicationController
       @form.service_agreement_form.attach(params[:form][:service_agreement_form])
       if @form.update(service_params)
         redirect_to client_profile_form_path(@form, status: 'Upload Service Agreement')
-      else
-
       end
     else
       redirect_to client_profile_form_path(@form, status: 'Upload Service Agreement')

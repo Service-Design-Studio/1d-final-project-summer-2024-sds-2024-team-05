@@ -291,11 +291,11 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
 ## Developer Team
 
 Meet the amazing team behind this project.
-1. Charmaine Hong [Github@charmaineyhong](https://github.com/charmaineyhong)
-2. Celine Goh [Github@celine-goh](https://github.com/celine-goh)
-3. Hubert Koh [Github@sneakiestofbeaks](https://github.com/sneakiestofbeaks)
-4. Darrel liew [Github@DarrelLiew](https://github.com/DarrelLiew)
-5. Royce Lim [Github@spyabi](https://github.com/spyabi)
-6. Austin Isaac [Github@Omega1424](https://github.com/Omega1424)
+1. [Charmaine Hong](https://www.linkedin.com/in/charmaine-hong-170554292/) | [Github@charmaineyhong](https://github.com/charmaineyhong)
+2. [Celine Goh](https://www.linkedin.com/in/celineghl/) | [Github@celine-goh](https://github.com/celine-goh)
+3. [Hubert Koh](https://www.linkedin.com/in/hubert-koh/) | [Github@sneakiestofbeaks](https://github.com/sneakiestofbeaks)
+4. [Darrel liew](https://www.linkedin.com/in/darrel-liew-8768a321a/) | [Github@DarrelLiew](https://github.com/DarrelLiew)
+5. [Royce Lim](https://www.linkedin.com/in/royce-lim-wt/) | [Github@spyabi](https://github.com/spyabi)
+6. [Austin Isaac](https://www.linkedin.com/in/austin--isaac/) | [Github@Omega1424](https://github.com/Omega1424)
 
 

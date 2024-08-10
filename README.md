@@ -9,6 +9,7 @@
 - [Introduction](#introduction)
 - [Features](#features)
 - [Installation](#installation)
+- [Google Cloud Deployment](#cloud-run-deployment)
 - [Developer Team](#developer-team)
 <!-- - [Usage](#usage)
 - [Configuration](#configuration)
@@ -194,7 +195,7 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
 7. **Grant Cloud Build access to Cloud SQL**
 
     - In the Cloud Console, go to the Identity and Access Management page. Go to the Identity and Access Management page.
-    - To edit the entry for PROJECTNUM@cloudbuild.gserviceaccount.com member, click create Edit Member.
+    - To edit the entry for ```PROJECTNUM@cloudbuild.gserviceaccount.com``` member, click create Edit Member.
     - Click Add **another** role (Do not overwrite existing role)
     - In the Select a role dialog, select Cloud SQL Client.
     - Click Save
@@ -231,7 +232,7 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
 
 11. **Deploying Flask Microservice**
 
-    - You will need to do Steps 1, 2, 7 and 8 again if deploying the CV Flask Microservice on a separate project. It essentially just needs to run separately but does not need its own Cloud SQL and Bucket as it does not require a database and uploads the processed video back to the original bucket.
+    - **You will need to do Steps 1, 2, 7 and 8 again if deploying the CV Flask Microservice on a separate project.** It essentially just needs to run separately but does not need its own Cloud SQL and Bucket as it does not require a database and uploads the processed video back to the original bucket.
     - Deploying it as a microservice helps as if there is a need to update the CV model to refine it etc. it can be done by reploying the microservice and not the entire Ruby app again.
     - Deploying the microservice before the Ruby app is necessary because you will need to replace the url in the Ruby app (```app/controllers/patients_controllers```) cv_assessment(form) method as it makes a http request to the microservice specified.
 

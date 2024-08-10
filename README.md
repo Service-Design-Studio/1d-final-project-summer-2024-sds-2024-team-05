@@ -41,7 +41,9 @@
   - Sorting based on different columns
   - Search functionality for patient name
   -  Colour coded statuses for next action required
-- Self-built calendar for creation of Meetings (house visit appointments) with Patient and Users (Patient's Next of Kin)
+- Self-built calendar
+  - Schedule Meetings (house visit appointments) with Patient and Users (Patient's Next of Kin)
+  - Toggle monthly or weekly view of calendar to see all scheduled meetings with different patients
 - Automated Email Notifications sent to User for Meeting Management (upon creating, rescheduling, and cancelling meetings)
 
 ## Installation
@@ -68,10 +70,13 @@
 
 - **google-cloud-storage**
   - Client library for Google Cloud Storage, used for interacting with Google Cloud buckets.
+  - 
 - **google-cloud-speech** (`~> 1.7.0`)
   - Allows you to communicate with the Google Cloud Speech-to-Text API.
+  - 
 - **grpc** (`~> 1.64.0`)
   - Handles the efficient, low-latency communication between your application and Google's API.
+  - 
 - **streamio-ffmpeg** (`>= 3.0.2`)
   - Extracts and processes the audio from a video file, making it ready for transcription by the Speech To Text API.
 

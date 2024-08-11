@@ -3,13 +3,25 @@ class MeetingsController < ApplicationController
   before_action :set_all_meetings
 
   # GET /meetings or /meetings.json
-  # def index
-  #   @meetings = Meeting.all
-  #   @meeting = Meeting.new()
-  # end
+  def index
+    if current_user.admin?
+      @meetings = Meeting.all
+    else
+      @meetings = current_user.forms.includes(:meeting).map(&:meeting).compact
+    end
+    @meeting = Meeting.new()
+    respond_to do |format|
+      format.html
+      format.json { render json: @meetings.to_json(include: { form: { only: [:id, :first_name, :last_name, :address] }})}
+    end
+  end
 
   # GET /meetings/1 or /meetings/1.json
   def show
+    respond_to do |format|
+      format.html
+      format.json { render json: @meeting.to_json(include: :form)}
+    end
   end
 
   # GET /meetings/new
@@ -39,7 +51,7 @@ class MeetingsController < ApplicationController
           format.json { render :show, status: :created, location: @meeting }
         elsif current_user.admin?
           format.html { redirect_to admin_root_path(start_date: DateTime.now), notice: "Meeting was successfully destroyed." }
-          format.json { head :no_content }
+          format.json { render :show, status: :created, location: @meeting }
         else
           format.html { redirect_to user_root_path, notice: "How did you do this." }
           format.json { head :no_content }
@@ -92,11 +104,17 @@ class MeetingsController < ApplicationController
     respond_to do |format|
       if params[:origin] && @form
         format.html { redirect_to client_profile_form_path(@form), notice: "Meeting was successfully destroyed." }
-        format.json { head :no_content }
+        format.json { render json: {
+            status: "Meeting was successfully destroyed."
+          }
+        }
       else
         if current_user.admin?
           format.html { redirect_to admin_root_path(start_date: DateTime.now), notice: "Meeting was successfully destroyed." }
-          format.json { head :no_content }
+          format.json { render json: {
+            status: "Meeting was successfully destroyed."
+          }
+        }
         else
           format.html { redirect_to user_root_path, notice: "How did you do this." }
           format.json { head :no_content }

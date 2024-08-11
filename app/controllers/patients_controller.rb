@@ -5,11 +5,11 @@ class PatientsController < ApplicationController
    before_action :check_valid_params, only: [:show]
    before_action :authenticate_user!
 
-   def show
-    @form = Form.includes(:user).find(params[:id])
+  def show
+    @form = Form.includes(:user, :meeting).find(params[:id])
     respond_to do |format|
-      format.html
-      format.json { render json: @form.to_json(include: :user) }
+        format.html
+        format.json { render json: @form.to_json(include: :user)}
     end
   end
 
@@ -18,7 +18,12 @@ class PatientsController < ApplicationController
     @forms = current_user.forms.select(:id, :first_name, :last_name, :start_date, :submitted)
     @form = current_user.forms.build
     @user = current_user
-    # session[:form_origin] = 'index'
+    session[:form_origin] = 'index'
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @forms.to_json(include: { meeting: { only: [:id, :title, :location, :start_time] }})}
+    end
   end
 
   # Step 1 of form creation
@@ -26,6 +31,10 @@ class PatientsController < ApplicationController
     @form = current_user.forms.build
     # session[:form_origin] = 'new'
 
+    respond_to do |format|
+      format.html
+      format.json { render json: @form.to_json}
+    end
   end
 
   # Save step 1 form data and move to step 2
@@ -69,7 +78,21 @@ class PatientsController < ApplicationController
 
   # GET /forms/1/edit_1
   def edit_1
-
+    respond_to do |format|
+      format.html do
+        @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
+      end
+      format.json do
+        if @form.valid?
+          render json: @form.to_json, status: :ok
+        else
+          render json: {
+            error: 'Validation failed',
+            messages: @form.errors.full_messages
+          }, status: :unprocessable_entity
+        end
+      end
+    end
   end
 
   # PATCH /forms/1/update_1
@@ -117,7 +140,20 @@ class PatientsController < ApplicationController
 
   # GET /forms/1/edit_2
   def edit_2
-
+    @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
+    respond_to do |format|
+      format.html
+      format.json do
+        if @form.valid?
+          render json: @form.to_json, status: :ok
+        else
+          render json: {
+            error: 'Validation failed',
+            messages: @form.errors.full_messages
+          }, status: :unprocessable_entity
+        end
+      end
+    end
   end
 
   # PATCH /forms/1/update_2
@@ -165,7 +201,20 @@ class PatientsController < ApplicationController
 
   # GET /forms/1/edit_3
   def edit_3
-
+    @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
+    respond_to do |format|
+      format.html
+      format.json do
+        if @form.valid?
+          render json: @form.to_json, status: :ok
+        else
+          render json: {
+            error: 'Validation failed',
+            messages: @form.errors.full_messages
+          }, status: :unprocessable_entity
+        end
+      end
+    end
   end
 
   # PATCH /forms/1/update_3
@@ -211,7 +260,20 @@ class PatientsController < ApplicationController
 
   # GET /forms/1/edit_4
   def edit_4
-
+    @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
+    respond_to do |format|
+      format.html
+      format.json do
+        if @form.valid?
+          render json: @form.to_json, status: :ok
+        else
+          render json: {
+            error: 'Validation failed',
+            messages: @form.errors.full_messages
+          }, status: :unprocessable_entity
+        end
+      end
+    end
   end
 
   # PATCH /forms/1/update_4
@@ -270,7 +332,20 @@ class PatientsController < ApplicationController
 
   # GET /forms/1/edit_5
   def edit_5
-
+    @form_origin_text = determine_form_origin_text # Changes my header based on my origin new or edit
+    respond_to do |format|
+      format.html
+      format.json do
+        if @form.valid?
+          render json: @form.to_json, status: :ok
+        else
+          render json: {
+            error: 'Validation failed',
+            messages: @form.errors.full_messages
+          }, status: :unprocessable_entity
+        end
+      end
+    end
   end
 
   # PATCH /forms/1/update_5
@@ -414,17 +489,62 @@ class PatientsController < ApplicationController
     @form = Form.find(params[:id])
     if current_user.admin?
       @form.destroy
+      
+      flash[:notice] = "Form for '#{@form.first_name}' deleted."
+  
+      respond_to do |format|
+        format.html do
+          if current_user.admin?
+            redirect_to admin_root_path
+          else
+            redirect_to forms_path
+          end
+        end
+        
+        format.json do
+          render json: {
+            message: "Form deleted successfully",
+            form_id: @form.id
+          }, status: :ok
+        end
+      end
     else
       if !@form.submitted
         @form.destroy
+        
+        flash[:notice] = "Form for '#{@form.first_name}' deleted."
+
+        respond_to do |format|
+          format.html do
+            if current_user.admin?
+              redirect_to admin_root_path
+            else
+              redirect_to forms_path
+            end
+          end
+
+          format.json do
+            render json: {
+              message: "Form deleted successfully",
+              form_id: @form.id
+            }, status: :ok
+          end
+        end
       end
     end
-    flash[:notice] = "Form for '#{@form.first_name}' deleted."
-
-    if current_user.admin?
-      redirect_to admin_root_path
     else
-      redirect_to forms_path
+      respond_to do |format|
+        format.html do
+          flash[:alert] = "Failed to delete form."
+          redirect_back(fallback_location: forms_path)
+        end
+        
+        format.json do
+          render json: {
+            error: "Failed to delete form"
+          }, status: :unprocessable_entity
+        end
+      end
     end
   end
 

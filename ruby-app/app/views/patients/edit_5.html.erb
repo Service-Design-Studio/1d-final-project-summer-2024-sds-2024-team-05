@@ -369,7 +369,7 @@
       async function createNewForm() {
         try {
           const response = await fetch('/forms/edit_5', {
-            method: 'PATCH',
+            method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')

@@ -109,6 +109,8 @@ class PatientsController < ApplicationController
         else
         redirect_to edit_2_form_path(@form), notice: 'No changes were made.'
         end
+      else
+        redirect_to edit_2_form_path(@form), notice: 'No changes were made.'
       end
     else
       render :edit_1

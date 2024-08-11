@@ -264,8 +264,7 @@
 
           document.getElementById('nextButton').addEventListener('click', function(event) {
             event.preventDefault();
-            showLoading
-
+            showLoading();
             const formIdInput = document.querySelector('input[name="form[id]"]');
             let formId = formIdInput ? formIdInput.value : '';
             console.log(formId)

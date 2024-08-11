@@ -230,6 +230,7 @@
           const formId = formIdInput ? formIdInput.value : '';
           handleFileUpload(event, 'physical_video', formId, 'Upload Physical Video')
           .then(result => {
+            hideLoading();
             if (result.success) {
               if (result.isNewForm){
                 window.location.href = `/forms/${result.formId}/edit_4`;

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'User Registration', type: :feature do
+RSpec.describe 'User Registration', type: :feature, js: true do
   scenario 'User signs up successfully with valid details' do
     visit new_user_session_path # Visit the page where the sign-up form is located
 

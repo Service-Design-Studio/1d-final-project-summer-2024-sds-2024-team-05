@@ -165,6 +165,8 @@ class PatientsController < ApplicationController
         if @form.update(form_params_step2)
           redirect_to edit_3_form_path(@form), notice: 'Form 2 was successfully updated.'
         end
+      else
+        redirect_to edit_3_form_path(@form), notice: 'No changes were made.'
       end
     else
       render :edit_2

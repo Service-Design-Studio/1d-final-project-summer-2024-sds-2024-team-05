@@ -28,7 +28,7 @@ def process_video_cv(file_path):
 
     sit_stand_results = False
     start_writing = False
-
+    count = 0
     while cap.isOpened():
         success, img = cap.read()
         if not success:
@@ -59,11 +59,14 @@ def process_video_cv(file_path):
                 elif id == 23:
                     key_points["left Hip"]= lm
 
-            if sit_stand_test(key_points):
-                sit_stand_results = True
+        if sit_stand_test(key_points) == True:
+            count+=1
 
-            text = "Test: Passed" if sit_stand_results else "Test: Failed"
-            cv2.putText(img, text, (70, 50), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
+        if count>=20:
+            sit_stand_results= True    
+            cv2.putText(img, f"Test: Passed", (70, 50), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
+        else:
+            cv2.putText(img, f"Test: Failed", (70, 50), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
         start_writing = True
 
         cTime = time.time()
@@ -116,7 +119,7 @@ def sit_stand_test(key_points):
     right_leg_angle = getAngle(right_ankle,right_knee,right_hip)
     left_leg_angle = getAngle(left_ankle,left_knee,left_hip)
     # print(right_leg_angle,left_leg_angle)
-    if right_leg_angle>=120 or left_leg_angle>=120:
+    if right_leg_angle>=160 or left_leg_angle>=160:
         return True
     else:
         return False

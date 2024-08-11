@@ -14,14 +14,6 @@ Capybara.configure do |config|
   config.app_host = 'http://127.0.0.1:3000'
 end
 Capybara.server_port = 3000 
-Capybara.register_driver :selenium_chrome do |app|
-  options = Selenium::WebDriver::Chrome::Options.new
-  # Set the path to the ChromeDriver
-  Selenium::WebDriver::Chrome::Service.driver_path = "C:/Users/royce/Downloads/chromedriver-win64/chromedriver-win64/chromedriver.exe"
-
-  options.add_argument('headless') if ENV['HEADLESS']
-  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
-end
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are

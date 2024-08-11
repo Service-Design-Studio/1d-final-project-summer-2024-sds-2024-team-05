@@ -97,13 +97,17 @@ class PatientsController < ApplicationController
   def update_1
     case params[:commit]
     when 'Save'
-      if @form.update(form_params_step1)
-        redirect_to edit_1_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
+      if params[:form].present? && params[:form].except(:autofill_address).values.any?(&:present?)
+        if @form.update(form_params_step1)
+          redirect_to edit_1_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
+        end
       end
     when 'Next'
       if params[:form].present? && params[:form].except(:autofill_address).values.any?(&:present?)
         if @form.update(form_params_step1)
           redirect_to edit_2_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'
+        else
+        redirect_to edit_2_form_path(@form), notice: 'No changes were made.'
         end
       end
     else
@@ -115,7 +119,7 @@ class PatientsController < ApplicationController
   def update_1_collection
     case params[:commit]
     when 'Save'
-      if params[:form].present? && params[:form].values.any?(&:present?)
+      if params[:form].present? && params[:form].except(:autofill_address).values.any?(&:present?)
         @form = current_user.forms.build(form_params_step1)
         if @form.save
           session[:form_origin] = 'new'
@@ -123,7 +127,7 @@ class PatientsController < ApplicationController
         end
       end
     when 'Next'
-      if params[:form].present? && params[:form].values.any?(&:present?)
+      if params[:form].present? && params[:form].except(:autofill_address).values.any?(&:present?)
         @form = current_user.forms.build(form_params_step1)
         if @form.save
           redirect_to edit_2_form_path(@form), notice: 'Step 1 of form creation was successfully saved.'

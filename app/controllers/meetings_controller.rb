@@ -138,7 +138,9 @@ class MeetingsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def meeting_params
       permitted_params = params.require(:meeting).permit(:title, :description, :location, :start_time, :form_id)
-      permitted_params[:start_time] = permitted_params[:start_time].in_time_zone('Asia/Singapore')
+      if permitted_params[:start_time].present?
+        permitted_params[:start_time] = permitted_params[:start_time].in_time_zone('Asia/Singapore')
+      end
       permitted_params
     end
 end

@@ -9,8 +9,12 @@
   <!-- Application CSS -->
   <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
   <style>
-    .container {
-      max-width: 800px;
+    .container-2-videos {
+      display: flex;
+      flex-direction: column; /* Align items in a row */
+      justify-content: center; /* Center items horizontally within the container */
+      max-width: 80%; /* Limit the maximum width of the container */
+      margin: auto; /* Center the container within its parent element */
     }
     .circular-button {
       border-radius: 50%;
@@ -33,6 +37,7 @@
       display: flex;
       justify-content: space-between;
       margin-bottom: 1rem;
+      max-width: 60%;
     }
     .step {
       display: flex;
@@ -44,10 +49,63 @@
       margin-top: 0.5rem;
       font-size: 18px;
     }
+    /* Container for centering the loader */
+    #loadingIndicator_edit_4 {
+      position: fixed; /* Fixed position to stay in place while scrolling */
+      top: 50%; /* Center vertically */
+      left: 50%; /* Center horizontally */
+      transform: translate(-50%, -50%); /* Adjust for exact center */
+      z-index: 1000; /* Ensure it appears above other content */
+    }
+
+    /* Content wrapper to center the dot */
+    .loading-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Pulsing dot loader */
+    .pulsing-dot {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background-color: #3498db;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Loading text */
+    .loading-text {
+      color: #000000; /* Set text color for contrast */
+      font-size: 30px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    /* Pulse animation */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
   </style>
 </head>
 <body>
-  <div class="container mt-5">
+  <div class="container-2-videos">
     <!-- Steps Bar -->
     <div class="steps">
       <div class="page">
@@ -80,9 +138,16 @@
 
     <!-- Title -->
     <h1 class="text-center mb-4">Page 4 - Patient Analysis </h1>
+    <div id="loadingIndicator_edit_4" class="loading-container" style="display: None;">
+    <div class="loading-content">
+      <div class="pulsing-dot"></div>
+      <div class="loading-text">Uploading...</div>
+    </div>
+  </div>
 
     <!-- Video Upload Section -->
-    <%= form_with(model: @form, url: @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :patch, local: true, html: { multipart: true }) do |form| %>
+    <%= form_with(model: @form, url: @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: @form.persisted? ? :patch : :post, local: true, html: { multipart: true }) do |form| %>
+      <input type="hidden" name="form[id]" value="<%= @form.id %>">
       <div class="row">
         <!-- Step 1: Physical Video -->
         <div class="col-md-6 box">
@@ -100,7 +165,7 @@
             </div>
             <p class="mt-3">Video should contain patient moving around the house just like how he/she would on a daily basis</p>
             <%= form.file_field :physical_video, accept: 'video/*', class: 'form-control mb-3', id: 'physical_video' %>
-            <%= form.submit 'Upload Physical Video', name: 'commit', value: 'Upload Physical Video', class: 'btn btn-primary me-2' %>
+            <%= form.submit 'Upload Physical Video', name: 'commit', value: 'Upload Physical Video', class: 'btn btn-primary me-2', id: "uploadPhysicalVideoButton"%>
             <% if @form.physical_video_file_name.present? %>
               <% gcs_service = GoogleCloudStorageService.new %>
               <% signed_url = gcs_service.generate_signed_url_for_viewing(@form.physical_video_file_name) %>
@@ -112,7 +177,7 @@
           </div>
 
         <!-- Step 2: Mental Video -->
-        <div class="box">
+        <div class="col-md-6 box">
           <h3>Step 2</h3>
           <hr/>
           <h4>Upload Mental Video<span style="color: red;"> *</span></h4>
@@ -122,7 +187,7 @@
           </div>
             <p class="mt-3">Possible Questions: “How are you today?”, “What is your name?”, “What day is it today?”, “Who is this person?”</p>
             <%= form.file_field :mental_video, accept: 'video/*', class: 'form-control mb-3', id: 'mental_video' %>
-            <%= form.submit 'Upload Mental Video', name: 'commit', value: 'Upload Mental Video', class: 'btn btn-primary me-2' %>
+            <%= form.submit 'Upload Mental Video', name: 'commit', value: 'Upload Mental Video', class: 'btn btn-primary me-2', id: "uploadMentalVideoButton" %>
             <% if @form.mental_video_file_name.present? %>
               <% gcs_service = GoogleCloudStorageService.new %>
               <% signed_url = gcs_service.generate_signed_url_for_viewing(@form.mental_video_file_name) %>
@@ -138,8 +203,8 @@
       <div class="d-flex justify-content-between mt-5 mb-5">
         <%= link_to "Back", @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, class: "btn btn-lg btn-outline-black rounded-pill" %>
         <div>
-          <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green me-2" %>
-          <%= form.submit "Next", name: 'commit', value: 'Next', class: "btn btn-lg btn-blue rounded-pill" %>
+          <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green me-2", id: "saveButton" %>
+          <%= form.submit "Next", name: 'commit', value: 'Next', class: "btn btn-lg btn-blue rounded-pill", id: "nextButton" %>
         </div>
       </div>
     <% end %>
@@ -147,5 +212,235 @@
 
   <!-- Bootstrap Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          function showLoading() {
+            document.getElementById('loadingIndicator_edit_4').style.display = 'block';
+            console.log("SHOWING")
+          }
+
+          function hideLoading() {
+            document.getElementById('loadingIndicator_edit_4').style.display = 'none';
+            console.log("HIDING)")
+          }
+        document.getElementById('uploadPhysicalVideoButton').addEventListener('click', function(event) {
+          event.preventDefault();
+          showLoading();
+          const formIdInput = document.querySelector('input[name="form[id]"]');
+          const formId = formIdInput ? formIdInput.value : '';
+          handleFileUpload(event, 'physical_video', formId, 'Upload Physical Video')
+          .then(result => {
+            if (result.success) {
+              if (result.isNewForm){
+                window.location.href = `/forms/${result.formId}/edit_4`;
+              }else{
+              window.location.reload();
+              }
+            }
+          });
+        });
+
+        document.getElementById('uploadMentalVideoButton').addEventListener('click', function(event) {
+          event.preventDefault();
+          showLoading();
+          const formIdInput = document.querySelector('input[name="form[id]"]');
+          const formId = formIdInput ? formIdInput.value : '';
+          handleFileUpload(event, 'mental_video', formId, 'Upload Mental Video')
+          .then(result => {
+            hideLoading();
+            if (result.success) {
+              if (result.isNewForm){
+                window.location.href = `/forms/${result.formId}/edit_4`;
+              }else{
+              window.location.reload();
+              }
+            }
+        });
+      });
+
+
+        document.getElementById('saveButton').addEventListener('click', function(event) {
+          event.preventDefault();
+          showLoading();
+          const formIdInput = document.querySelector('input[name="form[id]"]');
+          let formId = formIdInput ? formIdInput.value : '';
+
+          let isNewForm = false;
+
+          handleFileUpload(event, 'physical_video', formId, 'Upload Physical Video')
+            .then(result => {
+              if (result.success && result.formId) {
+                formId = result.formId;
+                isNewForm = result.isNewForm; 
+              }
+              // Pass the updated formId to the second file upload
+              return handleFileUpload(event, 'mental_video', formId, 'Upload Mental Video');
+            })
+            .then(result2 => {
+              hideLoading();
+              if (result2.success) {
+                if (isNewForm) {
+                  // If the first upload was a new form, handle redirection
+                  window.location.href = `/forms/${formId}/edit_4`;
+                } else {
+                  window.location.reload();
+                }
+              } else {
+                window.location.reload();
+              }
+            })
+            .catch(error => {
+              console.error('Error during file uploads:', error);
+              hideLoading();
+              window.location.reload();
+            });
+        });
+
+          document.getElementById('nextButton').addEventListener('click', function(event) {
+            event.preventDefault();
+            showLoading();
+            const formIdInput = document.querySelector('input[name="form[id]"]');
+            let formId = formIdInput ? formIdInput.value : '';
+            let isNewForm = false;
+
+            handleFileUpload(event, 'physical_video', formId, 'Upload Physical Video')
+              .then(result => {
+                if (result.success && result.formId) {
+                  formId = result.formId;
+                  isNewForm = result.isNewForm; 
+                }
+                // Pass the updated formId to the second file upload
+                return handleFileUpload(event, 'mental_video', formId, 'Upload Mental Video');
+              })
+              .then(result2 => {
+                hideLoading();
+                if (result2.success) {
+                  // Redirect based on the isNewForm flag
+                  window.location.href = `/forms/${result2.formId}/edit_5`;
+                } else if (isNewForm || formId != '') {
+                  window.location.href = `/forms/${formId}/edit_5`;
+                } else{
+                  window.location.href = `/forms/edit_5`;
+                }
+
+              })
+              .catch(error => {
+                hideLoading();
+                console.error('Error during file uploads:', error);
+                window.location.reload();
+              });
+          });
+        });
+    async function handleFileUpload(event, videoId, formId, changes) {
+      event.preventDefault(); // Prevent the form from submitting normally
+
+      const fileInput = document.getElementById(videoId);
+      const file = fileInput.files[0];
+      let isNewForm = false;
+
+      if (!file) {
+        console.log("No file selected.");
+        return { success: false, formId: formId };;
+      }
+
+      if (!formId) {
+        
+        console.log("Form ID is missing.");
+        try {
+          formId = await createNewForm();
+          isNewForm = true;
+        } catch (error) {
+          // Handle form creation failure
+          return { success: false, message: 'Failed to create new form' };
+        }
+      }
+      const fileName = `form_${formId}_${videoId}`; // Customize the file name
+      const contentType = file.type;
+
+      console.log(contentType);
+
+      // Request a signed URL from Rails
+      const response = await fetch(`/forms/${formId}/generate_signed_url`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ filename: fileName, content_type: contentType })
+      });
+
+      const data = await response.json();
+      const uploadUrl = data.url;
+
+      if (!uploadUrl) {
+        console.error("Failed to get upload URL.");
+        return;
+      }
+
+      // Upload the file to GCS using the signed URL
+      const uploadResponse = await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': contentType
+        },
+        body: file
+      });
+
+      if (uploadResponse.ok) {
+        console.log("File uploaded successfully to GCS.");
+
+        const patchResponse = await fetch(`/forms/${formId}/edit_4`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          },
+          body: JSON.stringify({ filename: fileName, changes: changes })
+        });
+
+        const patchData = await patchResponse.json();
+        console.log(patchData);
+
+        if (patchResponse.ok && patchData.success) {
+          console.log(patchData.message);
+          if (changes === 'Next') {
+            window.location.href = `/forms/${formId}/edit_5`;
+          }
+          return { success: true, message: patchData.message, isNewForm: isNewForm, formId: formId };
+        } else {
+          console.error("Failed to update form:", patchData.message || patchData.error);
+        }
+
+      } else {
+        console.error("Upload failed:", await uploadResponse.text());
+      }
+
+      // Helper function to create a new form
+      async function createNewForm() {
+        try {
+          const response = await fetch('/forms/edit_4', {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            return data.formId;
+          } else {
+            console.error('Failed to create form:', data.message);
+            throw new Error(data.message);
+          }
+        } catch (error) {
+          console.error('Error during form creation:', error);
+          throw error;
+        }
+      }
+    }
+  </script>
+
 </body>
 </html>

@@ -53,19 +53,19 @@
           <p class="step-label">Patient Details</p>
         </div>
         <div class="step">
-          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: @form.persisted? ? @valid_button_classes[1] : "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '2', @form.persisted? ? edit_2_form_path(@form) : edit_2_forms_path, method: :get, class: @form.persisted? ? @valid_button_classes[1] : "btn btn-primary circular-button btn-outline-blue" , id:"patient-detail-button" %>
           <p class="step-label">Medical Conditions</p>
         </div>
         <div class="step">
-          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: @form.persisted? ? @valid_button_classes[2] : "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '3', @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :get, class: @form.persisted? ? @valid_button_classes[2] : "btn btn-primary circular-button btn-outline-blue", id:"medical-conditions-button" %>
           <p class="step-label">Service Required</p>
         </div>
         <div class="step">
-          <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: @form.persisted? ? @valid_button_classes[3] : "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '4', @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, method: :get, class: @form.persisted? ? @valid_button_classes[3] : "btn btn-primary circular-button btn-outline-blue", id:"patient-assessment-button" %>
           <p class="step-label">Patient Assessment</p>
         </div>
         <div class="step">
-          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: @form.persisted? ? @valid_button_classes[4] : "btn btn-primary circular-button btn-outline-blue" %>
+          <%= button_to '5', @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :get, class: @form.persisted? ? @valid_button_classes[4] : "btn btn-primary circular-button btn-outline-blue", id:"home-assessment-button" %>
           <p class="step-label">Home Assessment</p>
         </div>
         <div class="step">
@@ -77,7 +77,7 @@
 
     <h1 class="text-center mb-4">Page 1 - Patient Details</h1>
     
-    <%= form_with(model: @form, url: @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: :patch, local: true, class: "mb-4") do |form| %>
+    <%= form_with(model: @form, url: @form.persisted? ? edit_1_form_path(@form) : edit_1_forms_path, method: @form.persisted? ? :patch : :post, local: true, class: "mb-4") do |form| %>
       <% if current_user.admin? %>
         <div class="row mb-3">
           <div class="col-6">
@@ -239,13 +239,13 @@
 
       <div class="d-flex justify-content-between">
         <% if current_user.admin? %>
-          <%= link_to "Back", admin_root_path, class: "btn btn-lg btn-outline-black rounded-pill" %>
+          <%= link_to "Back", admin_root_path, class: "btn btn-lg btn-outline-black rounded-pill", id:"back_button" %>
         <% else %>
           <%= link_to "Back", user_root_path, class: "btn btn-lg btn-outline-black rounded-pill" %>
         <% end %>
         <div>
-          <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green me-2" %>
-          <%= form.submit "Next", class: "btn btn-lg btn-blue rounded-pill" %>
+          <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green me-2", id:"save_button" %>
+          <%= form.submit "Next", class: "btn btn-lg btn-blue rounded-pill", id:"next_button" %>
         </div>
       </div>
     <% end %>

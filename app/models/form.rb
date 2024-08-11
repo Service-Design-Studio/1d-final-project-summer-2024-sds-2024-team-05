@@ -51,9 +51,9 @@ class Form < ApplicationRecord
         end
     end
 
-    def all_required
-        return ['edit_1_valid', 'edit_2_valid', 'edit_3_valid', 'mental_uploaded', 'physical_uploaded', 'environment_uploaded']
-    end
+    # def all_required
+    #     return ['edit_1_valid', 'edit_2_valid', 'edit_3_valid', 'mental_uploaded', 'physical_uploaded', 'environment_uploaded']
+    # end
 
     def page1_required
        return ['date_of_birth', 'nok_address', 'nok_email', 'nok_contact_no', 'nok_first_name', 'nok_last_name', 'first_name', 'last_name', 'gender', 'address', 'relationship', 'languages', 'postal']

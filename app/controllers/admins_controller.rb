@@ -125,65 +125,65 @@ class AdminsController < ApplicationController
     end
   end
 
-  def _physical_assessment
-    @form = Form.find(params[:id])
-    # @form_origin_text = determine_form_origin_text
-  end
+  # def _physical_assessment
+  #   @form = Form.find(params[:id])
+  #   # @form_origin_text = determine_form_origin_text
+  # end
 
-  def update_physical_assessment
-    @form = Form.find(params[:id])
+  # def update_physical_assessment
+  #   @form = Form.find(params[:id])
 
-    case params[:commit]
-    when 'Save'
-      if @form.update(physical_assessment_params)
-        redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Physical Assessment Updated'
-      end
-    when 'Back'
-      redirect_to @form, notice: 'Physical Assessment Updated'
-    else
-      redirect_to physical_assessment_path, alert: 'Invalid action.'
-    end
-  end
+  #   case params[:commit]
+  #   when 'Save'
+  #     if @form.update(physical_assessment_params)
+  #       redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Physical Assessment Updated'
+  #     end
+  #   when 'Back'
+  #     redirect_to @form, notice: 'Physical Assessment Updated'
+  #   else
+  #     redirect_to physical_assessment_path, alert: 'Invalid action.'
+  #   end
+  # end
 
-  def _mental_assessment
-    @form = Form.find(params[:id])
-    # @form_origin_text = determine_form_origin_text
-  end
+  # def _mental_assessment
+  #   @form = Form.find(params[:id])
+  #   # @form_origin_text = determine_form_origin_text
+  # end
 
-  def update_mental_assessment
-    @form = Form.find(params[:id])
+  # def update_mental_assessment
+  #   @form = Form.find(params[:id])
 
-    case params[:commit]
-    when 'Save'
-      if @form.update(mental_assessment_params)
-        redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Mental Assessment Updated'
-      end
-    when 'Back'
-      redirect_to @form, notice: 'Mental Assessment Updated'
-    else
-      redirect_to mental_assessment_path, alert: 'Invalid action.'
-    end
-  end
+  #   case params[:commit]
+  #   when 'Save'
+  #     if @form.update(mental_assessment_params)
+  #       redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Mental Assessment Updated'
+  #     end
+  #   when 'Back'
+  #     redirect_to @form, notice: 'Mental Assessment Updated'
+  #   else
+  #     redirect_to mental_assessment_path, alert: 'Invalid action.'
+  #   end
+  # end
 
-  def _environment_assessment
-    @form = Form.find(params[:id])
-    # @form_origin_text = determine_form_origin_text
-  end
+  # def _environment_assessment
+  #   @form = Form.find(params[:id])
+  #   # @form_origin_text = determine_form_origin_text
+  # end
 
-  def update_environment_assessment
-    @form = Form.find(params[:id])
+  # def update_environment_assessment
+  #   @form = Form.find(params[:id])
 
-    case params[:commit]
-    when 'Save'
-      if @form.update(environment_assessment_params)
-        redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Environmental Assessment Updated'
-      end
-    when 'Back'
-      redirect_to @form, notice: 'Environmental Assessment Updated'
-    else
-      redirect_to environment_assessment_path, alert: 'Invalid action.'
-    end
-  end
+  #   case params[:commit]
+  #   when 'Save'
+  #     if @form.update(environment_assessment_params)
+  #       redirect_to client_profile_form_path(status: 'Pending Assessment'), notice: 'Environmental Assessment Updated'
+  #     end
+  #   when 'Back'
+  #     redirect_to @form, notice: 'Environmental Assessment Updated'
+  #   else
+  #     redirect_to environment_assessment_path, alert: 'Invalid action.'
+  #   end
+  # end
 
   def _patient_assessment
     @form = Form.find(params[:id])
@@ -201,7 +201,7 @@ class AdminsController < ApplicationController
     when 'Back'
       redirect_to @form, notice: 'No changes were made.'
     else
-      redirect_to physical_assessment_form_path, alert: 'Invalid action.'
+      # redirect_to physical_assessment_form_path, alert: 'Invalid action.'
     end
   end
 

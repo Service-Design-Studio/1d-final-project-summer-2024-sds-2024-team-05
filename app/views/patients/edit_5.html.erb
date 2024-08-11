@@ -47,6 +47,58 @@
     .video-preview {
       margin-top: 20px;
     }
+    /* Container for centering the loader */
+    #loadingIndicator {
+      position: fixed; /* Fixed position to stay in place while scrolling */
+      top: 50%; /* Center vertically */
+      left: 50%; /* Center horizontally */
+      transform: translate(-50%, -50%); /* Adjust for exact center */
+      z-index: 1000; /* Ensure it appears above other content */
+    }
+
+    /* Content wrapper to center the dot */
+    .loading-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Pulsing dot loader */
+    .pulsing-dot {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background-color: #3498db;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Loading text */
+    .loading-text {
+      color: #000000; /* Set text color for contrast */
+      font-size: 30px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    /* Pulse animation */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
   </style>
 </head>
 <body>
@@ -83,10 +135,16 @@
 
     <!-- Title -->
     <h1 class="text-center mb-4">Page 5 - Environmental Analysis</h1>
+    <div id="loadingIndicator" class="loading-container" style="display: None;">
+      <div class="loading-content">
+        <div class="pulsing-dot"></div>
+        <div class="loading-text">Uploading...</div>
+      </div>
+    </div>
 
     <!-- Video Upload Section -->
-    <%= form_with(model: @form, url: @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: :patch, local: true, html: { multipart: true }) do |form| %>
-
+    <%= form_with(model: @form, url: @form.persisted? ? edit_5_form_path(@form) : edit_5_forms_path, method: @form.persisted? ? :patch : :post, local: true, html: { multipart: true }) do |form| %>
+    <input type="hidden" name="form[id]" value="<%= @form.id %>">
       <%# <div class="row justify-content-center">
       <div class="box text-center">
         <p>Take a video from your house doorstep including the Living Room, Bedroom, and Toilet. The video should show the patient moving around the house as they would daily.</p>
@@ -112,7 +170,7 @@
             The video should show the patient moving around the house as they would daily.
           </p>
           <%= form.file_field :environment_video, accept: 'video/*', class: 'form-control mb-3', id: 'environment_video'%>
-          <%= form.submit 'Upload', name: 'commit', value: 'Upload Environment Video', class: 'btn btn-primary' %>
+          <%= form.submit 'Upload', name: 'commit', value: 'Upload Environment Video', class: 'btn btn-primary', id: 'uploadEnvironmentVideoButton' %>
           <div class=" text-center">
             <% if @form.environment_video_file_name.present? %>
               <% gcs_service = GoogleCloudStorageService.new %>
@@ -147,8 +205,8 @@
       <div class="d-flex justify-content-between mt-5 mb-5">
         <%= link_to "Back", @form.persisted? ? edit_4_form_path(@form) : edit_4_forms_path, class: "btn btn-lg btn-outline-black rounded-pill" %>
         <div>
-          <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green me-2" %>
-          <%= form.submit "Next", name: 'commit', value: 'Next', class: "btn btn-lg btn-blue rounded-pill" %>
+          <%= form.submit "Save", name: "commit", value: "Save", class: "btn btn-lg rounded-pill btn-green me-2", id: 'saveButton' %>
+          <%= form.submit "Next", name: 'commit', value: 'Next', class: "btn btn-lg btn-blue rounded-pill", id: 'nextButton' %>
         </div>
       </div>
     <% end %>
@@ -156,5 +214,183 @@
 
   <!-- Bootstrap Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          function showLoading() {
+            document.getElementById('loadingIndicator').style.display = 'block';
+            console.log("SHOWING)")
+          }
+
+          function hideLoading() {
+            document.getElementById('loadingIndicator').style.display = 'none';
+            console.log("HIDING)")
+          }
+        document.getElementById('uploadEnvironmentVideoButton').addEventListener('click', function(event) {
+          event.preventDefault();
+          showLoading();
+          const formIdInput = document.querySelector('input[name="form[id]"]');
+          const formId = formIdInput ? formIdInput.value : '';
+          handleFileUpload(event, 'environment_video', formId, 'Upload Environment Video')
+          .then(result => {
+            hideLoading();
+            if (result.success) {
+              if (result.isNewForm){
+                window.location.href = `/forms/${result.formId}/edit_5`;
+              }else{
+              window.location.reload();
+              }
+            }
+          });
+        });
+
+        document.getElementById('saveButton').addEventListener('click', function(event) {
+          event.preventDefault();
+          showLoading();
+          const formIdInput = document.querySelector('input[name="form[id]"]');
+          let formId = formIdInput ? formIdInput.value : '';
+          console.log(formId)
+          handleFileUpload(event, 'environment_video', formId, 'Upload Environment Video')
+          .then(result => {
+            hideLoading();
+            if (result.success) {
+              if (result.isNewForm){
+                window.location.href = `/forms/${result.formId}/edit_5`;
+              }else{
+              window.location.reload();
+              }
+            }
+          });
+        });
+
+          document.getElementById('nextButton').addEventListener('click', function(event) {
+            event.preventDefault();
+            showLoading
+
+            const formIdInput = document.querySelector('input[name="form[id]"]');
+            let formId = formIdInput ? formIdInput.value : '';
+            console.log(formId)
+            handleFileUpload(event, 'environment_video', formId, 'Upload Environment Video')
+            .then(result => {
+              hideLoading();
+              if (result.success) {
+                window.location.href = `/forms/${result.formId}`
+              } else if (result.formId != '' || formId != ''){
+                window.location.href = `/forms/${result.formId}`
+              } else {
+                window.location.href = `/forms/show_error`
+              }
+            });
+          });
+        });
+    async function handleFileUpload(event, videoId, formId, changes) {
+      event.preventDefault(); // Prevent the form from submitting normally
+
+      const fileInput = document.getElementById(videoId);
+      const file = fileInput.files[0];
+      let isNewForm = false;
+
+      if (!file) {
+        console.log("No file selected.");
+        return { success: false, formId: formId };;
+      }
+
+      if (!formId) {
+        
+        console.log("Form ID is missing.");
+        try {
+          formId = await createNewForm();
+          isNewForm = true;
+        } catch (error) {
+          // Handle form creation failure
+          return { success: false, message: 'Failed to create new form' };
+        }
+      }
+      const fileName = `form_${formId}_${videoId}`; // Customize the file name
+      const contentType = file.type;
+
+      console.log(contentType);
+
+      // Request a signed URL from Rails
+      const response = await fetch(`/forms/${formId}/generate_signed_url`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ filename: fileName, content_type: contentType })
+      });
+
+      const data = await response.json();
+      const uploadUrl = data.url;
+
+      if (!uploadUrl) {
+        console.error("Failed to get upload URL.");
+        return;
+      }
+
+      // Upload the file to GCS using the signed URL
+      const uploadResponse = await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': contentType
+        },
+        body: file
+      });
+
+      if (uploadResponse.ok) {
+        console.log("File uploaded successfully to GCS.");
+
+        const patchResponse = await fetch(`/forms/${formId}/edit_5`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          },
+          body: JSON.stringify({ filename: fileName, changes: changes })
+        });
+
+        const patchData = await patchResponse.json();
+        console.log(patchData);
+
+        if (patchResponse.ok && patchData.success) {
+          console.log(patchData.message);
+          if (changes === 'Next') {
+            window.location.href = `/forms/${formId}/edit_5`;
+          }
+          return { success: true, message: patchData.message, isNewForm: isNewForm, formId: formId };
+        } else {
+          console.error("Failed to update form:", patchData.message || patchData.error);
+        }
+
+      } else {
+        console.error("Upload failed:", await uploadResponse.text());
+      }
+
+      // Helper function to create a new form
+      async function createNewForm() {
+        try {
+          const response = await fetch('/forms/edit_5', {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            return data.formId;
+          } else {
+            console.error('Failed to create form:', data.message);
+            throw new Error(data.message);
+          }
+        } catch (error) {
+          console.error('Error during form creation:', error);
+          throw error;
+        }
+      }
+    }
+  </script>
 </body>
 </html>

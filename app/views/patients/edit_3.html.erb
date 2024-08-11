@@ -77,7 +77,7 @@
 
     <h1 class="text-center mb-4">Page 3 - Service Required</h1>
     
-    <%= form_with(model: @form, url: @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: :patch, local: true) do |form| %>
+    <%= form_with(model: @form, url: @form.persisted? ? edit_3_form_path(@form) : edit_3_forms_path, method: @form.persisted? ? :patch : :post, local: true) do |form| %>
       <div class="mb-3">
         <fieldset>
           <p>What Services are Required?<span style="color: red;"> *</span></p>

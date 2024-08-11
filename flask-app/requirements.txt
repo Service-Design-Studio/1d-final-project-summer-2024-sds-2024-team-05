@@ -1,0 +1,9 @@
+Flask
+mediapipe
+google-cloud-storage
+python-dotenv
+numpy
+waitress
+imageio[ffmpeg]
+
+#python -m pip install -r requirements.txt

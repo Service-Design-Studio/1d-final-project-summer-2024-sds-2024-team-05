@@ -79,9 +79,7 @@ class PatientsController < ApplicationController
   # GET /forms/1/edit_1
   def edit_1
     respond_to do |format|
-      format.html do
-        @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
-      end
+      format.html
       format.json do
         if @form.valid?
           render json: @form.to_json, status: :ok
@@ -140,7 +138,6 @@ class PatientsController < ApplicationController
 
   # GET /forms/1/edit_2
   def edit_2
-    @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
     respond_to do |format|
       format.html
       format.json do
@@ -201,7 +198,6 @@ class PatientsController < ApplicationController
 
   # GET /forms/1/edit_3
   def edit_3
-    @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
     respond_to do |format|
       format.html
       format.json do
@@ -260,7 +256,6 @@ class PatientsController < ApplicationController
 
   # GET /forms/1/edit_4
   def edit_4
-    @form_origin_text = determine_form_origin_text #Changes my header based on my origin new or edit
     respond_to do |format|
       format.html
       format.json do
@@ -332,7 +327,6 @@ class PatientsController < ApplicationController
 
   # GET /forms/1/edit_5
   def edit_5
-    @form_origin_text = determine_form_origin_text # Changes my header based on my origin new or edit
     respond_to do |format|
       format.html
       format.json do
@@ -530,19 +524,18 @@ class PatientsController < ApplicationController
             }, status: :ok
           end
         end
-      end
-    end
-    else
-      respond_to do |format|
-        format.html do
-          flash[:alert] = "Failed to delete form."
-          redirect_back(fallback_location: forms_path)
-        end
-        
-        format.json do
-          render json: {
-            error: "Failed to delete form"
-          }, status: :unprocessable_entity
+      else
+        respond_to do |format|
+          format.html do
+            flash[:alert] = "Failed to delete form."
+            redirect_back(fallback_location: forms_path)
+          end
+          
+          format.json do
+            render json: {
+              error: "Failed to delete form"
+            }, status: :unprocessable_entity
+          end
         end
       end
     end

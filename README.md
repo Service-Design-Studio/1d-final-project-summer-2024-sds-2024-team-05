@@ -40,11 +40,11 @@
 - Manual input for assessing Patients uploaded videos
 - Admin Dashboard Management System
   - Sorting based on different columns
-  - Search functionality for patient name
+  - Search functionality for patient or next-of-kin name
   -  Colour coded statuses for next action required
 - Self-built calendar
-  - Schedule Meetings (house visit appointments) with Patient and Users (Patient's Next of Kin)
-  - Toggle monthly or weekly view of calendar to see all scheduled meetings with different patients
+  - Schedule Meetings (house visit appointments) with Patient and Users (Patient's Next of Kin) or for Internal Use (No association with Patients or Users)
+  - Toggle monthly or weekly view of calendar to see all scheduled meetings with details of attached patient (if applicable)
 - Automated Email Notifications sent to User for Meeting Management (upon creating, rescheduling, and cancelling meetings)
 
 ## Overview

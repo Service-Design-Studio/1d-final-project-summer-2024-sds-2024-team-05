@@ -5,7 +5,7 @@ import os
 def init_routes(app):
     @app.route('/')
     def home():
-        return "Hello World!"
+        return "CV Flask App"
     
     @app.route('/process_video', methods=['POST'])
     def process_video():

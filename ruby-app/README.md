@@ -61,22 +61,47 @@ This application uses different databases based on the environment:
 ### User
 - Contains all the user data such as email, password, first name, last name and whether the user is an admin
 
-## Additional Setup and info
+## Setup and info
 
 - **Configuration**  
   The application configuration can be managed through environment files or the Rails `config` directory. Ensure that all necessary environment variables are set up correctly.
-
+  
   **Automated Email Function** can be configured in ```config/environments/development.rb and production.rb
 
-- **Database Creation**  
-  To create the database, run the following command:
+This app is designed to retrieve and upload files directly to Google Cloud Bucket,  hence you will need a Google Cloud Bucket and a JSON key credentials for this to work locally as well.
+
+For example: setting up a testing bucket in another project (not yet deploying, because deployment should use the same bucket as the ruby-app)
+
+    1. Create a project on Google Cloud 
+    2. Go to Cloud Storage and create a bucket
+    3. Go to IAM & Admin > Service Account > Create a key
+    4. Insert the bucket name and key into you project and put the key under .gitignore
+
+End product will look like this:
+![Code Screenshot](readme_images/bucket_setup.png)
+The different keys are for different service accounts with access to different buckets. For example, ninkatec-2.json leads to the production bucket whereas ninkatec-cv.json was just used for our own testing with postman. Add the path to the key under `app/services/GoogleCloudStorageService`
+
+- **Install the Gems required**  
+  run the following command:
   ```bash
-  rails db:create
-  rails db:migrate
-  rails db:seed
+  bundle install
   ```
 
-  The admin user is seeded in the database
+- **Database Creation**  
+To create the database, run the following command:
+```bash
+rails db:create
+rails db:migrate
+rails db:seed
+```
+
+The admin user is seeded in the database
+
+- **Run the rails server**  
+To create the database, run the following command:
+```bash
+rails s
+```
 
 ## Testing
 
@@ -120,11 +145,9 @@ For the following steps, you should be in the ruby-app directory
   ![Replace videos](readme_images/replace_these.png)
 
   Replace all the pdf file paths in ai_part.rb, client_profile.rb, dashboard.rb, userstories.rb
-  ![Replace PDF](readme_images/replace_slides.png)
+  ![Replace PDF](readme_images/replace_slide.png)
 
   To execute the cucumber tests, run the following command:
   ```bash
   bundle exec cucumber
   ```
-
-

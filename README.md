@@ -1,7 +1,7 @@
-[![Review Assignment Due Date](https://github.com/Service-Design-Studio/1d-final-project-summer-2024-sds-2024-team-05/blob/main/ruby-app/public/review-assignment-button.svg)](https://classroom.github.com/a/QpCtzJAE)
+[![Review Assignment Due Date](https://github.com/Service-Design-Studio/1d-final-project-summer-2024-sds-2024-team-05/blob/main/ruby-app/public/rev-assignment-button.svg)](https://classroom.github.com/a/QpCtzJAE)
 [![Open in Visual Studio Code](https://github.com/Service-Design-Studio/1d-final-project-summer-2024-sds-2024-team-05/blob/main/ruby-app/public/open-in-vscode.svg)](https://classroom.github.com/online_ide?assignment_repo_id=15055754&assignment_repo_type=AssignmentRepo)
 
-[![Design Workbook](https://github.com/Service-Design-Studio/1d-final-project-summer-2024-sds-2024-team-05/blob/main/ruby-app/public/design-workbook.svg)](https://docs.google.com/document/d/1SXpq8aStl2y5TK2OTNNwD2Nqwt8G41vPAxLpP77D05s/edit?pli=1)
+[![Design Workbook](https://github.com/Service-Design-Studio/1d-final-project-summer-2024-sds-2024-team-05/blob/main/ruby-app/public/design-workbook-button.svg)](https://docs.google.com/document/d/1SXpq8aStl2y5TK2OTNNwD2Nqwt8G41vPAxLpP77D05s/edit?pli=1)
 
 # Ninkatec Patient Onboarding WebApp
 

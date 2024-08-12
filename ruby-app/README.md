@@ -1,67 +1,128 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/QpCtzJAE)
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-718a45dd9cf7e7f842a935f5ebbe5719a5e09af4491e668f4dbf3b35d5cca122.svg)](https://classroom.github.com/online_ide?assignment_repo_id=15055754&assignment_repo_type=AssignmentRepo)
+# Ruby Application
 
-[Design Workbook](https://docs.google.com/document/d/1SXpq8aStl2y5TK2OTNNwD2Nqwt8G41vPAxLpP77D05s/edit?pli=1)
+This README provides the necessary steps to get the Ruby on Rails application up and running.
 
-# README
+## Ruby Version
+- **Ruby**: `3.3.2`
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## System Dependencies
 
-Things you may want to cover:
-
-## Ruby version
-- **Ruby** (`3.3.2`)
-
-## System dependencies
 ### Ruby Gems
-- **Rails** (`7.1.3.4`)
-  - A web application framework for Ruby, providing default structures for a database, a web service, and web pages.
+- **Rails (`7.1.3.4`)**  
+  A web application framework for Ruby that provides default structures for a database, web services, and web pages.
 
-- **Puma** (`~> 5.0`)
-  - A high-performance web server for Ruby/Rails applications.
+- **Puma (`~> 5.0`)**  
+  A high-performance web server designed for Ruby/Rails applications.
 
-- **Devise** (`~> 4.9.3`)
-  - Flexible authentication solution for Rails with support for various features like password recovery and account locking.
+- **Devise (`~> 4.9.3`)**  
+  A flexible authentication solution for Rails, supporting features like password recovery and account locking.
 
-- **RSpec-Rails** 
-  - RSpec's Rails-specific testing tools, used for writing and running tests for Rails applications.
+- **RSpec-Rails**  
+  Testing tools specific to Rails, used for writing and running tests for Rails applications.
 
-- **google-cloud-storage** 
-  - Client library for Google Cloud Storage, used for interacting with Google Cloud buckets.
+- **google-cloud-storage**  
+  A client library for interacting with Google Cloud Storage, used for managing Google Cloud buckets.
 
 ### JavaScript Libraries
+- **Stimulus-Rails**  
+  A lightweight JavaScript framework for enhancing the behavior of HTML within your application.
 
-- **Stimulus-Rails** 
-  - A modest JavaScript framework for enhancing the behavior of HTML.
-
-- **Turbo-Rails** 
-  - Framework for building modern, fast, and reliable web applications by leveraging techniques like partial page updates.
+- **Turbo-Rails**  
+  A framework for building modern, fast, and reliable web applications by leveraging techniques like partial page updates.
 
 ### Database
+This application uses different databases based on the environment:
 
-This application uses different databases for various purposes:
+- **PostgreSQL (Production)**  
+  A powerful, open-source relational database management system used in production for managing application data. It supports complex queries and ensures data integrity.
 
-- **PostgreSQL (Production)** 
-  - A powerful, open-source relational database management system used for storing and managing application data in production. It provides robust support for complex queries and data integrity.
+- **SQLite3 (Development/Testing)**  
+  A lightweight, file-based relational database included with Ruby on Rails by default for development and testing environments. It is simple to set up and ideal for local development.
 
-- **SQLite3 (Deployment)**
-  - A lightweight, file-based relational database used for development and testing. It is included with Ruby on Rails by default for local development and testing environments due to its simplicity and ease of setup.
-  - 
+## Application Controllers
 
-* Configuration
+### PatientsController
+- Handles the CRUD (Create, Read, Update, Delete) operations for patient application forms. This controller manages the lifecycle of patient data within the application.
 
-* Database creation
+### AdminsController
+- Manages the functionalities of the admin dashboard, client profile pages, and patient assessments. This controller is responsible for overseeing the administrative aspects of the application.
 
-* Database initialization
+### MeetingsController
+- Responsible for handling the CRUD operations related to meetings. This controller facilitates the scheduling, updating, and management of meetings within the application.
 
-* How to run the test suite
+## Application Models
 
-* Services (job queues, cache servers, search engines, etc.)
+### Form
+- Contains all the data related to the patient that is filled out in the application form
 
-* Deployment instructions
+### Meeting
+- Contains the data related to the meeting such as title, description, location, start time
 
-* ...
+### User
+- Contains all the user data such as email, password, first name, last name and whether the user is an admin
 
-This project was deployed using Google Cloud Run, with a Cloud SQL instance for PostgreSQL managing general data and metadata. Google Cloud Storage is used for storing files (such as images and PDFs) and videos.
+## Additional Setup and info
+
+- **Configuration**  
+  The application configuration can be managed through environment files or the Rails `config` directory. Ensure that all necessary environment variables are set up correctly.
+
+- **Database Creation**  
+  To create the database, run the following command:
+  ```bash
+  rails db:create
+  rails db:migrate
+  rails db:seed
+  ```
+
+  The admin user is seeded in the database
+
+## Testing
+
+We mainly did testing in rspec and cucumber. 
+
+Our rspec unit tests were written to test the functionality of individual methods of our controllers and models and our system tests were written in rspec and capybara. These can be found under  `spec/`.
+
+For our cucumber tests, we wrote user scenarios in cucumber and executed it using selenium. They can be found under `features/`.
+
+### Executing the tests
+For the following steps, you should be in the ruby-app directory
+
+- **Database Creation**  
+  To create the database, run the following command:
+  ```bash
+  rails db:create RAILS_ENV=test
+  rails db:migrate RAILS_ENV=test
+  rails db:seed RAILS_ENV=test
+  ```
+
+  To purge the database, run the following command:
+  ```bash
+  #purge test database
+  rails db:purge RAILS_ENV=test
+
+  #purge development database
+  rails db:purge
+  ```
+  After purging, do the creation steps again to start on a clean slate.
+
+- **Execute rspec**  
+  To execute rspec, run the following command:
+  ```bash
+  rspec
+  ```
+
+- **Execute cucumber**  
+  Before you execute this, you will need to change the following paths and please clear the test and development database if required
+
+  Replace all the video file paths in ai_part.rb, client_profile.rb, dashboard.rb, userstories.rb
+  ![Replace videos](readme_images/replace_these.png)
+
+  Replace all the pdf file paths in ai_part.rb, client_profile.rb, dashboard.rb, userstories.rb
+  ![Replace PDF](readme_images/replace_slide.png)
+
+  To execute the cucumber tests, run the following command:
+  ```bash
+  bundle exec cucumber
+  ```
+
 

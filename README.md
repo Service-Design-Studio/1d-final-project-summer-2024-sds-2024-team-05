@@ -46,47 +46,43 @@
   - Toggle monthly or weekly view of calendar to see all scheduled meetings with different patients
 - Automated Email Notifications sent to User for Meeting Management (upon creating, rescheduling, and cancelling meetings)
 
+## Overview
+This project has 3 different folders, each with a different purpose and their own README for how to install and use them. This is because they need to be set up differently, especially for ruby-app and flask-app.
+
+Click on folder or Link to [cv-models](https://github.com/Service-Design-Studio/1d-final-project-summer-2024-sds-2024-team-05/tree/main/cv-models)
+
+Click on folder or Link to [flask-app](https://github.com/Service-Design-Studio/1d-final-project-summer-2024-sds-2024-team-05/tree/main/flask-app)
+
+Click on folder or Link to [ruby-app](https://github.com/Service-Design-Studio/1d-final-project-summer-2024-sds-2024-team-05/tree/main/ruby-app)
+```
+Repo/
+│
+├── README.md          # Main README with overall project details and deployment steps for the entire project
+├── cv-models/
+│   ├── README.md      # README for cv-models
+│   ├── cv ipynb       # python ipynbs for testing cv model
+│
+├── flask-app/         
+│   ├── README.md      # README for flask-app installation and setup
+│   ├── app1.py
+│   ├── other files
+│   └── requirements.txt
+│
+└── ruby-app/
+    ├── README.md      # README for ruby-app installation and setup
+    ├── app
+    └── other folders
+```
+
 ## Installation
 ### Prerequisites
 - Ruby on Rails
 - Python
-
-## Ruby version
-- **Ruby** (`3.3.2`)
+- Google Cloud account
+- Google Cloud Bucket
 
 ## System dependencies
-### Ruby Gems
-- **Rails** (`7.1.3.4`)
-  - A web application framework for Ruby, providing default structures for a database, a web service, and web pages.
-
-- **Puma** (`~> 5.0`)
-  - A high-performance web server for Ruby/Rails applications.
-
-- **Devise** (`~> 4.9.3`)
-  - Flexible authentication solution for Rails with support for various features like password recovery and account locking.
-
-- **RSpec-Rails** 
-  - RSpec's Rails-specific testing tools, used for writing and running tests for Rails applications.
-
-- **google-cloud-storage**
-  - Client library for Google Cloud Storage, used for interacting with Google Cloud buckets.
-  - 
-- **google-cloud-speech** (`~> 1.7.0`)
-  - Allows you to communicate with the Google Cloud Speech-to-Text API.
-  - 
-- **grpc** (`~> 1.64.0`)
-  - Handles the efficient, low-latency communication between your application and Google's API.
-  - 
-- **streamio-ffmpeg** (`>= 3.0.2`)
-  - Extracts and processes the audio from a video file, making it ready for transcription by the Speech To Text API.
-
-### JavaScript Libraries
-
-- **Stimulus-Rails** 
-  - A modest JavaScript framework for enhancing HTML behavior.
-
-- **Turbo-Rails** 
-  - Framework for building modern, fast, and reliable web applications by leveraging techniques like partial page updates.
+Details of specific Ruby / python dependencies can be found within their own folders README.
 
 ### Database
 
@@ -97,43 +93,6 @@ This application uses different databases for various purposes:
 
 - **SQLite3 (Deployment)**
   - A lightweight, file-based relational database used for development and testing. It is included with Ruby on Rails by default for local development and testing environments due to its simplicity and ease of setup.
-  - 
-### Python Packages
-
-- **Flask**
-  - A micro web framework for Python used to create web applications.
-
-- **mediapipe** 
-  - A library for building cross-platform, customizable ML solutions for live and streaming media.
-
-- **google-cloud-storage** 
-  - Client library for Google Cloud Storage, used for interacting with Google Cloud buckets.
-
-- **python-dotenv** 
-  - A tool for loading environment variables from a `.env` file into the Python environment.
-
-- **numpy**
-  - A fundamental package for scientific computing with Python, providing support for large, multi-dimensional arrays and matrices.
-
-- **waitress** 
-  - A production-quality pure-Python WSGI server for running Python web applications.
-
-- **imageio[ffmpeg]** 
-  - A library for reading and writing image data in various formats, with optional support for video processing via FFmpeg.
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
 
 This project was deployed using Google Cloud Run, with a Cloud SQL instance for PostgreSQL managing general data and metadata. Google Cloud Storage is used to store files (such as images and PDFs) and videos.
 

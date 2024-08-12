@@ -227,7 +227,7 @@ Google Cloud Run is used to deploy the application. It provides a fully managed 
     - As we attained many names / credentials in our previous steps, we need to use them in order to actually connect to them on Google Cloud. Either add them in just before and push them with your container (probably not recommended) or use Google Cloud Secret Manager but remember not to push them to github
     - Example credentials path if placed under config would be ```'config/<name_of_key>.json'```
     
-    General things to replace
+    **General things to replace**
     - need to replace database, username, password and host in ```database.yml```. Host refers to ```'/cloudsql/<your_cloudsql_connection_name>'``` found under your SQL instance on Google Cloud
     - need to replace credentials path and bucket name in ```storage.yml```
     - need to replace the secret key base in the dockerfile

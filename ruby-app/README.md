@@ -66,6 +66,8 @@ This application uses different databases based on the environment:
 - **Configuration**  
   The application configuration can be managed through environment files or the Rails `config` directory. Ensure that all necessary environment variables are set up correctly.
 
+  **Automated Email Function** can be configured in ```config/environments/development.rb and production.rb
+
 - **Database Creation**  
   To create the database, run the following command:
   ```bash
@@ -118,7 +120,7 @@ For the following steps, you should be in the ruby-app directory
   ![Replace videos](readme_images/replace_these.png)
 
   Replace all the pdf file paths in ai_part.rb, client_profile.rb, dashboard.rb, userstories.rb
-  ![Replace PDF](readme_images/replace_slide.png)
+  ![Replace PDF](readme_images/replace_slides.png)
 
   To execute the cucumber tests, run the following command:
   ```bash
